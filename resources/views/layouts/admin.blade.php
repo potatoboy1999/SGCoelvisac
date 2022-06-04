@@ -87,8 +87,8 @@
                         @endforeach
                     @endforeach
                 @endforeach
-                <li class="nav-title">Otros</li>
-                <li class="nav-group">
+                <li class="nav-title d-none">Otros</li>
+                <li class="nav-group d-none">
                     <a class="nav-link nav-group-toggle" href="#">
                         <svg class="nav-icon">
                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-bell"></use>
