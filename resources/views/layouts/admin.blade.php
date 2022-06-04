@@ -59,7 +59,7 @@
             </div>
             <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
                 <li class="nav-item">
-                    <a class="nav-link {{((isset($page) && $page == "dashboard") ? "active":"")}}" href="#">
+                    <a class="nav-link {{((isset($page) && $page == "dashboard") ? "active":"")}}" href="{{route('dashboard')}}">
                         <svg class="nav-icon">
                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-speedometer"></use>
                         </svg> Dashboard
