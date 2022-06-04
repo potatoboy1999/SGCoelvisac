@@ -78,7 +78,7 @@
                                     ->where("estado",1)
                                     ->sortBy("num_orden") as $option)
                             <li class="nav-item">
-                                <a class="nav-link" href="{{($option->url != null)?route($option->url):""}}">
+                                <a class="nav-link" href="{{($option->url != null)?route($option->url):"javascript:;"}}">
                                     <svg class="nav-icon">
                                         <use xlink:href="{{asset("icons/sprites/free.svg")}}#{{$option->url_img}}"></use>
                                     </svg> {{$option->opcion}}
