@@ -9,7 +9,7 @@ class Theme extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Temas";
+    protected $table = "t_sgcv_tmas";
     public $timestamps = true;
 
     protected $fillable = [

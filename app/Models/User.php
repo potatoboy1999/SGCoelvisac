@@ -12,7 +12,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table = "T_SGCV_Usuarios";
+    protected $table = "t_sgcv_usuarios";
     public $timestamps = true;
 
     /**
@@ -68,7 +68,7 @@ class User extends Authenticatable
     }
 
     public function profiles(){
-        return $this->belongsToMany(Profile::class,"T_SGCV_Usuario_Perfil","usuario_id","perfil_id");
+        return $this->belongsToMany(Profile::class,"t_sgcv_usuario_perfil","usuario_id","perfil_id");
     }
 
     public function activities(){

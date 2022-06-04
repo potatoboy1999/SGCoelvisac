@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Metric extends Model
 {
     use HasFactory;
-    protected $table = "T_SGCV_Metricas";
+    protected $table = "t_sgcv_metricas";
     public $timestamps = true;
 
     protected $fillable = [

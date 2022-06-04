@@ -9,7 +9,7 @@ class Position extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Posiciones";
+    protected $table = "t_sgcv_posiciones";
     public $timestamps = true;
 
     protected $fillable = [

@@ -9,7 +9,7 @@ class ReunionDocument extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Reu_document";
+    protected $table = "t_sgcv_reu_document";
     public $timestamps = true;
 
     protected $fillable = [

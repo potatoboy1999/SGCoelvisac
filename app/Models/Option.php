@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Option extends Model
 {
     use HasFactory;
-    protected $table = "T_SGCV_Opciones";
+    protected $table = "t_sgcv_opciones";
     public $timestamps = true;
 
     protected $fillable = [
@@ -24,6 +24,6 @@ class Option extends Model
     ];
 
     public function profiles(){
-        return $this->belongsToMany(Profile::class,"T_SGCV_Opcion_Perfil","opcion_id","perfil_id");
+        return $this->belongsToMany(Profile::class,"t_sgcv_opcion_perfil","opcion_id","perfil_id");
     }
 }

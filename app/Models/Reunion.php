@@ -9,7 +9,7 @@ class Reunion extends Model
 {
     use HasFactory;
     
-    protected $table = "T_SGCV_Reuniones";
+    protected $table = "t_sgcv_reuniones";
     public $timestamps = true;
 
     protected $fillable = [
@@ -28,10 +28,10 @@ class Reunion extends Model
     }
 
     public function users(){
-        return $this->belongsToMany(User::class,"T_SGCV_Reu_presentadores","reunion_id","usuario_id");
+        return $this->belongsToMany(User::class,"t_sgcv_reu_presentadores","reunion_id","usuario_id");
     }
 
     public function documents(){
-        return $this->belongsToMany(Documents::class,"T_SGCV_Reu_document","reunion_id","documento_id");
+        return $this->belongsToMany(Documents::class,"t_sgcv_reu_document","reunion_id","documento_id");
     }
 }

@@ -9,7 +9,7 @@ class ReunionPresenter extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Reu_presentadores";
+    protected $table = "t_sgcv_reu_presentadores";
     public $timestamps = true;
 
     protected $fillable = [

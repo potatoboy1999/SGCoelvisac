@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class OptionProfile extends Model
 {
     use HasFactory;
-    protected $table = "T_SGCV_Opcion_Perfil";
+    protected $table = "t_sgcv_opcion_perfil";
     public $timestamps = true;
 
     protected $fillable = [

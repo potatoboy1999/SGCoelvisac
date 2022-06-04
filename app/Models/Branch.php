@@ -9,7 +9,7 @@ class Branch extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Sedes";
+    protected $table = "t_sgcv_sedes";
     public $timestamps = true;
 
     protected $fillable = [

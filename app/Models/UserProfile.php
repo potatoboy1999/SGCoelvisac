@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserProfile extends Model
 {
     use HasFactory;
-    protected $table = "T_SGCV_Usuario_Perfil";
+    protected $table = "t_sgcv_usuario_perfil";
     public $timestamps = true;
 
     protected $fillable = [

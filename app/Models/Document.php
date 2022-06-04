@@ -9,7 +9,7 @@ class Document extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Documentos";
+    protected $table = "t_sgcv_documentos";
     public $timestamps = true;
 
     protected $fillable = [

@@ -9,7 +9,7 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Roles";
+    protected $table = "t_sgcv_roles";
     public $timestamps = true;
 
     protected $fillable = [

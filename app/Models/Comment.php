@@ -9,7 +9,7 @@ class Comment extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Comentarios";
+    protected $table = "t_sgcv_comentarios";
     public $timestamps = true;
 
     protected $fillable = [
