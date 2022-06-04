@@ -9,7 +9,7 @@ class Kpi extends Model
 {
     use HasFactory;
     
-    protected $table = "T_SGCV_Kpis";
+    protected $table = "t_sgcv_kpis";
     public $timestamps = true;
 
     protected $fillable = [
@@ -27,6 +27,6 @@ class Kpi extends Model
     }
 
     public function objectives(){
-        return $this->belongsToMany(Objective::class,"T_SGCV_Obj_kpi","kpi_id",'objectivo_id');
+        return $this->belongsToMany(Objective::class,"t_sgcv_obj_kpi","kpi_id",'objectivo_id');
     }
 }

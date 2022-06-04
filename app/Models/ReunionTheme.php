@@ -9,7 +9,7 @@ class ReunionTheme extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Reu_Temas";
+    protected $table = "t_sgcv_reu_temas";
     public $timestamps = true;
 
     protected $fillable = [
@@ -23,6 +23,6 @@ class ReunionTheme extends Model
     }
 
     public function documents(){
-        return $this->belongsToMany(Document::class,"T_SGCV_Reu_document","reu_tema_id","documento_id");
+        return $this->belongsToMany(Document::class,"t_sgcv_reu_document","reu_tema_id","documento_id");
     }
 }

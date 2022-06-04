@@ -9,7 +9,7 @@ class TravelSchedule extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Agenda_Viajes";
+    protected $table = "t_sgcv_agenda_viajes";
     public $timestamps = true;
 
     protected $fillable = [

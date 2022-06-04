@@ -9,7 +9,7 @@ class ObjKpi extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Obj_kpi";
+    protected $table = "t_sgcv_obj_kpi";
     public $timestamps = true;
 
     protected $fillable = [

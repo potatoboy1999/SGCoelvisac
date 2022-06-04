@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class MailSent extends Model
 {
     use HasFactory;
-    protected $table = "T_SGCV_Correos";
+    protected $table = "t_sgcv_correos";
     public $timestamps = true;
 
     protected $fillable = [

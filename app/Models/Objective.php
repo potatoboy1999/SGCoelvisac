@@ -9,7 +9,7 @@ class Objective extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Objetivos";
+    protected $table = "t_sgcv_objetivos";
     public $timestamps = true;
 
     protected $fillable = [
@@ -22,7 +22,7 @@ class Objective extends Model
         return $this->belongsTo(Theme::class, "tema_id","id");
     }
     public function kpis(){
-        return $this->belongsToMany(Kpi::class,"T_SGCV_Obj_kpi","objetivo_id","kpi_id");
+        return $this->belongsToMany(Kpi::class,"t_sgcv_obj_kpi","objetivo_id","kpi_id");
     }
     public function activities(){
         return $this->hasMany(Activity::class,'objetivo_id','id');

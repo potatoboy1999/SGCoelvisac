@@ -9,7 +9,7 @@ class Activity extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Actividades";
+    protected $table = "t_sgcv_actividades";
     public $timestamps = true;
 
     protected $fillable = [

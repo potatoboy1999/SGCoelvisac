@@ -9,7 +9,7 @@ class KpiCalendar extends Model
 {
     use HasFactory;
 
-    protected $table = "T_SGCV_Kpi_Calendario";
+    protected $table = "t_sgcv_kpi_calendario";
     public $timestamps = true;
 
     protected $fillable = [
