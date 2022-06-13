@@ -34,7 +34,7 @@ class Activity extends Model
         return $this->belongsTo(Document::class, "doc_adjunto_id", "id");
     }
 
-    public function docPoliticas(){
+    public function docPolicy(){
         return $this->belongsTo(Document::class, "doc_politicas_id", "id");
     }
 }

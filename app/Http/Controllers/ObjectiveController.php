@@ -139,7 +139,7 @@ class ObjectiveController extends Controller
             $objective_id = $request->obj_sel;
         }
 
-        $sizeMax = 8388608;
+        $sizeMax = 8388608; // 8MB
         $valMimes = ["application/pdf"];
         $destinationPath = 'uploads';
 
@@ -174,7 +174,7 @@ class ObjectiveController extends Controller
         if($request->hasFile("adjacent_file") && $request->file("adjacent_file")->isValid()){
             $adjFile = $request->adjacent_file;
             
-            $ogName = $polFile->getClientOriginalName();
+            $ogName = $adjFile->getClientOriginalName();
             $ogExtension = $adjFile->getClientOriginalExtension();
             $size = $adjFile->getSize();
             $mime = $adjFile->getMimeType();
@@ -194,7 +194,6 @@ class ObjectiveController extends Controller
             }else{
                 $alerts[] = "<br>Problemas con el archivo adjunto";
             }
-
         }        
 
         $activity = new Activity;
@@ -213,7 +212,7 @@ class ObjectiveController extends Controller
         ]);
     }
 
-    public function all_items(Request $request){
+    public function allItems(Request $request){
         $roles = Role::where("estado",1)->get();
         foreach ($roles as $i => $role) {
             foreach ($role->themes->where("estado",1) as $x => $theme) {

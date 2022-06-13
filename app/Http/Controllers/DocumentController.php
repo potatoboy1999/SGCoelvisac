@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Document;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
@@ -80,5 +81,33 @@ class DocumentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function delete(Request $request){
+        $document = Document::find($request->id);
+        if($document){
+            $document->estado = 0;
+            $document->save();
+            return [
+                "status"=> "ok",
+                "msg" => "El documento ha sido eliminado"
+            ];
+        }else{
+            return [
+                "status" => "error",
+                "msg" => "Error: No se encontro el documento"
+            ];
+        }
+    }
+
+    public function download(Request $request){
+        $document = Document::find($request->id);
+        if($document){
+            //file is stored under project/public/uploads/
+            $file= public_path(). "/uploads/".$document->file;
+            return response()->download($file, $document->nombre);
+        }else{
+            return back()->with("document wasn't found");
+        }
     }
 }

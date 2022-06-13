@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ObjectiveController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,8 +27,20 @@ Route::group(["middleware"=>["auth"]], function(){
     Route::group(["prefix"=>"gestor"], function(){
         Route::get('objetivos', [ObjectiveController::class,"index"])->name("objectives");
         Route::post('nuevo_item', [ObjectiveController::class,"storeItem"])->name("new_item");
-        Route::get("all_items", [ObjectiveController::class,"all_items"])->name("api_all_activities");
+        Route::get("all_items", [ObjectiveController::class,"allItems"])->name("api_all_activities");
     });
+
+    Route::group(["prefix"=>"activity"], function(){
+        Route::post('add_politics', [ActivityController::class,"updatePolicy"])->name("upd_activity_policy");
+        Route::post('add_adjacent', [ActivityController::class,"updateAdjacent"])->name("upd_activity_adjacent");
+    });
+
+    Route::group(["prefix"=>"document"], function(){
+        Route::get('download', [DocumentController::class,"download"])->name('doc.download');
+        Route::post('delete', [DocumentController::class,"delete"])->name('doc.delete');
+    });
+
+    //Route::get("download2", [ActivityController::class,"getDownload"]);
 });
 
 require __DIR__.'/auth.php';
