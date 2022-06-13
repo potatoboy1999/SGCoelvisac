@@ -44,7 +44,7 @@
             // Bootstrap ID
             gtag('config', 'UA-118965717-5');
         </script>
-        <link href="{{asset("css/node_vendors/coreui-chartjs.css")}}" rel="stylesheet">
+        <!-- <link href="{{asset("css/node_vendors/coreui-chartjs.css")}}" rel="stylesheet"> -->
         @yield('style')
     </head>
     <body>
@@ -203,8 +203,8 @@
         <script src="{{asset("js/node_vendors/coreui.bundle.min.js")}}"></script>
         <script src="{{asset("js/node_vendors/simplebar.min.js")}}"></script>
         <!-- Plugins and scripts required by this view-->
-        <script src="{{asset("js/node_vendors/chart.min.js")}}"></script>
-        <script src="{{asset("js/node_vendors/coreui-chartjs.js")}}"></script>
+        <!-- <script src="{{asset("js/node_vendors/chart.min.js")}}"></script> -->
+        <!-- <script src="{{asset("js/node_vendors/coreui-chartjs.js")}}"></script> -->
         <script src="{{asset("js/node_vendors/coreui-utils.js")}}"></script>
         <script src="{{asset("js/main.js")}}"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="crossorigin="anonymous"></script>
