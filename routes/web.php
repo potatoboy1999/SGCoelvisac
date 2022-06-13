@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Route::get('/', function () {return view('welcome');});
-Route::get('/', function () {return redirect('/login');});
+//Route::get('/', function () {return redirect('/login');});
 
 Route::group(["middleware"=>["auth"]], function(){
     Route::get('dashboard',[DashboardController::class,"index"])->name('dashboard');
@@ -42,7 +42,8 @@ Route::group(["middleware"=>["auth"]], function(){
         Route::post('delete', [DocumentController::class,"delete"])->name('doc.delete');
     });
 
-    //Route::get("download2", [ActivityController::class,"getDownload"]);
 });
+
+Route::get("/", function(){return view("front.index"); });
 
 require __DIR__.'/auth.php';
