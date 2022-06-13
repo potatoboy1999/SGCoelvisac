@@ -14,6 +14,7 @@ class Document extends Model
 
     protected $fillable = [
         'nombre',
+        'file',
         'estado',
     ];
 

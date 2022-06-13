@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Document;
 use App\Models\Objective;
 use App\Models\Role;
 use App\Models\Theme;
@@ -96,6 +97,8 @@ class ObjectiveController extends Controller
     }
 
     public function storeItem(Request $request){
+
+        $alerts = [];
         
         $role_id = 0;
         if(isset($request->new_role_switch)){
@@ -105,7 +108,6 @@ class ObjectiveController extends Controller
             $role->descripcion = "";
             $role->estado = 1;
             $role->save();
-
             $role_id = $role->id;
         }else{
             $role_id = $request->role_sel;
@@ -137,13 +139,71 @@ class ObjectiveController extends Controller
             $objective_id = $request->obj_sel;
         }
 
+        $sizeMax = 8388608;
+        $valMimes = ["application/pdf"];
+        $destinationPath = 'uploads';
+
+        $pol_file = null;
+        if($request->hasFile("policy_file") && $request->file("policy_file")->isValid()){
+            $polFile = $request->policy_file;
+
+            $ogName = $polFile->getClientOriginalName();
+            $ogExtension = $polFile->getClientOriginalExtension();
+            $size = $polFile->getSize();
+            $mime = $polFile->getMimeType();
+            if($size <= $sizeMax && in_array($mime, $valMimes)){
+                //Move Uploaded File
+                $newName = "file".date("Ymd-His-U")."01.".$ogExtension;
+                $polFile->move($destinationPath, $newName);
+                
+                $polDoc = new Document();
+                $polDoc->nombre = substr($ogName, 0, 150);
+                $polDoc->file = $newName;
+                $polDoc->estado = 1;
+                $polDoc->save();
+
+                $pol_file = $polDoc->id;
+            }else{
+                $alerts[] = "<br>Problemas con el archivo de politicas";
+            }
+
+
+        }
+
+        $adj_file = null;
+        if($request->hasFile("adjacent_file") && $request->file("adjacent_file")->isValid()){
+            $adjFile = $request->adjacent_file;
+            
+            $ogName = $polFile->getClientOriginalName();
+            $ogExtension = $adjFile->getClientOriginalExtension();
+            $size = $adjFile->getSize();
+            $mime = $adjFile->getMimeType();
+
+            if($size <= $sizeMax && in_array($mime, $valMimes)){
+                //Move Uploaded File
+                $newName = "file".date("Ymd-His-U")."02.".$ogExtension;
+                $adjFile->move($destinationPath, $newName);
+
+                $adjDoc = new Document();
+                $adjDoc->nombre = substr($ogName, 0, 150);
+                $adjDoc->file = $newName;
+                $adjDoc->estado = 1;
+                $adjDoc->save();
+
+                $adj_file = $adjDoc->id;
+            }else{
+                $alerts[] = "<br>Problemas con el archivo adjunto";
+            }
+
+        }        
+
         $activity = new Activity;
         $activity->nombre           = $request->activity_desc;
         $activity->objetivo_id      = $objective_id;
         $activity->fecha_comienzo   = date_format(date_create_from_format('d/m/Y',$request->act_date_start),'Y-m-d');
         $activity->fecha_fin        = date_format(date_create_from_format('d/m/Y',$request->act_date_end),'Y-m-d');
-        $activity->doc_politicas_id = null;
-        $activity->doc_adjunto_id   = null;
+        $activity->doc_politicas_id = $pol_file;
+        $activity->doc_adjunto_id   = $adj_file;
         $activity->estado           = 1;
         $activity->save();
 
