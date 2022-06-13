@@ -84,6 +84,31 @@ class ActivityController extends Controller
         //
     }
 
+    public function popupEdit(Request $request){
+        $activity = Activity::find($request->id);
+        return view("activities.popup_edit",["activity"=>$activity]);
+    }
+
+    public function popupUpdate(Request $request){
+        $activity = Activity::find($request->act_upd_id);
+        if($activity){
+            $activity->nombre = $request->upd_activity_desc;
+            $activity->fecha_comienzo = $request->act_upd_date_start;
+            $activity->fecha_fin = $request->act_upd_date_end;
+            $activity->save();
+
+            return back()->with([
+                "status" => "ok",
+                "msg" => "Actividad editada correctamente"
+            ]);
+        }else{
+            return back()->with([
+                "status" => "error",
+                "msg" => "ERROR: La actividad no existe"
+            ]);
+        }
+    }
+
     public function updatePolicy(Request $request){
         $pol_file = null;
 
@@ -211,14 +236,5 @@ class ActivityController extends Controller
             "status" => "error",
             "msg" => "Error: Actividad no encontrada"
         ];
-    }
-
-    public function getDownload(){
-        //PDF file is stored under project/public/download/info.pdf
-        //$file= public_path(). "/uploads/file20220612-210506-1655085906.pdf";
-        $file= public_path(). "/uploads/Diseño de sistema de seguimiento - Fase I.pptx";
-        
-        return response()->download($file);
-        //return "hi";
     }
 }

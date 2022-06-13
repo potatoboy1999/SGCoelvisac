@@ -17,21 +17,6 @@ $("#act_date_end").datepicker({
 
 $("#item_save").on("click", function(ev){
     ev.preventDefault();
-    var data = {
-        new_role: $("#newRoleSwitch").prop("checked"),
-        role_sel: $("#role_sel").val(),
-        role_name: $("#role_name").val(),
-        new_theme: $("#newThemeSwitch").prop("checked"),
-        theme_sel: $("#theme_sel").val(),
-        theme_name: $("#theme_name").val(),
-        new_objective: $("#newObjSwitch").prop("checked"),
-        obj_sel: $("#obj_sel").val(),
-        obj_name: $("#obj_name").val(),
-        activity_desc: $("#activity_desc").val(),
-        date_start: $("#act_date_start").val(),
-        date_end: $("#act_date_end").val(),
-    };
-    console.log("Save New Item", data);
     $("#role_form").submit();
 });
 
@@ -76,7 +61,6 @@ $(".new_item_switch").on("change",function(ev){
 });
 
 $("#role_sel").on("change",function(){
-    console.log("role change:",$(this).val());
     var role_id = $("#role_sel option:selected").val();
     var role = global_items.find(role=> role.id == role_id);
 
@@ -105,7 +89,6 @@ $("#role_sel").on("change",function(){
 });
 
 $("#theme_sel").on("change",function(){
-    console.log("theme change:",$(this).val());
     var theme_id = $("#theme_sel option:selected").val();
     var role = global_items.find(role=> role.themes.find(theme=>theme.id == theme_id));
 
@@ -198,7 +181,6 @@ $("#pol_save").on("click", function(ev){
         contentType: false,
         processData: false,
         success: function(res){
-            console.log(res);
             if(res.status == "ok"){
                 var act_id = $("[name='p_act_id']").val();
 
@@ -337,6 +319,29 @@ $(".btn-file-delete").click(function(ev){
             }
         }
     });
+});
+
+$(".btn-edit").on("click",function(ev){
+    ev.preventDefault();
+    var id = $(this).data("act");
+    var route = $(this).data("route");
+    $("#editActivityModal").html("");
+    $.ajax({
+        url: route,
+        data:{
+            id: id,
+        },
+        method: "GET",
+        success: function(res){
+            $("#editActivityModal").html(res);
+            $("#editActivityModal").modal("show");
+        }
+    });
+});
+
+$(document).on("click","#item_update",function(ev){
+    ev.preventDefault();
+    $("#edit_activity_form").submit();
 });
 
 var global_items = [];

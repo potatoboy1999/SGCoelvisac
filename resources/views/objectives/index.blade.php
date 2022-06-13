@@ -47,12 +47,12 @@
 
 @section('content')
 
-<!-- Role Modal -->
+<!-- Item Modal -->
 <div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="roleModalLabel">Nuevo Rol</h5>
+                <h5 class="modal-title" id="roleModalLabel">Nuevo Item</h5>
                 <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -163,7 +163,12 @@
         </div>
     </div>
 </div>
-<!-- End Role Modal -->
+<!-- End Item Modal -->
+
+<!-- Edit Activity Modal -->
+<div class="modal fade" id="editActivityModal" tabindex="-1" aria-labelledby="editActivityModalLabel" aria-hidden="true">
+</div>
+<!-- End Edit Activity Modal -->
 
 <!-- Policy Modal -->
 <div class="modal fade" id="policyModal" tabindex="-1" aria-labelledby="policyModalLabel" aria-hidden="true">
@@ -381,17 +386,17 @@
                                                     </td>
                                                     <td class="t_red"></td>
                                                     <td class="text-center align-middle t-cel-comments">
-                                                        <a href="javascript:;" class="btn btn-secondary my-1 btn-sm text-white">
+                                                        <a href="javascript:;" class="btn btn-secondary my-1 btn-sm text-white btn-edit" data-act="{{$activity->id}}" data-route="{{route("activity.popup.edit")}}">
                                                             <svg class="icon">
                                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
                                                             </svg>
                                                         </a>
-                                                        <a href="javascript:;" class="btn btn-danger my-1 btn-sm text-white">
+                                                        <a href="javascript:;" class="btn btn-danger my-1 btn-sm text-white btn-delete">
                                                             <svg class="icon">
                                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                             </svg>
                                                         </a>
-                                                        <a href="javascript:;" class="btn btn-success my-1 btn-sm text-white">
+                                                        <a href="javascript:;" class="btn btn-success my-1 btn-sm text-white btn-comment">
                                                             <svg class="icon">
                                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-comment-bubble"></use>
                                                             </svg>
