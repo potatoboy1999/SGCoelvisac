@@ -9,7 +9,7 @@ class DashboardController extends Controller
     public function index(){
         $page = "dashboard";
         $bcrums = ["Dashboard"];
-        return view('dashboard.index',[
+        return view('intranet.dashboard.index',[
             "page"=> $page,
             "bcrums"=>$bcrums
         ]);

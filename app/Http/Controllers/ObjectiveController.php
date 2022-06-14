@@ -23,7 +23,7 @@ class ObjectiveController extends Controller
 
         $roles = Role::where("estado",1)->get();
         
-        return view("objectives.index",[
+        return view("intranet.objectives.index",[
             "page"=>$page,
             "bcrums" => $bcrums,
             "roles" => $roles,

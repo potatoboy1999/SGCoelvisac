@@ -170,6 +170,35 @@
 </div>
 <!-- End Edit Activity Modal -->
 
+<!-- Edit Theme Modal -->
+<div class="modal fade" id="editThemeModal" tabindex="-1" aria-labelledby="editThemeModalLabel" aria-hidden="true">
+</div>
+<!-- End Edit Activity Modal -->
+
+<!-- Edit Role Modal -->
+<div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+</div>
+<!-- End Edit Activity Modal -->
+
+<!-- Delete Role Modal -->
+<div class="modal fade" id="deleteItemModal" tabindex="-1" aria-labelledby="deleteItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar Elemento</h5>
+            </div>
+            <div class="modal-body">
+                <p>¿Estas seguro que quieres eliminar este elemento y sus Objetivos y Actividades vinculadas?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" id="delete-confirm" class="btn btn-danger text-white">Si, Eliminar</a>
+                <a href="javascript:;" id="delete-deny" class="btn btn-secondary text-white">No, Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Edit Activity Modal -->
+
 <!-- Policy Modal -->
 <div class="modal fade" id="policyModal" tabindex="-1" aria-labelledby="policyModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -309,7 +338,14 @@
         @foreach ($roles as $role)
         <div class="card mb-4">
             <div class="card-header rol-header">
-                Rol {{$i+1}}: {{$role->nombre}}
+                <div class="float-end">
+                    <a href="{{route('role.popup.edit')}}" class="btn btn-light btn-sm btn-role-settings" roleid="{{$role->id}}">
+                        <svg class="icon">
+                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-settings"></use>
+                        </svg>
+                    </a>
+                </div>
+                <p class="m-0">Rol {{$i+1}}: {{$role->nombre}}</p>
             </div>
             <div class="card-body">
                 <?php 
@@ -318,7 +354,16 @@
                 ?>
                 @foreach ($themes as $theme)
                 <div class="card {{($x != sizeOf($themes)-1?"mb-3":"")}}">
-                    <div class="card-header">Tema {{$x+1}}: {{$theme->nombre}}</div>
+                    <div class="card-header">
+                        <div class="float-end">
+                            <a href="{{route('theme.popup.edit')}}" class="btn btn-outline-secondary btn-sm btn-theme-settings" themeid="{{$theme->id}}">
+                                <svg class="icon">
+                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-settings"></use>
+                                </svg>
+                            </a>
+                        </div>
+                        <p class="m-0">Tema {{$x+1}}: {{$theme->nombre}}</p>
+                    </div>
                     <div class="card-body p-0">
                         <div class="row">
                             <div class="col-12">

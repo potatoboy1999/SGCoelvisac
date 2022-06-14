@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
+use App\Models\Objective;
+use App\Models\Role;
+use App\Models\Theme;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -80,5 +84,69 @@ class RoleController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function popupEdit(Request $request){
+        $role = Role::find($request->id);
+        return view("intranet.roles.popup_edit",["role"=>$role]);
+    }
+
+    public function popupUpdate(Request $request){
+        $role = Role::find($request->role_upd_id);
+        if($role){
+            $role->nombre = $request->upd_role_desc;
+            $role->save();
+
+            return back()->with([
+                "status" => "ok",
+                "msg" => "Rol editado correctamente"
+            ]);
+        }else{
+            return back()->with([
+                "status" => "error",
+                "msg" => "ERROR: El Rol no existe"
+            ]);
+        }
+    }
+
+    public function popupDelete(Request $request){
+        $role = Role::find($request->role_upd_id);
+        if($role){
+            $role->estado = 0;
+            $role->save();
+
+            $themes = $role->themes->where('estado', 1);
+
+            $themes_id = [];
+            $obj_id = [];
+            $act_id = [];
+            foreach ($themes as $k => $theme) {
+                $themes_id[] = $theme->id;
+                $objectives = $theme->objectives->where('estado', 1);
+
+                foreach ($objectives as $x => $obj) {
+                    $obj_id[] = $obj->id;
+                    $activities = $obj->activities->where('estado', 1);
+
+                    foreach ($activities as $y => $act) {
+                        $act_id[] = $act->id;
+                    }
+                }
+            }
+
+            Theme::whereIn('id',$themes_id)->update(["estado" => 0]);
+            Objective::whereIn('id',$obj_id)->update(["estado" => 0]);
+            Activity::whereIn('id',$act_id)->update(["estado" => 0]);
+
+            return back()->with([
+                "status" => "ok",
+                "msg" => "El rol y sus elementos vinculados han sido eliminado correctamente"
+            ]);
+        }else{
+            return back()->with([
+                "status" => "error",
+                "msg" => "ERROR: El Rol no existe"
+            ]);
+        }
     }
 }

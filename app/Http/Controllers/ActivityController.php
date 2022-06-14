@@ -86,7 +86,7 @@ class ActivityController extends Controller
 
     public function popupEdit(Request $request){
         $activity = Activity::find($request->id);
-        return view("activities.popup_edit",["activity"=>$activity]);
+        return view("intranet.activities.popup_edit",["activity"=>$activity]);
     }
 
     public function popupUpdate(Request $request){

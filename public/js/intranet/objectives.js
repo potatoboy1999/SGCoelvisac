@@ -339,9 +339,62 @@ $(".btn-edit").on("click",function(ev){
     });
 });
 
+$(".btn-theme-settings").on("click",function(ev){
+    ev.preventDefault();
+    var id = $(this).attr("themeid");
+    var route = $(this).attr("href");
+    $("#editThemeModal").html("");
+    $.ajax({
+        url: route,
+        data:{
+            id: id,
+        },
+        method: "GET",
+        success: function(res){
+            $("#editThemeModal").html(res);
+            $("#editThemeModal").modal("show");
+        }
+    });
+});
+
+$(".btn-role-settings").on("click",function(ev){
+    ev.preventDefault();
+    var id = $(this).attr("roleid");
+    var route = $(this).attr("href");
+    $("#editRoleModal").html("");
+    $.ajax({
+        url: route,
+        data:{
+            id: id,
+        },
+        method: "GET",
+        success: function(res){
+            $("#editRoleModal").html(res);
+            $("#editRoleModal").modal("show");
+        }
+    });
+});
+
 $(document).on("click","#item_update",function(ev){
     ev.preventDefault();
     $("#edit_activity_form").submit();
+});
+
+$(document).on("click","#theme_update",function(ev){
+    ev.preventDefault();
+    $("#edit_theme_form").submit();
+});
+
+$(document).on("click","#theme_delete",function(ev){
+    ev.preventDefault();
+    $.ajax({
+        url: ""
+    });
+});
+
+$(document).on("click","#role_update",function(ev){
+    ev.preventDefault();
+    $("#edit_role_form").submit();
 });
 
 var global_items = [];
