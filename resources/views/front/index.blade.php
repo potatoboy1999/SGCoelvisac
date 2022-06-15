@@ -219,15 +219,14 @@
         <div class="fondo container-fluid">
             <img class="logo" src="{{asset("img/logo.png")}}" alt="">
 
-            <form class="d-flex" role="search" data-np-checked="1">
-                <input class="form-control" type="search" placeholder="Buscar" aria-label="Search"
-                    data-np-checked="1">
-                <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
-                <div class="usuario d-flex">
-                    <span>Administrador</span>
-                    <i class="fas fa-user"></i>
-                </div>
-            </form>
+            {{-- <form class="d-flex" role="search">
+              <input class="form-control" type="search" placeholder="Buscar" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+            </form> --}}
+            <div class="usuario d-flex">
+                <a class="pt-1" href="{{route('login')}}">Login</a>
+                <i class="fas fa-user"></i>
+            </div>
         </div>
     </nav>
 
