@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Area;
 use App\Models\Document;
 use App\Models\Objective;
 use App\Models\Role;
@@ -16,17 +17,33 @@ class ObjectiveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $page = "objectives";
         $bcrums = ["Agenda Estrategica","Objetivos"];
 
-        $roles = Role::where("estado",1)->get();
+        $area = null;
+        $all_areas = Area::where("estado",1)->where("vis_matriz",1)->get();
+        $roles = [];
+
+        if(isset($request->area)){
+            $area = Area::where('id',$request->area)
+                        ->where('estado',1)
+                        ->first();
+            if($area){
+                $roles = Role::where('area_id', $area->id)
+                            ->where("estado", 1)
+                            ->get();
+            }
+            
+        }
         
         return view("intranet.objectives.index",[
             "page"=>$page,
             "bcrums" => $bcrums,
             "roles" => $roles,
+            "all_areas" => $all_areas,
+            "area" => $area
         ]);
     }
 
@@ -104,6 +121,7 @@ class ObjectiveController extends Controller
         if(isset($request->new_role_switch)){
             // Add new role
             $role = new Role;
+            $role->area_id = $request->area_id;
             $role->nombre = $request->role_name;
             $role->descripcion = "";
             $role->estado = 1;
@@ -213,11 +231,22 @@ class ObjectiveController extends Controller
     }
 
     public function allItems(Request $request){
-        $roles = Role::where("estado",1)->get();
-        foreach ($roles as $i => $role) {
-            foreach ($role->themes->where("estado",1) as $x => $theme) {
-                foreach ($theme->objectives->where("estado",1) as $y => $objective) {
-                    $objective->activities->where("estado",1);
+        $roles = [];
+        if(isset($request->area)){
+            $area = Area::where('id', $request->area)
+                        ->where("vis_matriz",1)
+                        ->where('estado', 1)
+                        ->first();
+            if($area){
+                $roles = Role::where('area_id', $area->id)
+                            ->where("estado",1)
+                            ->get();
+                foreach ($roles as $i => $role) {
+                    foreach ($role->themes->where("estado",1) as $x => $theme) {
+                        foreach ($theme->objectives->where("estado",1) as $y => $objective) {
+                            $objective->activities->where("estado",1);
+                        }
+                    }
                 }
             }
         }

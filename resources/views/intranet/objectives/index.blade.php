@@ -42,6 +42,9 @@
         .file-downloadable p{
             margin: 0;
         }
+        #form-area-sel .form-group{
+            max-width: 400px;
+        }
     </style>
 @endsection
 
@@ -61,6 +64,13 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group py-1">
+                                <label>Area:</label>
+                                <input type="text" class="form-control" value="{{$area?$area->nombre:''}}" readonly>
+                                <input type="hidden" name="area_id" value="{{$area?$area->id:''}}">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group py-1">
                                 <div class="row">
                                     <div class="col-6">
                                         <label class="form-label" for="role_sel">Rol:</label>
@@ -72,7 +82,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <select class="form-select" name="role_sel" id="role_sel"></select>
+                                <select class="form-select" name="role_sel" id="role_sel">
+                                    <option value='0'>-- No hay Roles disponibles --</option>
+                                </select>
                                 <input class="form-control" type="text" name="role_name" id="role_name" placeholder="Descripcion del rol" style="display: none;">
                             </div>
                         </div>
@@ -89,7 +101,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <select class="form-select" name="theme_sel" id="theme_sel"></select>
+                                <select class="form-select" name="theme_sel" id="theme_sel">
+                                    <option value='0'>-- No hay Temas disponibles --</option>
+                                </select>
                                 <input class="form-control" type="text" name="theme_name" id="theme_name" placeholder="Descripcion del tema" style="display: none;">
                             </div>
                         </div>
@@ -106,7 +120,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <select class="form-select" name="obj_sel" id="obj_sel"></select>
+                                <select class="form-select" name="obj_sel" id="obj_sel">
+                                    <option value='0'>-- No hay Objetivos disponibles --</option>
+                                </select>
                                 <input class="form-control" type="text" name="obj_name" id="obj_name" placeholder="Descripcion del objetivo" style="display: none;">
                             </div>
                         </div>
@@ -120,7 +136,7 @@
                             <div class="form-group py-1">
                                 <label class="form-label" for="act_date_start">Fecha Inicio:</label>
                                 <div class="input-group">
-                                    <input id="act_date_start" class="form-control" type="text" name="act_date_start" value="" required>
+                                    <input id="act_date_start" class="form-control" type="text" name="act_date_start" value="{{date('d/m/Y')}}" required>
                                     <span class="input-group-text">
                                         <svg class="icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
@@ -133,7 +149,7 @@
                             <div class="form-group py-1">
                                 <label class="form-label" for="act_date_end">Fecha Fin:</label>
                                 <div class="input-group">
-                                    <input id="act_date_end" class="form-control" type="text" name="act_date_end" value="" required>
+                                    <input id="act_date_end" class="form-control" type="text" name="act_date_end" value="{{date('d/m/Y')}}" required>
                                     <span class="input-group-text">
                                         <svg class="icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
@@ -156,6 +172,9 @@
                         </div>
                     </div>
                 </form>
+                <div id="item_error">
+                    <ul class="text-danger"></ul>
+                </div>
             </div>
             <div class="modal-footer">
                 <button id="item_save" class="btn btn-info text-white" type="button">Guardar</button>
@@ -295,10 +314,29 @@
                 <strong class="me-auto">Nuevo Item</strong>
                 <button type="button" class="btn-close" data-coreui-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">Hello, world! This is a toast message.</div>
+            <div class="toast-body"></div>
         </div>
     </div>
     <div class="container-lg">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex flex-row flex-wrap">
+                    <form id="form-area-sel" action="{{route('objectives')}}" method="get" class="w-100">
+                        <div class="form-group w-100">
+                            <label>Area:</label>
+                            <select name="area" id="area-sel" class="form-select d-inline" style="width: calc(100% - 41px);">
+                                <option value="0">-- Selecciona un area --</option>
+                                @foreach ($all_areas as $a)
+                                    <option value="{{$a->id}}" {{($area && $area->id == $a->id)? 'selected':''}}>{{$a->nombre}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @if ($area)
+        
         <div class="card mb-4">
             <div class="card-body">
                 <div class="d-flex flex-row flex-wrap">
@@ -464,6 +502,7 @@
         </div>
         <?php $i++; ?>
         @endforeach
+        @endif
         <!-- End Activities Matrix -->
         <div class="card mb-4 d-none">
             <div class="card-header">Matriz de Objetivos</div>
@@ -583,7 +622,7 @@
 
     $(function() {
         $.ajax({
-            url: "{{route('api_all_activities')}}",
+            url: "{{route('api_all_activities').($area?'?area='.$area->id:'')}}",
             method: "GET",
             success: function(res){
                 global_items = res;

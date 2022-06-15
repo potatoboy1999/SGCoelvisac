@@ -15,9 +15,84 @@ $("#act_date_end").datepicker({
     minDate: new Date(),
 });
 
+$("#area-sel").on("change",function(ev){
+    var area_id = $(this).val();
+    if(area_id != "0"){
+        $("#form-area-sel").submit();
+    }
+});
+
 $("#item_save").on("click", function(ev){
     ev.preventDefault();
-    $("#role_form").submit();
+    // checks
+    var new_role = $("#newRoleSwitch").prop('checked');
+    var new_theme = $("#newThemeSwitch").prop('checked');
+    var new_obj = $("#newObjSwitch").prop('checked');
+    // selects
+    var role_sel = $("#role_sel").val();
+    var theme_sel = $("#theme_sel").val();
+    var obj_sel = $("#obj_sel").val();
+    // inputs
+    var role_name = $("#role_name").val().trim();
+    var theme_name = $("#theme_name").val().trim();
+    var obj_name = $("#obj_name").val().trim();
+    var act_name = $("#activity_desc").val().trim();
+    var date_start = $("#act_date_start").val().trim();
+    var date_end = $("#act_date_end").val().trim();
+    
+    
+
+    var role_ok = true;
+    var theme_ok = true;
+    var obj_ok = true;
+    var act_ok = (act_name != "");
+    var start_ok = (date_start != "");
+    var end_ok = (date_end != "");
+
+    var errors = "";
+
+    // validate role inputs
+    if(new_role){
+        role_ok = (role_name != "");
+    }else{
+        role_ok = (role_sel != "0");
+    }
+
+    if(new_theme){
+        theme_ok = (theme_name != "");
+    }else{
+        theme_ok = (theme_sel != "0");
+    }
+
+    if(new_obj){
+        obj_ok = (obj_name != "");
+    }else{
+        obj_ok = (obj_sel != "0");
+    }
+
+    if(!role_ok || !theme_ok || !obj_ok || !act_ok || !start_ok || !end_ok){
+        if(!role_ok){
+            errors += "<li>Ingrese un rol correctamente</li>";
+        }
+        if(!theme_ok){
+            errors += "<li>Ingrese un tema correctamente</li>";
+        }
+        if(!obj_ok){
+            errors += "<li>Ingrese un objetivo correctamente</li>";
+        }
+        if(!act_ok){
+            errors += "<li>Ingrese una actividad correctamente</li>";
+        }
+        if(!start_ok){
+            errors += "<li>Ingrese una fecha de inicio</li>";
+        }
+        if(!end_ok){
+            errors += "<li>Ingrese una fecha final</li>";
+        }
+    }else{
+        $("#role_form").submit();
+    }
+    $("#item_error ul").html(errors);
 });
 
 $(".new_item_switch").on("change",function(ev){
@@ -431,6 +506,16 @@ function setupNewItemModal(){
             i++;
         });
 
+        if(role_options == ""){
+            role_options = "<option value='0'>-- No hay Roles disponibles --</option>";
+        }
+        if(theme_options == ""){
+            theme_options = "<option value='0'>-- No hay Temas disponibles --</option>";
+        }
+        if(obj_options == ""){
+            obj_options = "<option value='0'>-- No hay Objetivos disponibles --</option>";
+        }
+        console.log("roles:",role_options);
         $("#role_sel").html(role_options);
         $("#theme_sel").html(theme_options);
         $("#obj_sel").html(obj_options);
@@ -442,5 +527,8 @@ function setupNewItemModal(){
         $("#role_sel").hide();
         $("#theme_sel").hide();
         $("#obj_sel").hide();
+        $("#role_name").show();
+        $("#theme_name").show();
+        $("#obj_name").show();
     }
 }

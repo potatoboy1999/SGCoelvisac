@@ -150,6 +150,11 @@ class ActivityController extends Controller
                     "msg" => "Error: Tamaño de archivo muy grande"
                 ];
             }
+        }else{
+            return [
+                "status" => "error",
+                "msg" => "No ha elegido un archivo o hubo problemas al subirlo"
+            ];
         }
 
         $activity = Activity::find($request->p_act_id);
