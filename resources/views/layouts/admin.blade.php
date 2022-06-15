@@ -89,16 +89,16 @@
                 @endforeach
                 <li class="nav-title d-none">Otros</li>
                 <li class="nav-group d-none">
-                    <a class="nav-link nav-group-toggle" href="#">
+                    <a class="nav-link nav-group-toggle" href="javascript:;">
                         <svg class="nav-icon">
                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-bell"></use>
                         </svg> Notifications
                     </a>
                     <ul class="nav-group-items">
-                        <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Alerts</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Badge</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Modals</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#"><span class="nav-icon"></span> Toasts</a></li>
+                        <li class="nav-item"><a class="nav-link" href="javascript:;"><span class="nav-icon"></span> Alerts</a></li>
+                        <li class="nav-item"><a class="nav-link" href="javascript:;"><span class="nav-icon"></span> Badge</a></li>
+                        <li class="nav-item"><a class="nav-link" href="javascript:;"><span class="nav-icon"></span> Modals</a></li>
+                        <li class="nav-item"><a class="nav-link" href="javascript:;"><span class="nav-icon"></span> Toasts</a></li>
                     </ul>
                 </li>
             </ul>
@@ -111,34 +111,34 @@
                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-menu"></use>
                         </svg>
                     </button>
-                    <a class="header-brand d-md-none" href="#">
+                    <a class="header-brand d-md-none" href="javascript:;">
                         <svg width="118" height="46" alt="CoreUI Logo">
                             <use xlink:href="{{asset("icons/coreui.svg#full")}}"></use>
                         </svg>
                     </a>
                     <ul class="header-nav ms-3">
-                    <li class="nav-item dropdown"><a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <li class="nav-item dropdown"><a class="nav-link py-0" data-coreui-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false">
                         <div class="avatar avatar-md"><img class="avatar-img" src="{{asset("img/avatars/8.jpg")}}" alt="user@email.com"></div></a>
                         <div class="dropdown-menu dropdown-menu-end pt-0">
                             <div class="dropdown-header bg-light py-2">
                                 <div class="fw-semibold">Account: {{Auth::user()->nombre}}</div>
                             </div>
-                            <!--<a class="dropdown-item" href="#">
+                            <!--<a class="dropdown-item" href="javascript:;">
                                 <svg class="icon me-2">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-bell"></use>
                                 </svg> Updates<span class="badge badge-sm bg-info ms-2">42</span>
                             </a>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="javascript:;">
                                 <svg class="icon me-2">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-envelope-open"></use>
                                 </svg> Messages<span class="badge badge-sm bg-success ms-2">42</span>
                             </a>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="javascript:;">
                                 <svg class="icon me-2">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-task"></use>
                                 </svg> Tasks<span class="badge badge-sm bg-danger ms-2">42</span>
                             </a>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="javascript:;">
                                 <svg class="icon me-2">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-comment-square"></use>
                                 </svg> Comments<span class="badge badge-sm bg-warning ms-2">42</span>
@@ -146,29 +146,29 @@
                             <div class="dropdown-header bg-light py-2">
                                 <div class="fw-semibold">Settings</div>
                             </div>-->
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="javascript:;">
                                 <svg class="icon me-2">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-user"></use>
                                 </svg> Profile
                             </a>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="javascript:;">
                                 <svg class="icon me-2">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-settings"></use>
                                 </svg> Settings
                             </a>
                             <!--
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="javascript:;">
                                 <svg class="icon me-2">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-credit-card"></use>
                                 </svg> Payments<span class="badge badge-sm bg-secondary ms-2">42</span>
                             </a>-->
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" href="javascript:;">
                                 <svg class="icon me-2">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
                                 </svg> Projects
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout').submit();">
+                            <a class="dropdown-item" href="javascript:;" onclick="event.preventDefault(); document.getElementById('logout').submit();">
                                 <svg class="icon me-2">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-account-logout"></use>
                                 </svg> {{ __('Log Out') }}
@@ -187,7 +187,7 @@
                         @for ($i = 0; $i < sizeOf($bcrums); $i++)
                             <li class="breadcrumb-item {{(($i+1) == sizeOf($bcrums))?"active":""}}">
                                 @if (($i+1) < sizeOf($bcrums))
-                                    <a href="#">{{$bcrums[$i]}}</a>
+                                    <a href="javascript:;">{{$bcrums[$i]}}</a>
                                 @else
                                     <span>{{$bcrums[$i]}}</span>
                                 @endif
