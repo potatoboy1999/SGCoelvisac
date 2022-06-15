@@ -248,7 +248,7 @@
                 <div class="row">
                     <div class="col-3">
                         <div class="box">
-                            <a href="https://disac.info/roger/#">
+                            <a href="{{route('front.activity.matrix.show')}}">
                                 <i class="fas fa-cog"></i>
                                 Matriz de Agenda de Gestión Estratégica
                             </a>
@@ -256,7 +256,7 @@
                     </div>
                     <div class="col-2">
                         <div class="box">
-                            <a href="https://disac.info/roger/#">
+                            <a href="javascript:;">
                                 <i class="fas fa-suitcase"></i>
                                 Rol de viajes
                             </a>
@@ -264,7 +264,7 @@
                     </div>
                     <div class="col-2">
                         <div class="box">
-                            <a href="https://disac.info/roger/#">
+                            <a href="javascript:;">
                                 <i class="fas fa-chart-bar"></i>
                                 Resultados
                             </a>
@@ -272,7 +272,7 @@
                     </div>
                     <div class="col-2">
                         <div class="box">
-                            <a href="https://disac.info/roger/#">
+                            <a href="javascript:;">
                                 <i class="fas fa-bezier-curve"></i>
                                 Reunión de Resultado mensual
                             </a>
@@ -280,7 +280,7 @@
                     </div>
                     <div class="col-3">
                         <div class="box">
-                            <a href="https://disac.info/roger/#">
+                            <a href="javascript:;">
                                 <i class="fas fa-file-alt"></i>
                                 Documentos de gestión
                             </a>
@@ -325,15 +325,15 @@
         </div>
     </div>
 
-    <script src="{{asset("js/front/popper.min.js.download")}}"
+    <script src="{{asset("js/front/popper.min.js")}}"
         integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous">
     </script>
-    <script src="{{asset("js/front/bootstrap.min.js.download")}}"
+    <script src="{{asset("js/front/bootstrap.min.js")}}"
         integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous">
     </script>
-    <script src="{{asset("js/front/jquery-3.2.1.min.js.download")}}"></script>
-    <script src="{{asset("js/front/owl.carousel.js.download")}}"></script>
-    <script src="{{asset("js/front/owl.js.download")}}"></script>
+    <script src="{{asset("js/front/jquery-3.2.1.min.js")}}"></script>
+    <script src="{{asset("js/front/owl.carousel.js")}}"></script>
+    <script src="{{asset("js/front/owl.js")}}"></script>
     <script>
         $(document).ready(function() {
 

@@ -242,4 +242,13 @@ class ActivityController extends Controller
             "msg" => "Error: Actividad no encontrada"
         ];
     }
+
+    // ------------- FRONT FUNCTIONS --------------//
+
+    public function showMatrix(Request $request){
+        $page = [];
+        return view('front.matrix.index',[
+            "page" => $page
+        ]);
+    }
 }

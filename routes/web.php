@@ -56,5 +56,6 @@ Route::group(["middleware"=>["auth"]], function(){
 });
 
 Route::get("/", function(){return view("front.index"); });
+Route::get("/matriz", [ActivityController::class,'showMatrix'])->name('front.activity.matrix.show');
 
 require __DIR__.'/auth.php';
