@@ -87,21 +87,11 @@
             color-scheme: dark !important;
         }
 
-        html,
-        body,
-        input,
-        textarea,
-        select,
-        button {
+        html, body, input, textarea, select, button {
             background-color: #181a1b;
         }
 
-        html,
-        body,
-        input,
-        textarea,
-        select,
-        button {
+        html, body, input, textarea, select, button {
             border-color: #736b5e;
             color: #e8e6e3;
         }
@@ -225,7 +215,7 @@
 </head>
 
 <body class="home">
-    <nav class="navbar navbar-default navbar-static-top">
+    <nav class="navbar navbar-default navbar-static-top header">
         <div class="fondo container-fluid">
             <img class="logo" src="{{asset("img/logo.png")}}" alt="">
 
@@ -248,7 +238,7 @@
                 <div class="row">
                     <div class="col-3">
                         <div class="box">
-                            <a href="{{route('front.activity.matrix.show')}}">
+                            <a href="{{route('front.menu')}}">
                                 <i class="fas fa-cog"></i>
                                 Matriz de Agenda de Gestión Estratégica
                             </a>

@@ -383,7 +383,8 @@
                         </svg>
                     </a>
                 </div>
-                <p class="m-0">Rol {{$i+1}}: {{$role->nombre}}</p>
+                {{-- <p class="m-0">Rol {{$i+1}}: {{$role->nombre}}</p> --}}
+                <p class="m-0">Rol {{$role->id}}: {{$role->nombre}}</p>
             </div>
             <div class="card-body">
                 <?php 
@@ -429,7 +430,9 @@
                                                 @foreach ($activities as $activity)
                                                 <tr>
                                                     @if ($y == 0)
-                                                    <td class="text-center align-middle" rowspan="{{sizeOf($activities)}}">Op_01-1</td>
+                                                    <td class="text-center align-middle" rowspan="{{sizeOf($activities)}}">
+                                                        Ob_{{$theme->id}}-{{$objective->id}}
+                                                    </td>
                                                     <td class="align-middle" rowspan="{{sizeOf($activities)}}">{{$objective->nombre}}</td>
                                                     @endif
                                                     <td class="align-middle">{{$activity->nombre}}</td>
@@ -504,106 +507,6 @@
         @endforeach
         @endif
         <!-- End Activities Matrix -->
-        <div class="card mb-4 d-none">
-            <div class="card-header">Matriz de Objetivos</div>
-            <div class="card-body overflow-auto">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="text-end mb-2">
-                            <a href="javascript:;" class="btn btn-success text-white" data-coreui-toggle="modal" data-coreui-target="#roleModal">+ Nuevo Rol</a>
-                        </div>
-                    </div>
-                </div>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th class="text-center align-middle" width="90">COD</th>
-                            <th class="text-center align-middle">Objetivo</th>
-                            <th class="text-center align-middle">Actividades Principales</th>
-                            <th class="text-center align-middle" width="120">Fecha Inicio</th>
-                            <th class="text-center align-middle" width="120">Fecha Fin</th>
-                            <th class="text-center align-middle">Procedimiento/<br>Politica</th>
-                            <th class="text-center align-middle">Documento<br>Adjunto</th>
-                            <th class="text-center align-middle">Estado</th>
-                            <th class="text-center align-middle">Comentarios</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="t_role_row" colspan="100%">Rol 01: Asegurar la calidad y confiabilidad de la red eléctrica de distribución de Coelvisac para el suministro de energía</td>
-                        </tr>
-                        <tr>
-                            <td class="t_theme_row" colspan="100%">Tema 1: Distribución de la Red Eléctrica</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center align-middle" rowspan="3">Op_01-1</td>
-                            <td class="align-middle" rowspan="3">Evitar Interrupciones Masivas</td>
-                            <td class="align-middle">Elaborar e implementar plan</td>
-                            <td class="text-center align-middle">05-Junio-22</td>
-                            <td class="text-center align-middle">25-Junio-22</td>
-                            <td class="text-center align-middle"><a href="#" class="btn btn-warning btn-sm">
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-from-bottom"></use>
-                                </svg>
-                            </a></td>
-                            <td class="text-center align-middle"><a href="#" class="btn btn-warning btn-sm">
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-from-bottom"></use>
-                                </svg>
-                            </a></td>
-                            <td class="t_red"></td>
-                            <td class="text-center align-middle t_comments"><a href="#" class="btn btn-success btn-sm">
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-notes"></use>
-                                </svg>
-                            </a></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">Implementar sistemas de protección suficientes</td>
-                            <td class="text-center align-middle">05-Junio-22</td>
-                            <td class="text-center align-middle">25-Junio-22</td>
-                            <td class="text-center align-middle"><a href="#" class="btn btn-warning btn-sm">
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-from-bottom"></use>
-                                </svg>
-                            </a></td>
-                            <td class="text-center align-middle"><a href="#" class="btn btn-warning btn-sm">
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-from-bottom"></use>
-                                </svg>
-                            </a></td>
-                            <td class="t_red"></td>
-                            <td class="text-center align-middle t_comments"><a href="#" class="btn btn-success btn-sm">
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-notes"></use>
-                                </svg>
-                            </a></td>
-                        </tr>
-                        <tr>
-                            <td class="align-middle">Clientes libres deben contar con sistemas de protección dentro de sus operaciones</td>
-                            <td class="text-center align-middle">05-Junio-22</td>
-                            <td class="text-center align-middle">25-Junio-22</td>
-                            <td class="text-center align-middle"><a href="#" class="btn btn-warning btn-sm">
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-from-bottom"></use>
-                                </svg>
-                            </a></td>
-                            <td class="text-center align-middle"><a href="#" class="btn btn-warning btn-sm">
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-from-bottom"></use>
-                                </svg>
-                            </a></td>
-                            <td class="t_red"></td>
-                            <td class="text-center align-middle t_comments"><a href="#" class="btn btn-success btn-sm">
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-notes"></use>
-                                </svg>
-                            </a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
 </div>
 

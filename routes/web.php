@@ -56,6 +56,8 @@ Route::group(["middleware"=>["auth"]], function(){
 });
 
 Route::get("/", function(){return view("front.index"); });
+Route::get("/menu", [ActivityController::class,'showMenu'])->name('front.menu');
 Route::get("/matriz", [ActivityController::class,'showMatrix'])->name('front.activity.matrix.show');
+Route::get("/front/document/download", [DocumentController::class,"download"])->name('front.doc.download');
 
 require __DIR__.'/auth.php';

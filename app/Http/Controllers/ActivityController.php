@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\Area;
 use App\Models\Document;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
@@ -245,10 +247,42 @@ class ActivityController extends Controller
 
     // ------------- FRONT FUNCTIONS --------------//
 
+    public function showMenu(Request $request){
+        $page = [];
+        $m_areas = Area::where('vis_matriz', 1)
+                    ->where('estado',1)
+                    ->get();
+
+        return view('front.menu',[
+            "page" => $page,
+            "m_areas" => $m_areas,
+        ]);
+    }
+
     public function showMatrix(Request $request){
         $page = [];
+        $m_areas = Area::where('vis_matriz', 1)
+                    ->where('estado',1)
+                    ->get();
+        $area = null;
+        $roles = [];
+
+        if(isset($request->area)){
+            $area = Area::where('id',$request->area)
+                        ->where('estado',1)
+                        ->first();
+            if($area){
+                $roles = Role::where('area_id', $area->id)
+                            ->where("estado", 1)
+                            ->get();
+            }
+        }
+
         return view('front.matrix.index',[
-            "page" => $page
+            "page" => $page,
+            "m_areas" => $m_areas,
+            "roles" => $roles,
+            "area" => $area
         ]);
     }
 }

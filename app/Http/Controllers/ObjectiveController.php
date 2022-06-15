@@ -33,6 +33,7 @@ class ObjectiveController extends Controller
             if($area){
                 $roles = Role::where('area_id', $area->id)
                             ->where("estado", 1)
+                            ->orderBy("created_at", "desc")
                             ->get();
             }
             
