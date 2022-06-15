@@ -15,10 +15,15 @@ class Role extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
+        'area_id',
         'estado'
     ];
 
     public function themes(){
         return $this->hasMany(Theme::class,"rol_id","id");
+    }
+
+    public function area(){
+        return $this->belongsTo(Area::class,"area_id","id");
     }
 }

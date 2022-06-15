@@ -14,6 +14,7 @@ class Area extends Model
 
     protected $fillable = [
         'nombre',
+        'vis_matriz',
         'estado',
     ];
 
@@ -23,5 +24,9 @@ class Area extends Model
 
     public function reu_documents(){
         return $this->belongsToMany(Document::class,'t_sgcv_reu_document','area_id','documento_id');
+    }
+
+    public function roles(){
+        return $this->hasMany(Role::class,'area_id','id');
     }
 }
