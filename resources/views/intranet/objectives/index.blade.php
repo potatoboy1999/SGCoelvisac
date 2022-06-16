@@ -59,7 +59,7 @@
                 <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="role_form" action="{{route('new_item')}}" method="POST" enctype="multipart/form-data" autocomplete="off">
+                <form id="role_form" action="{{route('new_item')}}" method="POST" enctype="multipart/form-data" autocomplete="off" onkeydown="return event.key != 'Enter';">
                     @csrf
                     <div class="row">
                         <div class="col-12">
@@ -533,7 +533,7 @@
         toast.show();
     @endif
 
-    $(function() {
+    function getAllActivities(){
         $.ajax({
             url: "{{route('api_all_activities').($area?'?area='.$area->id:'')}}",
             method: "GET",
@@ -542,6 +542,10 @@
                 setupNewItemModal();
             }
         });
+    }
+
+    $(function() {
+        getAllActivities();
     });
 
 </script>

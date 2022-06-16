@@ -234,6 +234,13 @@ $("#role_sel").on("change",function(){
         }
     });
 
+    if(theme_options == ""){
+        theme_options = "<option value='0'>-- No hay Temas disponibles --</option>";
+    }
+    if(obj_options == ""){
+        obj_options = "<option value='0'>-- No hay Objetivos disponibles --</option>";
+    }
+
     $("#theme_sel").html(theme_options);
     $("#obj_sel").html(obj_options);
 
@@ -256,6 +263,10 @@ $("#theme_sel").on("change",function(){
             });
         }
     });
+
+    if(obj_options == ""){
+        obj_options = "<option value='0'>-- No hay Objetivos disponibles --</option>";
+    }
     
     $("#obj_sel").html(obj_options);
 });
@@ -521,6 +532,7 @@ $('#delete-item-confirm').on('click', function(ev){
         },
         success: function(res){
             if(res.status == "ok"){
+                getAllActivities();
 
                 if(type == "activity"){
                     var row = $("tr[act-id='"+id+"']");
