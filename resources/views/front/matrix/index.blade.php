@@ -30,6 +30,12 @@
   tr.td_activity>* {
       padding: 0.2rem!important;
   }
+  .t_role_row {
+      border-width: 6px 0!important;
+  }
+  .t_theme_row {
+      border-width: 3px 0!important;
+  }
 </style>
 @endsection
 

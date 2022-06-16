@@ -11,7 +11,17 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group py-1">
-                            <label class="form-label" for="activity_desc">Actividad:</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="form-label" for="activity_desc">Actividad:</label>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <div class="form-check form-switch float-end">
+                                        <input class="form-check-input" id="act_done" name="act_done" type="checkbox" {{$activity->cumplido == 1?'checked':''}}>
+                                        <label class="form-check-label" for="act_done">Cumplido</label>
+                                    </div>
+                                </div>
+                            </div>
                             <input id="activity_desc" class="form-control" type="text" name="upd_activity_desc" placeholder="Descripcion de la actividad" value="{{$activity->nombre}}" required>
                         </div>
                     </div>

@@ -97,6 +97,7 @@ class ActivityController extends Controller
             $activity->nombre = $request->upd_activity_desc;
             $activity->fecha_comienzo = $request->act_upd_date_start;
             $activity->fecha_fin = $request->act_upd_date_end;
+            $activity->cumplido = isset($request->act_done)?1:0;
             $activity->save();
 
             return back()->with([

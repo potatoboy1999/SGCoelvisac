@@ -5,6 +5,10 @@
 @section('style')
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <style>
+        #edit_activity_form .form-check-input:checked{
+            background-color: #35c107;
+            border-color: #35c107;
+        }
         thead tr th{
             background-color: #51607c!important;
             color: white!important;

@@ -19,6 +19,7 @@ class Activity extends Model
         'fecha_fin',
         'doc_politicas_id',
         'doc_adjunto_id',
+        'cumplido',
         'estado',
     ];
 
