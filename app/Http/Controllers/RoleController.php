@@ -110,7 +110,7 @@ class RoleController extends Controller
     }
 
     public function popupDelete(Request $request){
-        $role = Role::find($request->role_upd_id);
+        $role = Role::find($request->id);
         if($role){
             $role->estado = 0;
             $role->save();
@@ -138,15 +138,15 @@ class RoleController extends Controller
             Objective::whereIn('id',$obj_id)->update(["estado" => 0]);
             Activity::whereIn('id',$act_id)->update(["estado" => 0]);
 
-            return back()->with([
+            return [
                 "status" => "ok",
                 "msg" => "El rol y sus elementos vinculados han sido eliminado correctamente"
-            ]);
+            ];
         }else{
-            return back()->with([
+            return [
                 "status" => "error",
                 "msg" => "ERROR: El Rol no existe"
-            ]);
+            ];
         }
     }
 }

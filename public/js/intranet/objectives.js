@@ -627,6 +627,24 @@ $(document).on("click","#role_update",function(ev){
     $("#edit_role_form").submit();
 });
 
+$(document).on("click","#role_delete",function(ev){
+    ev.preventDefault();
+    var type = "role";
+    var obj = "";
+    var id = $(this).attr('role-id');
+    var route = $(this).attr('route');
+    var name = $(this).attr('role-name');
+
+    $("#delete-item-confirm").attr('d-id',id);
+    $("#delete-item-confirm").attr('d-route',route);
+    $("#delete-item-confirm").attr('d-type',type);
+    $("#delete-item-confirm").attr('d-obj',obj);
+    $("#d-item-name").html("<strong>Rol:</strong> "+name);
+
+    $("#editRoleModal").modal("hide");
+    $("#delItemModal").modal("show");
+});
+
 var global_items = [];
 
 function setupNewItemModal(){

@@ -19,7 +19,7 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button id="role_delete" class="btn btn-danger text-white" type="button" route="{{route('role.popup.delete')}}" roleid="{{$role->id}}">Eliminar</button>
+            <button id="role_delete" class="btn btn-danger text-white" type="button" route="{{route('role.popup.delete')}}" role-id="{{$role->id}}" role-name="{{$role->nombre}}">Eliminar</button>
             <button id="role_update" class="btn btn-info text-white" type="button">Guardar</button>
         </div>
     </div>
