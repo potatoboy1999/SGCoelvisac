@@ -109,7 +109,7 @@ class ThemeController extends Controller
     }
 
     public function popupDelete(Request $request){
-        $theme = Theme::find($request->theme_upd_id);
+        $theme = Theme::find($request->id);
         if($theme){
             $theme->estado = 0;
             $theme->save();
@@ -128,15 +128,15 @@ class ThemeController extends Controller
             Objective::whereIn('id',$obj_id)->update(["estado" => 0]);
             Activity::whereIn('id',$act_id)->update(["estado" => 0]);
 
-            return back()->with([
+            return [
                 "status" => "ok",
                 "msg" => "El tema y sus elementos vinculados han sido eliminado correctamente"
-            ]);
+            ];
         }else{
-            return back()->with([
+            return [
                 "status" => "error",
                 "msg" => "ERROR: El Tema no existe"
-            ]);
+            ];
         }
     }
 }

@@ -19,7 +19,7 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button id="theme_delete" class="btn btn-danger text-white" type="button" route="{{route('theme.popup.delete')}}" themeid="{{$theme->id}}">Eliminar</button>
+            <button id="theme_delete" class="btn btn-danger text-white" type="button" route="{{route('theme.popup.delete')}}" theme-id="{{$theme->id}}" theme-name="{{$theme->nombre}}">Eliminar</button>
             <button id="theme_update" class="btn btn-info text-white" type="button">Guardar</button>
         </div>
     </div>

@@ -204,25 +204,6 @@
 </div>
 <!-- End Edit Activity Modal -->
 
-<!-- Delete Role Modal -->
-<div class="modal fade" id="deleteItemModal" tabindex="-1" aria-labelledby="deleteItemModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Eliminar Elemento</h5>
-            </div>
-            <div class="modal-body">
-                <p>¿Estas seguro que quieres eliminar este elemento y sus Objetivos y Actividades vinculadas?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="javascript:;" id="delete-confirm" class="btn btn-danger text-white">Si, Eliminar</a>
-                <a href="javascript:;" id="delete-deny" class="btn btn-secondary text-white">No, Cancelar</a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Edit Activity Modal -->
-
 <!-- Delete Item Modal -->
 <div class="modal fade" id="delItemModal" tabindex="-1" aria-labelledby="delItemModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -235,7 +216,7 @@
             </div>
             <div class="modal-footer">
                 <a href="javascript:;" id="delete-item-confirm" class="btn btn-danger text-white" d-route="" d-id="" d-type="" d-obj="">Si, Eliminar</a>
-                <a href="javascript:;" id="delete-item-deny" class="btn btn-secondary text-white">No, Cancelar</a>
+                <a href="javascript:;" id="delete-item-deny" class="btn btn-secondary text-white" data-coreui-dismiss="modal">No, Cancelar</a>
             </div>
         </div>
     </div>
@@ -401,7 +382,7 @@
         <!-- Start Activities Matrix -->
         <?php $i = 0; ?>
         @foreach ($roles as $role)
-        <div class="card mb-4">
+        <div class="card role-card mb-4" role-id="{{$role->id}}">
             <div class="card-header rol-header">
                 <div class="float-end">
                     <a href="{{route('role.popup.edit')}}" class="btn btn-light btn-sm btn-role-settings" roleid="{{$role->id}}">
@@ -419,7 +400,7 @@
                     $themes = $role->themes->where("estado", 1);
                 ?>
                 @foreach ($themes as $theme)
-                <div class="card {{($x != sizeOf($themes)-1?"mb-3":"")}}">
+                <div class="card theme-card {{($x != sizeOf($themes)-1?"mb-3":"")}}" theme-id="{{$theme->id}}">
                     <div class="card-header">
                         <div class="float-end">
                             <a href="{{route('theme.popup.edit')}}" class="btn btn-outline-secondary btn-sm btn-theme-settings" themeid="{{$theme->id}}">

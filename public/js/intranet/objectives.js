@@ -538,9 +538,15 @@ $('#delete-item-confirm').on('click', function(ev){
                         obj_name.first().show();
                     }
                 }else if(type == "theme"){
-
+                    $(".theme-card[theme-id='"+id+"']").remove();
+                    if($(".theme-card").length > 0){
+                        var r_theme = $(".theme-card").last();
+                        if(r_theme.hasClass("mb-3")){
+                            r_theme.removeClass("mb-3");
+                        }
+                    }
                 }else if(type == "role"){
-                    
+                    $(".role-card[role-id='"+id+"']").remove();
                 }
 
                 $("#delItemModal").modal("hide");
@@ -600,9 +606,20 @@ $(document).on("click","#theme_update",function(ev){
 
 $(document).on("click","#theme_delete",function(ev){
     ev.preventDefault();
-    $.ajax({
-        url: ""
-    });
+    var type = "theme";
+    var obj = "";
+    var id = $(this).attr('theme-id');
+    var route = $(this).attr('route');
+    var name = $(this).attr('theme-name');
+
+    $("#delete-item-confirm").attr('d-id',id);
+    $("#delete-item-confirm").attr('d-route',route);
+    $("#delete-item-confirm").attr('d-type',type);
+    $("#delete-item-confirm").attr('d-obj',obj);
+    $("#d-item-name").html("<strong>Tema:</strong> "+name);
+
+    $("#editThemeModal").modal("hide");
+    $("#delItemModal").modal("show");
 });
 
 $(document).on("click","#role_update",function(ev){
