@@ -25,6 +25,6 @@ class Objective extends Model
         return $this->belongsToMany(Kpi::class,"t_sgcv_obj_kpi","objetivo_id","kpi_id");
     }
     public function activities(){
-        return $this->hasMany(Activity::class,'objetivo_id','id');
+        return $this->hasMany(Activity::class,'objetivo_id','id')->where('estado',1);
     }
 }
