@@ -24,13 +24,13 @@
             background-color: #cccccc!important;
         }
         td.t_red {
-            background-color: rgb(236, 29, 29);
+            background-color: #ec1d1d;
         }
         td.t_green {
-            background-color: green;
+            background-color: #12c212;
         }
         td.t_yellow {
-            background-color: rgb(172, 172, 39);
+            background-color: #f9e715;
         }
         #ui-datepicker-div{
             z-index: 10000!important;
@@ -482,7 +482,31 @@
                                                             </svg>
                                                         </a>
                                                     </td>
-                                                    <td class="t_red"></td>
+                                                    @php
+                                                        $s = ['t_red','t_yellow','t_green'];
+                                                        $status = 0; // not done = RED
+                                                        if($activity->cumplido == 1){
+                                                            $status = 2; // done = GREEN
+                                                        }else{
+                                                            $today = time();
+                                                            $d_start = strtotime($activity->fecha_comienzo);
+                                                            $d_end = strtotime($activity->fecha_fin);
+                                                            if($d_start <= $today && $today <= $d_end){
+                                                                // calculate 25% of time remaining
+                                                                $diff = ($d_end - $d_start)*0.25;
+                                                                $d_limit = $d_start + $diff;
+                                                                
+                                                                if($d_limit <= $today){
+                                                                    $status = 1; // if today is past 25%, status warning
+                                                                }
+
+                                                            }else if($d_end < $today){
+                                                                $status = 0; // time expired, not done = RED
+                                                            }
+                                                        }
+                                                    @endphp
+                                                    <td class="{{$s[$status]}}"></td>
+                                                    
                                                     <td class="text-center align-middle t-cel-comments">
                                                         <a href="javascript:;" class="btn btn-secondary my-1 btn-sm text-white btn-edit" data-act="{{$activity->id}}" data-route="{{route("activity.popup.edit")}}">
                                                             <svg class="icon">
