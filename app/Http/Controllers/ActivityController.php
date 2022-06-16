@@ -111,6 +111,23 @@ class ActivityController extends Controller
         }
     }
 
+    public function popupDelete(Request $request){
+
+        $activity = Activity::find($request->id);
+        if($activity){
+            $activity->estado = 0;
+            $activity->save();
+            return [
+                'status'=>'ok',
+                'msg'=>'actividad eliminada correctamente'
+            ];
+        }
+        return [
+            'status'=>'error',
+            'msg'=>'actividad no encontrada'
+        ];
+    }
+
     public function updatePolicy(Request $request){
         $pol_file = null;
 

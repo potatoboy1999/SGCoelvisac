@@ -132,7 +132,6 @@ $(document).on("click","#comm_update",function(ev){
         method: 'POST',
         data: $("#comments_form").serialize(),
         success: function(res){
-            console.log(res);
             if(res.status == "ok"){
                 // reload the modal content
                 $.ajax({
@@ -161,7 +160,6 @@ $(document).on("click",".comm-delete",function(ev){
             comment: comm_id,
         },
         success: function(res){
-            console.log(res);
             if(res.status == "ok"){
                 $(".comm-group[commid='"+comm_id+"']").remove();
             }else{
@@ -488,6 +486,68 @@ $(".btn-edit").on("click",function(ev){
         success: function(res){
             $("#editActivityModal").html(res);
             $("#editActivityModal").modal("show");
+        }
+    });
+});
+
+$(".btn-delete").on('click',function(ev){
+    var type = "activity";
+    var id = $(this).data('act');
+    var obj = $(this).data('obj');
+    var route = $(this).data('route');
+    var name = $(this).parent().parent().find("td.t-act-name").text();
+
+    $("#delete-item-confirm").attr('d-id',id);
+    $("#delete-item-confirm").attr('d-route',route);
+    $("#delete-item-confirm").attr('d-type',type);
+    $("#delete-item-confirm").attr('d-obj',obj);
+    $("#d-item-name").html("<strong>Actividad:</strong> "+name);
+
+    $("#delItemModal").modal("show");
+});
+
+$('#delete-item-confirm').on('click', function(ev){
+    ev.preventDefault();
+    var id = $(this).attr('d-id');
+    var route = $(this).attr('d-route');
+    var type = $(this).attr('d-type');
+    var obj = $(this).attr('d-obj');
+    $.ajax({
+        url: route,
+        method: 'POST',
+        data: {
+            _token: $("[name='_token']").val(),
+            id: id,
+        },
+        success: function(res){
+            if(res.status == "ok"){
+
+                if(type == "activity"){
+                    var row = $("tr[act-id='"+id+"']");
+                    row.remove();
+
+                    var obj_code = $(".t-obj-code[obj-id='"+obj+"']");
+                    if(obj_code.length > 0){
+                        obj_code.attr("rowspan",obj_code.length);
+                        obj_code.first().show();
+                    }
+                    
+                    var obj_name = $(".t-obj-name[obj-id='"+obj+"']");
+                    if(obj_name.length > 0){
+                        obj_name.attr("rowspan",obj_name.length);
+                        obj_name.first().show();
+                    }
+                }else if(type == "theme"){
+
+                }else if(type == "role"){
+                    
+                }
+
+                $("#delItemModal").modal("hide");
+
+            }else{
+                alert(res.msg);
+            }
         }
     });
 });

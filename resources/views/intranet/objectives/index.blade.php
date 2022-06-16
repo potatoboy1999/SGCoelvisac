@@ -223,6 +223,25 @@
 </div>
 <!-- End Edit Activity Modal -->
 
+<!-- Delete Item Modal -->
+<div class="modal fade" id="delItemModal" tabindex="-1" aria-labelledby="delItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">¿Quieres eliminar este elemento?</h5>
+            </div>
+            <div class="modal-body">
+                <p id="d-item-name"></p>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:;" id="delete-item-confirm" class="btn btn-danger text-white" d-route="" d-id="" d-type="" d-obj="">Si, Eliminar</a>
+                <a href="javascript:;" id="delete-item-deny" class="btn btn-secondary text-white">No, Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Edit Activity Modal -->
+
 <!-- Policy Modal -->
 <div class="modal fade" id="policyModal" tabindex="-1" aria-labelledby="policyModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -436,14 +455,14 @@
                                                     $activities = $objective->activities->where("estado", 1);
                                                 ?>
                                                 @foreach ($activities as $activity)
-                                                <tr>
-                                                    @if ($y == 0)
-                                                    <td class="text-center align-middle" rowspan="{{sizeOf($activities)}}">
+                                                <tr act-id="{{$activity->id}}">
+
+                                                    <td class="text-center align-middle t-obj-code" obj-id="{{$objective->id}}" rowspan="{{sizeOf($activities)}}" style="{{$y == 0?'':'display: none;'}}">
                                                         Ob_{{$theme->id}}-{{$objective->id}}
                                                     </td>
-                                                    <td class="align-middle" rowspan="{{sizeOf($activities)}}">{{$objective->nombre}}</td>
-                                                    @endif
-                                                    <td class="align-middle">{{$activity->nombre}}</td>
+                                                    <td class="align-middle t-obj-name" obj-id="{{$objective->id}}" rowspan="{{sizeOf($activities)}}" style="{{$y == 0?'':'display: none;'}}">{{$objective->nombre}}</td>
+
+                                                    <td class="align-middle t-act-name">{{$activity->nombre}}</td>
                                                     <td class="text-center align-middle">{{date("d-m-Y", strtotime($activity->fecha_comienzo))}}</td>
                                                     <td class="text-center align-middle">{{date("d-m-Y", strtotime($activity->fecha_fin))}}</td>
                                                     <td class="text-center align-middle">
@@ -485,7 +504,7 @@
                                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
                                                             </svg>
                                                         </a>
-                                                        <a href="javascript:;" class="btn btn-danger my-1 btn-sm text-white btn-delete">
+                                                        <a href="javascript:;" class="btn btn-danger my-1 btn-sm text-white btn-delete" data-act="{{$activity->id}}" data-route="{{route("activity.popup.delete")}}" data-obj="{{$objective->id}}">
                                                             <svg class="icon">
                                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                             </svg>
