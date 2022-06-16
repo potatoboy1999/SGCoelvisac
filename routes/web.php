@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ObjectiveController;
@@ -46,6 +47,12 @@ Route::group(["middleware"=>["auth"]], function(){
         Route::post("popup_update", [ActivityController::class,"popupUpdate"])->name("activity.popup.update");
         Route::post('add_politics', [ActivityController::class,"updatePolicy"])->name("upd_activity_policy");
         Route::post('add_adjacent', [ActivityController::class,"updateAdjacent"])->name("upd_activity_adjacent");
+    });
+
+    Route::group(["prefix"=>"comments"], function(){
+        Route::get("popup_show", [CommentController::class,"popupShow"])->name('comment.popup.show');
+        Route::post("popup_delete", [CommentController::class,"popupDelete"])->name('comment.popup.delete');
+        Route::post("popup_update", [CommentController::class,"popupUpdate"])->name('comment.popup.update');
     });
 
     Route::group(["prefix"=>"document"], function(){

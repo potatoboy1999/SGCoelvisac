@@ -184,6 +184,11 @@
 </div>
 <!-- End Item Modal -->
 
+<!-- Edit Comment Modal -->
+<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+</div>
+<!-- End Edit Comment Modal -->
+
 <!-- Edit Activity Modal -->
 <div class="modal fade" id="editActivityModal" tabindex="-1" aria-labelledby="editActivityModalLabel" aria-hidden="true">
 </div>
@@ -361,13 +366,16 @@
                             </svg> Filtrar
                         </a>
                     </div>
+                    <?php $permissions = ["Gestión","Admin"]; ?>
+                    @if (in_array(Auth::user()->position->area->nombre, $permissions ))
                     <div class="p-1">
-                        <a href="javascript:;" class="btn btn-secondary text-white">
+                        <a href="javascript:;" class="btn btn-secondary text-white toggle-comments">
                             <svg class="icon">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-comment-bubble"></use>
-                            </svg> Ver Comentarios
+                            </svg> <span>Ver Comentarios</span>
                         </a>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -482,11 +490,13 @@
                                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                             </svg>
                                                         </a>
-                                                        <a href="javascript:;" class="btn btn-success my-1 btn-sm text-white btn-comment">
+                                                        @if (in_array(Auth::user()->position->area->nombre, $permissions ))
+                                                        <a href="{{route('comment.popup.show')}}" class="btn btn-success my-1 btn-sm text-white btn-comment" style="display: none;" data-act="{{$activity->id}}">
                                                             <svg class="icon">
                                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-comment-bubble"></use>
                                                             </svg>
                                                         </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 <?php $y++; ?>

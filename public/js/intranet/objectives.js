@@ -95,6 +95,84 @@ $("#item_save").on("click", function(ev){
     $("#item_error ul").html(errors);
 });
 
+$(".toggle-comments").on("click",function(ev){
+    ev.preventDefault();
+    if($(".btn-comment").is(":hidden")){
+        $(".btn-comment").show();
+        $(this).find("span").html("Ocultar Comentarios");
+    }else{
+        $(".btn-comment").hide();
+        $(this).find("span").html("Ver Comentarios");
+    }
+});
+
+$(".btn-comment").on('click',function(ev){
+    ev.preventDefault();
+    var route = $(this).attr("href");
+    var act = $(this).data("act");
+    $.ajax({
+        url: route,
+        method: 'get',
+        data: {
+            activity: act
+        },
+        success: function(res){
+            $("#commentModal").html(res);
+            $("#commentModal").modal("show");
+        }
+    });
+});
+
+$(document).on("click","#comm_update",function(ev){
+    ev.preventDefault();
+    var route = $("#comments_form").attr('action');
+    var modal_route = $(this).attr("src");
+    $.ajax({
+        url: route,
+        method: 'POST',
+        data: $("#comments_form").serialize(),
+        success: function(res){
+            console.log(res);
+            if(res.status == "ok"){
+                // reload the modal content
+                $.ajax({
+                    url: modal_route,
+                    method: 'GET',
+                    success: function(modal){
+                        $("#commentModal").html(modal);
+                    }
+                });
+            }else{
+                alert(res.msg);
+            }
+        }
+    });
+})
+
+$(document).on("click",".comm-delete",function(ev){
+    ev.preventDefault();
+    var comm_id = $(this).attr('commid');
+    var route = $(this).attr('href');
+    $.ajax({
+        url: route,
+        method: 'POST',
+        data: {
+            _token: $("[name='_token']").val(),
+            comment: comm_id,
+        },
+        success: function(res){
+            console.log(res);
+            if(res.status == "ok"){
+                $(".comm-group[commid='"+comm_id+"']").remove();
+            }else{
+                alert(res.msg);
+            }
+        }
+    });
+});
+
+
+
 $(".new_item_switch").on("change",function(ev){
     var object = $(this).data("object");
     var n = $(this).prop("checked");
@@ -515,7 +593,6 @@ function setupNewItemModal(){
         if(obj_options == ""){
             obj_options = "<option value='0'>-- No hay Objetivos disponibles --</option>";
         }
-        console.log("roles:",role_options);
         $("#role_sel").html(role_options);
         $("#theme_sel").html(theme_options);
         $("#obj_sel").html(obj_options);
