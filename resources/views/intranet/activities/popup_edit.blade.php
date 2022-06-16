@@ -27,9 +27,9 @@
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group py-1">
-                            <label class="form-label" for="act_date_start">Fecha Inicio:</label>
+                            <label class="form-label" for="act_upd_date_start">Fecha Inicio:</label>
                             <div class="input-group">
-                                <input id="act_date_start" class="form-control" type="text" name="act_upd_date_start" value="{{$activity->fecha_comienzo}}" required>
+                                <input id="act_upd_date_start" class="form-control" type="text" name="act_upd_date_start" value="{{date('d/m/Y',strtotime($activity->fecha_comienzo))}}" required>
                                 <span class="input-group-text">
                                     <svg class="icon">
                                         <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
@@ -40,9 +40,9 @@
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="form-group py-1">
-                            <label class="form-label" for="act_date_end">Fecha Fin:</label>
+                            <label class="form-label" for="act_upd_date_end">Fecha Fin:</label>
                             <div class="input-group">
-                                <input id="act_date_end" class="form-control" type="text" name="act_upd_date_end" value="{{$activity->fecha_fin}}" required>
+                                <input id="act_upd_date_end" class="form-control" type="text" name="act_upd_date_end" value="{{date('d/m/Y',strtotime($activity->fecha_fin))}}" required>
                                 <span class="input-group-text">
                                     <svg class="icon">
                                         <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>

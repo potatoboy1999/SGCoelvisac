@@ -4,7 +4,6 @@ $(function() {
 
 $("#act_date_start").datepicker({
     dateFormat: "dd/mm/yy",
-    minDate: new Date(),
     onSelect: function(date){
         $("#act_date_end").datepicker('option', 'minDate', date);
     }
@@ -12,7 +11,6 @@ $("#act_date_start").datepicker({
 
 $("#act_date_end").datepicker({
     dateFormat: "dd/mm/yy",
-    minDate: new Date(),
 });
 
 $("#area-sel").on("change",function(ev){
@@ -496,6 +494,22 @@ $(".btn-edit").on("click",function(ev){
         method: "GET",
         success: function(res){
             $("#editActivityModal").html(res);
+
+            $("#act_upd_date_start").datepicker({
+                dateFormat: "dd/mm/yy",
+                onSelect: function(date){
+                    $("#act_upd_date_end").datepicker('option', 'minDate', date);
+                }
+            });
+            
+            $("#act_upd_date_end").datepicker({
+                dateFormat: "dd/mm/yy",
+                beforeShow: function(inp){
+                    var date = $("#act_upd_date_start").datepicker('getDate');
+                    $("#act_upd_date_end").datepicker('option', 'minDate', date);
+                }
+            });
+
             $("#editActivityModal").modal("show");
         }
     });
