@@ -44,6 +44,7 @@ Route::group(["middleware"=>["auth"]], function(){
 
     Route::group(["prefix"=>"activity"], function(){
         Route::get("popup_edit", [ActivityController::class,"popupEdit"])->name("activity.popup.edit");
+        Route::get("popup_adjacent_docs", [ActivityController::class,"popupAdjacentDocs"])->name("activity.popup.adjacents");
         Route::post("popup_update", [ActivityController::class,"popupUpdate"])->name("activity.popup.update");
         Route::post("popup_delete", [ActivityController::class,"popupDelete"])->name("activity.popup.delete");
         Route::post('add_politics', [ActivityController::class,"updatePolicy"])->name("upd_activity_policy");

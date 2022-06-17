@@ -24,6 +24,6 @@ class Option extends Model
     ];
 
     public function profiles(){
-        return $this->belongsToMany(Profile::class,"t_sgcv_opcion_perfil","opcion_id","perfil_id");
+        return $this->belongsToMany(Profile::class,"t_sgcv_opcion_perfil","opcion_id","perfil_id")->wherePivot('estado', 1);
     }
 }

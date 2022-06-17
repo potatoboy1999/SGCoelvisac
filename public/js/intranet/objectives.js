@@ -300,26 +300,21 @@ $(".btn-show-policy").on("click",function(ev){
 $(".btn-show-adjacent").on("click",function(ev){
     ev.preventDefault();
     var id = $(this).data("id");
-    var filename = $(this).data("filename");
-    var fileid = $(this).data("fileid");
+    var route = $(this).data("route");
 
-    // prepare update contents
-    $("[name='a_file']").val(null);
-    $("[name='a_edit']").val("false");
-    $("[name='a_act_id']").val(id);
-    $("#a_error").html("");
+    $.ajax({
+        url: route,
+        method: 'get',
+        data:{
+            id: id,
+        },
+        success:function(res){
+            $("#adjacentModal .modal-content").html(res);
+            // show modal
+            $("#adjacentModal").modal("show");
+        }
+    });
 
-    // prepare download/delete contents
-    $("#a_filename").html(filename);
-    $("#a_file_download").attr("file-id", fileid);
-    $("#a_file_delete").attr("file-id", fileid);
-    $(".file-downloadable").hide();
-    if(fileid != ""){
-        $(".file-downloadable").show();
-    }
-
-    // show modal
-    $("#adjacentModal").modal("show");
 });
 
 $(document).on("change","[name='p_file']",function(ev){
@@ -374,8 +369,9 @@ $("#pol_save").on("click", function(ev){
     });
 });
 
-$("#adj_save").on("click", function(ev){
+$(document).on("click", "#adj_save", function(ev){
     ev.preventDefault();
+    var route = $(this).data('route');
     var form = $("#adjacent-form");
     var data = new FormData(form[0]);
     $.ajax({
@@ -388,11 +384,20 @@ $("#adj_save").on("click", function(ev){
             if(res.status == "ok"){
                 var act_id = $("[name='a_act_id']").val();
 
+                $.ajax({
+                    url: route,
+                    method: 'get',
+                    data:{
+                        id: act_id,
+                    },
+                    success:function(modal){
+                        $("#adjacentModal .modal-content").html(modal);
+                    }
+                });
+                
                 // change table btn
                 var btn = $("a.btn-show-adjacent[data-id="+act_id+"]");
                 var icon = btn.find("use");
-                btn.data("filename",res.doc_name);
-                btn.data("fileid",res.doc_id);
                 if(btn.hasClass("btn-warning")){
                     btn.removeClass("btn-warning");
                     btn.addClass("btn-success");
@@ -401,15 +406,15 @@ $("#adj_save").on("click", function(ev){
                 href = href.replace("cil-arrow-thick-from-bottom","cil-file");
                 icon.attr("xlink:href", href); 
 
-                // update file form
-                $("[name='a_file']").val(null);
-                $("[name='a_edit']").val("false");
+                // // update file form
+                // $("[name='a_file']").val(null);
+                // $("[name='a_edit']").val("false");
 
-                // update file download
-                $("#a_filename").html(res.doc_name);
-                $("#a_file_download").attr("file-id", res.doc_id);
-                $("#a_file_delete").attr("file-id", res.doc_id);
-                $(".file-downloadable").show();
+                // // update file download
+                // $("#a_filename").html(res.doc_name);
+                // $("#a_file_download").attr("file-id", res.doc_id);
+                // $("#a_file_delete").attr("file-id", res.doc_id);
+                // $(".file-downloadable").show();
 
             }else{
                 $("#a_error").html(res.msg);
@@ -418,7 +423,7 @@ $("#adj_save").on("click", function(ev){
     });
 });
 
-$(".btn-file-download").click(function(ev){
+$(document).on("click",".btn-file-download",function(ev){
     ev.preventDefault();
     var route = $(this).attr("href");
     var id = $(this).attr("file-id");
@@ -426,7 +431,7 @@ $(".btn-file-download").click(function(ev){
     window.location.href = route+"?id="+id;
 });
 
-$(".btn-file-delete").click(function(ev){
+$(document).on("click",".btn-file-delete",function(ev){
     ev.preventDefault();
     var route = $(this).attr("href");
     var id = $(this).attr("file-id");

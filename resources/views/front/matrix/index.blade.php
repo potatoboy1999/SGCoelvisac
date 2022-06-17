@@ -110,34 +110,20 @@
                                     $docId = $policy->id;
                                 }
                             @endphp
-                            <a href="{{$docName?route('front.doc.download').'?id='.$docId:'javascript:;'}}" class="btn {{$docName?'btn-success':'btn-outline-secondary'}} btn-sm {{$docName?'text-white':''}} btn-show-policy" style="{{$docName?'':'width: 34px;'}}">
-                              @if ($docName)
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
-                                </svg>
-                              @else
-                                <span>?</span>
-                              @endif
+                            <a href="{{$docName?route('front.doc.download').'?id='.$docId:'javascript:;'}}" class="btn {{$docName?'btn-success':'btn-outline-secondary'}} btn-sm {{$docName?'text-white':''}} btn-show-policy">
+                              <svg class="icon">
+                                  <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
+                              </svg>
                             </a>
                         </td>
                         <td class="text-center align-middle">
                             @php
-                                $adjacent = $activity->docAdjacent;
-                                $docName = null;
-                                $docId = null;
-                                if($adjacent && $adjacent->estado == 1){
-                                    $docName = $adjacent->nombre;
-                                    $docId = $adjacent->id;
-                                }
+                                $adjacents = $activity->docAdjacents;
                             @endphp
-                            <a href="{{$docName?route('front.doc.download').'?id='.$docId:'javascript:;'}}" class="btn {{$docName?'btn-success':'btn-outline-secondary'}} btn-sm {{$docName?'text-white':''}} btn-show-policy" style="{{$docName?'':'width: 34px;'}}">
-                              @if ($docName)
+                            <a href="javascript:;" class="btn {{sizeof($adjacents)>0?'btn-success':'btn-outline-secondary'}} btn-sm {{sizeof($adjacents)>0?'text-white':''}} btn-show-policy">
                                 <svg class="icon">
                                     <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
                                 </svg>
-                              @else
-                                <span>?</span>
-                              @endif
                             </a>
                         </td>
 

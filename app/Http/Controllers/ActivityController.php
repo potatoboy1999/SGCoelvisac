@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\ActivityDocuments;
 use App\Models\Area;
 use App\Models\Document;
 use App\Models\Role;
@@ -203,6 +204,8 @@ class ActivityController extends Controller
 
         $sizeMax = 8388608; // 8MB
         $valMimes = [
+            "image/png", // png
+            "image/jpeg", // jpg
             "application/pdf", // pdf
             "application/vnd.ms-powerpoint", // ppt
             "application/vnd.openxmlformats-officedocument.presentationml.presentation", // pptx
@@ -235,7 +238,7 @@ class ActivityController extends Controller
                 }else{
                     return [
                         "status" => "error",
-                        "msg" => "Error: Archivo de tipo de aceptado"
+                        "msg" => "Error: Tipo de archivo no aceptado"
                     ];
                 }
             }else{
@@ -246,16 +249,23 @@ class ActivityController extends Controller
             }
         }
 
-        $activity = Activity::find($request->a_act_id);
+        $activity = Activity::where('id',$request->a_act_id)
+                            ->where('estado',1)
+                            ->first();
         if($activity && $request->a_edit == "true"){
-            $activity->doc_adjunto_id = $adj_file;
-            $activity->save();
+            if($adj_file){
+                $actDoc = new ActivityDocuments;
+                $actDoc->actividad_id = $activity->id;
+                $actDoc->documento_id = $adj_file;
+                $actDoc->estado = 1;
+                $actDoc->save();
+    
+                $activity->save();
+            }
     
             return [
                 "status" => "ok",
-                "msg" => "Archivo correctamente guardado",
-                "doc_id" => $adj_file,
-                "doc_name" => $ogName
+                "msg" => "Archivo correctamente guardado"
             ];
         }
         
@@ -304,5 +314,17 @@ class ActivityController extends Controller
             "roles" => $roles,
             "area" => $area
         ]);
+    }
+
+    public function popupAdjacentDocs(Request $request){
+        $activity = Activity::where('id',$request->id)
+                            ->where('estado',1)
+                            ->first();
+        if($activity){
+            return view('intranet.activities.popup_adjacents',[
+                "activity" => $activity,
+            ]);
+        }
+        return view('intranet.errors.popup_error');
     }
 }

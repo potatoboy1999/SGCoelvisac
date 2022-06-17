@@ -38,10 +38,11 @@
         .toast{
             background-color: var(--cui-toast-background-color, rgba(255, 255, 255, 1))
         }
-        .file-downloadable{
-            /*border: 1px solid #2eb85c;
+        .file-downloadable {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
             border-radius: 0.5rem;
-            padding: 0.25rem;*/
+            border-color: #2eb85c;
         }
         .file-downloadable p{
             margin: 0;
@@ -275,41 +276,6 @@
 <div class="modal fade" id="adjacentModal" tabindex="-1" aria-labelledby="adjacentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="adjacentModalLabel">Documento: Adjunto</h5>
-                <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12">
-                        <div id="" class="file-downloadable mb-3" style="">
-                            <p><strong>Documento Adjunto:</strong></p>
-                            <p id="a_filename"></p>
-                            <div class="mt-3">
-                                <a id="a_file_download" href="{{route("doc.download")}}" file-id="" class="btn btn-success text-white btn-file-download">Descargar</a>
-                                <a id="a_file_delete" href="{{route("doc.delete")}}" file-id="" file-type="adj" class="btn btn-danger text-white btn-file-delete">Eliminar</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <form id="adjacent-form" action="{{route('upd_activity_adjacent')}}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="">Nuevo Documento Adjunto:</label>
-                                <input type="file" name="a_file" id="adjacent_upd_file" class="form-control" required>
-                                <input type="hidden" name="a_edit" value="false">
-                                <input type="hidden" name="a_act_id" value="">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-12">
-                        <div id="a_error" class="text-danger"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="adj_save" class="btn btn-info text-white" type="button">Guardar</button>
-            </div>
         </div>
     </div>
 </div>
@@ -448,9 +414,9 @@
                                                     <td class="align-middle t-obj-name" obj-id="{{$objective->id}}" rowspan="{{sizeOf($activities)}}" style="{{$y == 0?'':'display: none;'}}">{{$objective->nombre}}</td>
 
                                                     <td class="align-middle t-act-name">{{$activity->nombre}}</td>
-                                                    <td class="text-center align-middle">{{date("d-m-Y", strtotime($activity->fecha_comienzo))}}</td>
-                                                    <td class="text-center align-middle">{{date("d-m-Y", strtotime($activity->fecha_fin))}}</td>
-                                                    <td class="text-center align-middle">
+                                                    <td class="text-center align-middle t-date-start">{{date("d-m-Y", strtotime($activity->fecha_comienzo))}}</td>
+                                                    <td class="text-center align-middle t-date-end">{{date("d-m-Y", strtotime($activity->fecha_fin))}}</td>
+                                                    <td class="text-center align-middle t-policies">
                                                         @php
                                                             $policy = $activity->docPolicy;
                                                             $docName = null;
@@ -466,19 +432,13 @@
                                                             </svg>
                                                         </a>
                                                     </td>
-                                                    <td class="text-center align-middle">
+                                                    <td class="text-center align-middle t-adjacents">
                                                         @php
-                                                            $adjacent = $activity->docAdjacent;
-                                                            $docName = null;
-                                                            $docId = null;
-                                                            if($adjacent && $adjacent->estado == 1){
-                                                                $docName = $adjacent->nombre;
-                                                                $docId = $adjacent->id;
-                                                            }
+                                                            $adjacents = $activity->docAdjacents;
                                                         @endphp
-                                                        <a href="javascript:;" class="btn {{$docName?'btn-success':'btn-warning'}} btn-sm text-white btn-show-adjacent" data-id="{{$activity->id}}" data-filename="{{$docName}}" data-fileid="{{$docId}}">
+                                                        <a href="javascript:;" class="btn {{sizeof($adjacents)>0?'btn-success':'btn-warning'}} btn-sm text-white btn-show-adjacent" data-route="{{route('activity.popup.adjacents')}}" data-id="{{$activity->id}}">
                                                             <svg class="icon">
-                                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#{{$docName?'cil-file':'cil-arrow-thick-from-bottom'}}"></use>
+                                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#{{sizeof($adjacents)>0?'cil-file':'cil-arrow-thick-from-bottom'}}"></use>
                                                             </svg>
                                                         </a>
                                                     </td>
