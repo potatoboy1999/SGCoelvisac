@@ -474,9 +474,13 @@
                                                                             // calculate 25% of time remaining
                                                                             $diff = ($d_end - $d_start)*0.25;
                                                                             $d_limit = $d_start + $diff;
+
+                                                                            if($today < $d_limit){
+                                                                                $status = 2; // if today is within 25% of start, status OK = GREEN
+                                                                            }
                                                                             
                                                                             if($d_limit <= $today){
-                                                                                $status = 1; // if today is past 25%, status warning
+                                                                                $status = 1; // if today is past 25%, status warning = YELLOW
                                                                             }
         
                                                                         }else if($d_end < $today){
