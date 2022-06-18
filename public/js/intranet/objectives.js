@@ -95,12 +95,29 @@ $("#item_save").on("click", function(ev){
 
 $(".toggle-comments").on("click",function(ev){
     ev.preventDefault();
-    if($(".btn-comment").is(":hidden")){
+    if($(this).attr("toggle-visible") == "false"){
         $(".btn-comment").show();
         $(this).find("span").html("Ocultar Comentarios");
+        $(this).attr("toggle-visible","true");
     }else{
         $(".btn-comment").hide();
         $(this).find("span").html("Ver Comentarios");
+        $(this).attr("toggle-visible","false");
+    }
+});
+
+$(".toggle-dates").on("click",function(ev){
+    ev.preventDefault();
+    if($(this).attr("toggle-visible") == "false"){
+        $(".t-head-date-start").show();
+        $(".t-date-start").show();
+        $(this).find("span").html("Ocultar Fechas");
+        $(this).attr("toggle-visible","true");
+    }else{
+        $(".t-head-date-start").hide();
+        $(".t-date-start").hide();
+        $(this).find("span").html("Ver Fechas");
+        $(this).attr("toggle-visible","false");
     }
 });
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\ActivityDocuments;
 use App\Models\Area;
 use App\Models\Document;
 use App\Models\Objective;
@@ -159,35 +160,42 @@ class ObjectiveController extends Controller
         }
 
         $sizeMax = 8388608; // 8MB
-        $valMimes = ["application/pdf"];
         $destinationPath = 'uploads';
+        // $valMimes = ["application/pdf"];
 
-        $pol_file = null;
-        if($request->hasFile("policy_file") && $request->file("policy_file")->isValid()){
-            $polFile = $request->policy_file;
-
-            $ogName = $polFile->getClientOriginalName();
-            $ogExtension = $polFile->getClientOriginalExtension();
-            $size = $polFile->getSize();
-            $mime = $polFile->getMimeType();
-            if($size <= $sizeMax && in_array($mime, $valMimes)){
-                //Move Uploaded File
-                $newName = "file".date("Ymd-His-U")."01.".$ogExtension;
-                $polFile->move($destinationPath, $newName);
+        // $pol_file = null;
+        // if($request->hasFile("policy_file") && $request->file("policy_file")->isValid()){
+        //     $polFile = $request->policy_file;
+        //     $ogName = $polFile->getClientOriginalName();
+        //     $ogExtension = $polFile->getClientOriginalExtension();
+        //     $size = $polFile->getSize();
+        //     $mime = $polFile->getMimeType();
+        //     if($size <= $sizeMax && in_array($mime, $valMimes)){
+        //         //Move Uploaded File
+        //         $newName = "file".date("Ymd-His-U")."01.".$ogExtension;
+        //         $polFile->move($destinationPath, $newName);
                 
-                $polDoc = new Document();
-                $polDoc->nombre = substr($ogName, 0, 150);
-                $polDoc->file = $newName;
-                $polDoc->estado = 1;
-                $polDoc->save();
+        //         $polDoc = new Document();
+        //         $polDoc->nombre = substr($ogName, 0, 150);
+        //         $polDoc->file = $newName;
+        //         $polDoc->estado = 1;
+        //         $polDoc->save();
 
-                $pol_file = $polDoc->id;
-            }else{
-                $alerts[] = "<br>Problemas con el archivo de politicas";
-            }
+        //         $pol_file = $polDoc->id;
+        //     }else{
+        //         $alerts[] = "<br>Problemas con el archivo de politicas";
+        //     }
+        // }
 
-
-        }
+        $valMimes = [
+            "image/png", // png
+            "image/jpeg", // jpg
+            "application/pdf", // pdf
+            "application/vnd.ms-powerpoint", // ppt
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation", // pptx
+            "application/vnd.ms-excel", // xls
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // xlsx
+        ];
 
         $adj_file = null;
         if($request->hasFile("adjacent_file") && $request->file("adjacent_file")->isValid()){
@@ -220,10 +228,16 @@ class ObjectiveController extends Controller
         $activity->objetivo_id      = $objective_id;
         $activity->fecha_comienzo   = date_format(date_create_from_format('d/m/Y',$request->act_date_start),'Y-m-d');
         $activity->fecha_fin        = date_format(date_create_from_format('d/m/Y',$request->act_date_end),'Y-m-d');
-        $activity->doc_politicas_id = $pol_file;
-        $activity->doc_adjunto_id   = $adj_file;
         $activity->estado           = 1;
         $activity->save();
+
+        if($adj_file){
+            $actDoc = new ActivityDocuments;
+            $actDoc->actividad_id = $activity->id;
+            $actDoc->documento_id = $adj_file;
+            $actDoc->estado = 1;
+            $actDoc->save();
+        }
 
         return back()->with([
             'item_status' => true, 
