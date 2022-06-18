@@ -40,10 +40,29 @@
   .t_theme_row {
       border-width: 3px 0!important;
   }
+  .file-downloadable {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      border-color: #2eb85c;
+  }
+  .file-downloadable p{
+      margin: 0;
+  }
 </style>
 @endsection
 
 @section('content')
+
+<!-- Document Download Modal -->
+<div class="modal fade" id="adjacentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<!-- End Document Download Modal -->
+
 <div class="row">
   <div class="marco col-md-12 col-xs-12">
     <div class="box">
@@ -110,7 +129,7 @@
                                     $docId = $policy->id;
                                 }
                             @endphp
-                            <a href="{{$docName?route('front.doc.download').'?id='.$docId:'javascript:;'}}" class="btn {{$docName?'btn-success':'btn-outline-secondary'}} btn-sm {{$docName?'text-white':''}} btn-show-policy">
+                            <a href="{{$docName?route('doc.download').'?id='.$docId:'javascript:;'}}" class="btn {{$docName?'btn-success':'btn-outline-secondary'}} btn-sm {{$docName?'text-white':''}} btn-show-policy">
                               <svg class="icon">
                                   <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
                               </svg>
@@ -120,7 +139,7 @@
                             @php
                                 $adjacents = $activity->docAdjacents;
                             @endphp
-                            <a href="javascript:;" class="btn {{sizeof($adjacents)>0?'btn-success':'btn-outline-secondary'}} btn-sm {{sizeof($adjacents)>0?'text-white':''}} btn-show-policy">
+                            <a href="javascript:;" class="btn {{sizeof($adjacents)>0?'btn-success':'btn-outline-secondary'}} btn-sm {{sizeof($adjacents)>0?'text-white':''}} btn-show-adjacent" data-route="{{route('front.activity.popup.adjacents')}}" data-id="{{$activity->id}}">
                                 <svg class="icon">
                                     <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
                                 </svg>
@@ -181,5 +200,5 @@
 @endsection
 
 @section('script')
-
+<script src="{{asset('js/front/matrix/script.js')}}"></script>
 @endsection

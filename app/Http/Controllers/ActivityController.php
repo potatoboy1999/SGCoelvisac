@@ -327,4 +327,16 @@ class ActivityController extends Controller
         }
         return view('intranet.errors.popup_error');
     }
+
+    public function popupFrontAdjacentDocs(Request $request){
+        $activity = Activity::where('id',$request->id)
+                            ->where('estado',1)
+                            ->first();
+        if($activity){
+            return view('front.matrix.popup_adjacents',[
+                "activity" => $activity,
+            ]);
+        }
+        return view('intranet.errors.popup_error');
+    }
 }

@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(["middleware"=>["auth"]], function(){
+Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
     Route::get('dashboard',[DashboardController::class,"index"])->name('dashboard');
     Route::get('gestor_objetivos', [ObjectiveController::class,"index"])->name("objectives");
 
@@ -58,7 +58,6 @@ Route::group(["middleware"=>["auth"]], function(){
     });
 
     Route::group(["prefix"=>"document"], function(){
-        Route::get('download', [DocumentController::class,"download"])->name('doc.download');
         Route::post('delete', [DocumentController::class,"delete"])->name('doc.delete');
     });
 
@@ -67,6 +66,7 @@ Route::group(["middleware"=>["auth"]], function(){
 Route::get("/", function(){return view("front.index"); });
 Route::get("/menu", [ActivityController::class,'showMenu'])->name('front.menu');
 Route::get("/matriz", [ActivityController::class,'showMatrix'])->name('front.activity.matrix.show');
-Route::get("/front/document/download", [DocumentController::class,"download"])->name('front.doc.download');
+Route::get("/activity/popup_adjacent_docs", [ActivityController::class,"popupFrontAdjacentDocs"])->name("front.activity.popup.adjacents");
+Route::get("/document/download", [DocumentController::class,"download"])->name('doc.download');
 
 require __DIR__.'/auth.php';
