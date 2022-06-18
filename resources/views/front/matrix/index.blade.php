@@ -114,7 +114,7 @@
                       <div class="float-end">
                         <button class="btn btn-light btn-sm" data-target=".collapseRole{{$role->id}}" data-bs-toggle="collapse">
                             <svg class="icon">
-                                <use xlink:href="http://localhost:8000/icons/sprites/free.svg#cil-chevron-double-down"></use>
+                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-chevron-double-down"></use>
                             </svg>
                         </button>
                       </div>
@@ -133,7 +133,7 @@
                               <div class="float-end">
                                 <button class="btn btn-light btn-sm" data-target=".collapseTheme{{$theme->id}}" data-bs-toggle="collapse" data-parent=".collapseRole{{$role->id}}">
                                   <svg class="icon">
-                                      <use xlink:href="http://localhost:8000/icons/sprites/free.svg#cil-chevron-double-down"></use>
+                                      <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-chevron-double-down"></use>
                                   </svg>
                                 </button>
                               </div>

@@ -369,7 +369,7 @@
                     </a>
                     <button class="btn btn-light btn-sm" data-coreui-target="#collapseRole{{$role->id}}" data-coreui-toggle="collapse" type="button" aria-expanded="true">
                         <svg class="icon">
-                            <use xlink:href="http://localhost:8000/icons/sprites/free.svg#cil-chevron-double-down"></use>
+                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-chevron-double-down"></use>
                         </svg>
                     </button>
                 </div>
@@ -394,7 +394,7 @@
                                         </a>
                                         <button class="btn btn-outline-secondary btn-sm" data-coreui-target="#collapseTheme{{$theme->id}}" data-coreui-toggle="collapse" role="button" aria-expanded="false" roleid="3">
                                             <svg class="icon">
-                                                <use xlink:href="http://localhost:8000/icons/sprites/free.svg#cil-chevron-double-down"></use>
+                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-chevron-double-down"></use>
                                             </svg>
                                         </button>
                                     </div>
