@@ -360,138 +360,150 @@
                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-settings"></use>
                         </svg>
                     </a>
+                    <button class="btn btn-light btn-sm" data-coreui-target="#collapseRole{{$role->id}}" data-coreui-toggle="collapse" type="button" aria-expanded="false" aria-controls="collapseRole{{$role->id}}">
+                        <svg class="icon">
+                            <use xlink:href="http://localhost:8000/icons/sprites/free.svg#cil-chevron-double-down"></use>
+                        </svg>
+                    </button>
                 </div>
                 {{-- <p class="m-0">Rol {{$i+1}}: {{$role->nombre}}</p> --}}
                 <p class="m-0">Rol {{$role->id}}: {{$role->nombre}}</p>
             </div>
-            <div class="card-body">
+            <div class="card-body p-0">
                 <?php 
                     $x = 0; 
                     $themes = $role->themes->where("estado", 1);
                 ?>
                 @foreach ($themes as $theme)
-                <div class="card theme-card {{($x != sizeOf($themes)-1?"mb-3":"")}}" theme-id="{{$theme->id}}">
-                    <div class="card-header">
-                        <div class="float-end">
-                            <a href="{{route('theme.popup.edit')}}" class="btn btn-outline-secondary btn-sm btn-theme-settings" themeid="{{$theme->id}}">
-                                <svg class="icon">
-                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-settings"></use>
-                                </svg>
-                            </a>
+                <div id="collapseRole{{$role->id}}" class="collapse p-3">
+                    <div class="card theme-card {{($x != sizeOf($themes)-1?"mb-3":"")}}" theme-id="{{$theme->id}}">
+                        <div class="card-header">
+                            <div class="float-end">
+                                <a href="{{route('theme.popup.edit')}}" class="btn btn-outline-secondary btn-sm btn-theme-settings" themeid="{{$theme->id}}">
+                                    <svg class="icon">
+                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-settings"></use>
+                                    </svg>
+                                </a>
+                                <button class="btn btn-outline-secondary btn-sm" data-coreui-target="#collapseTheme{{$theme->id}}" data-coreui-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseTheme{{$theme->id}}" roleid="3">
+                                    <svg class="icon">
+                                        <use xlink:href="http://localhost:8000/icons/sprites/free.svg#cil-chevron-double-down"></use>
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="m-0">Tema {{$x+1}}: {{$theme->nombre}}</p>
                         </div>
-                        <p class="m-0">Tema {{$x+1}}: {{$theme->nombre}}</p>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="overflow-auto">
-                                    <table class="table table-bordered m-0">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center align-middle" width="50">COD</th>
-                                                <th class="text-center align-middle" width="150">Objetivo</th>
-                                                <th class="text-center align-middle" width="180">Actividades Principales</th>
-                                                <th class="text-center align-middle" width="100">Fecha Inicio</th>
-                                                <th class="text-center align-middle" width="100">Fecha Fin</th>
-                                                <th class="text-center align-middle" width="80"><!--Procedimiento/<br>-->Politica</th>
-                                                <th class="text-center align-middle" width="120">Documento<br>Adjunto</th>
-                                                <th class="text-center align-middle" width="50">Estado</th>
-                                                <th class="text-center align-middle t-head-comments" width="100"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($theme->objectives->where("estado", 1) as $objective)
-                                                <?php 
-                                                    $y = 0; 
-                                                    $activities = $objective->activities->where("estado", 1);
-                                                ?>
-                                                @foreach ($activities as $activity)
-                                                <tr act-id="{{$activity->id}}">
-
-                                                    <td class="text-center align-middle t-obj-code" obj-id="{{$objective->id}}" rowspan="{{sizeOf($activities)}}" style="{{$y == 0?'':'display: none;'}}">
-                                                        Ob_{{$theme->id}}-{{$objective->id}}
-                                                    </td>
-                                                    <td class="align-middle t-obj-name" obj-id="{{$objective->id}}" rowspan="{{sizeOf($activities)}}" style="{{$y == 0?'':'display: none;'}}">{{$objective->nombre}}</td>
-
-                                                    <td class="align-middle t-act-name">{{$activity->nombre}}</td>
-                                                    <td class="text-center align-middle t-date-start">{{date("d-m-Y", strtotime($activity->fecha_comienzo))}}</td>
-                                                    <td class="text-center align-middle t-date-end">{{date("d-m-Y", strtotime($activity->fecha_fin))}}</td>
-                                                    <td class="text-center align-middle t-policies">
-                                                        @php
-                                                            $policy = $activity->docPolicy;
-                                                            $docName = null;
-                                                            $docId = null;
-                                                            if($policy && $policy->estado == 1){
-                                                                $docName = $policy->nombre;
-                                                                $docId = $policy->id;
-                                                            }
-                                                        @endphp
-                                                        <a href="javascript:;" class="btn {{$docName?'btn-success':'btn-warning'}} btn-sm text-white btn-show-policy" data-id="{{$activity->id}}" data-filename="{{$docName}}" data-fileid="{{$docId}}">
-                                                            <svg class="icon">
-                                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#{{$docName?'cil-file':'cil-arrow-thick-from-bottom'}}"></use>
-                                                            </svg>
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center align-middle t-adjacents">
-                                                        @php
-                                                            $adjacents = $activity->docAdjacents;
-                                                        @endphp
-                                                        <a href="javascript:;" class="btn {{sizeof($adjacents)>0?'btn-success':'btn-warning'}} btn-sm text-white btn-show-adjacent" data-route="{{route('activity.popup.adjacents')}}" data-id="{{$activity->id}}">
-                                                            <svg class="icon">
-                                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#{{sizeof($adjacents)>0?'cil-file':'cil-arrow-thick-from-bottom'}}"></use>
-                                                            </svg>
-                                                        </a>
-                                                    </td>
-                                                    @php
-                                                        $s = ['t_red','t_yellow','t_green'];
-                                                        $status = 0; // not done = RED
-                                                        if($activity->cumplido == 1){
-                                                            $status = 2; // done = GREEN
-                                                        }else{
-                                                            $today = time();
-                                                            $d_start = strtotime($activity->fecha_comienzo);
-                                                            $d_end = strtotime($activity->fecha_fin);
-                                                            if($d_start <= $today && $today <= $d_end){
-                                                                // calculate 25% of time remaining
-                                                                $diff = ($d_end - $d_start)*0.25;
-                                                                $d_limit = $d_start + $diff;
-                                                                
-                                                                if($d_limit <= $today){
-                                                                    $status = 1; // if today is past 25%, status warning
-                                                                }
-
-                                                            }else if($d_end < $today){
-                                                                $status = 0; // time expired, not done = RED
-                                                            }
-                                                        }
-                                                    @endphp
-                                                    <td class="{{$s[$status]}}"></td>
-                                                    
-                                                    <td class="text-center align-middle t-cel-comments">
-                                                        <a href="javascript:;" class="btn btn-secondary my-1 btn-sm text-white btn-edit" data-act="{{$activity->id}}" data-route="{{route("activity.popup.edit")}}">
-                                                            <svg class="icon">
-                                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
-                                                            </svg>
-                                                        </a>
-                                                        <a href="javascript:;" class="btn btn-danger my-1 btn-sm text-white btn-delete" data-act="{{$activity->id}}" data-route="{{route("activity.popup.delete")}}" data-obj="{{$objective->id}}">
-                                                            <svg class="icon">
-                                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
-                                                            </svg>
-                                                        </a>
-                                                        @if (in_array(Auth::user()->position->area->nombre, $permissions ))
-                                                        <a href="{{route('comment.popup.show')}}" class="btn btn-success my-1 btn-sm text-white btn-comment" style="display: none;" data-act="{{$activity->id}}">
-                                                            <svg class="icon">
-                                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-comment-bubble"></use>
-                                                            </svg>
-                                                        </a>
-                                                        @endif
-                                                    </td>
+                        <div class="card-body p-0">
+                            <div id="collapseTheme{{$theme->id}}" class="collapse row">
+                                <div class="col-12">
+                                    <div class="overflow-auto">
+                                        <table class="table table-bordered m-0">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center align-middle" width="50">COD</th>
+                                                    <th class="text-center align-middle" width="150">Objetivo</th>
+                                                    <th class="text-center align-middle" width="180">Actividades Principales</th>
+                                                    <th class="text-center align-middle" width="100">Fecha Inicio</th>
+                                                    <th class="text-center align-middle" width="100">Fecha Fin</th>
+                                                    <th class="text-center align-middle" width="80"><!--Procedimiento/<br>-->Politica</th>
+                                                    <th class="text-center align-middle" width="120">Documento<br>Adjunto</th>
+                                                    <th class="text-center align-middle" width="50">Estado</th>
+                                                    <th class="text-center align-middle t-head-comments" width="100"></th>
                                                 </tr>
-                                                <?php $y++; ?>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($theme->objectives->where("estado", 1) as $objective)
+                                                    <?php 
+                                                        $y = 0; 
+                                                        $activities = $objective->activities->where("estado", 1);
+                                                    ?>
+                                                    @foreach ($activities as $activity)
+                                                    <tr act-id="{{$activity->id}}">
+
+                                                        <td class="text-center align-middle t-obj-code" obj-id="{{$objective->id}}" rowspan="{{sizeOf($activities)}}" style="{{$y == 0?'':'display: none;'}}">
+                                                            Ob_{{$theme->id}}-{{$objective->id}}
+                                                        </td>
+                                                        <td class="align-middle t-obj-name" obj-id="{{$objective->id}}" rowspan="{{sizeOf($activities)}}" style="{{$y == 0?'':'display: none;'}}">{{$objective->nombre}}</td>
+
+                                                        <td class="align-middle t-act-name">{{$activity->nombre}}</td>
+                                                        <td class="text-center align-middle t-date-start">{{date("d-m-Y", strtotime($activity->fecha_comienzo))}}</td>
+                                                        <td class="text-center align-middle t-date-end">{{date("d-m-Y", strtotime($activity->fecha_fin))}}</td>
+                                                        <td class="text-center align-middle t-policies">
+                                                            @php
+                                                                $policy = $activity->docPolicy;
+                                                                $docName = null;
+                                                                $docId = null;
+                                                                if($policy && $policy->estado == 1){
+                                                                    $docName = $policy->nombre;
+                                                                    $docId = $policy->id;
+                                                                }
+                                                            @endphp
+                                                            <a href="javascript:;" class="btn {{$docName?'btn-success':'btn-warning'}} btn-sm text-white btn-show-policy" data-id="{{$activity->id}}" data-filename="{{$docName}}" data-fileid="{{$docId}}">
+                                                                <svg class="icon">
+                                                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#{{$docName?'cil-file':'cil-arrow-thick-from-bottom'}}"></use>
+                                                                </svg>
+                                                            </a>
+                                                        </td>
+                                                        <td class="text-center align-middle t-adjacents">
+                                                            @php
+                                                                $adjacents = $activity->docAdjacents;
+                                                            @endphp
+                                                            <a href="javascript:;" class="btn {{sizeof($adjacents)>0?'btn-success':'btn-warning'}} btn-sm text-white btn-show-adjacent" data-route="{{route('activity.popup.adjacents')}}" data-id="{{$activity->id}}">
+                                                                <svg class="icon">
+                                                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#{{sizeof($adjacents)>0?'cil-file':'cil-arrow-thick-from-bottom'}}"></use>
+                                                                </svg>
+                                                            </a>
+                                                        </td>
+                                                        @php
+                                                            $s = ['t_red','t_yellow','t_green'];
+                                                            $status = 0; // not done = RED
+                                                            if($activity->cumplido == 1){
+                                                                $status = 2; // done = GREEN
+                                                            }else{
+                                                                $today = time();
+                                                                $d_start = strtotime($activity->fecha_comienzo);
+                                                                $d_end = strtotime($activity->fecha_fin);
+                                                                if($d_start <= $today && $today <= $d_end){
+                                                                    // calculate 25% of time remaining
+                                                                    $diff = ($d_end - $d_start)*0.25;
+                                                                    $d_limit = $d_start + $diff;
+                                                                    
+                                                                    if($d_limit <= $today){
+                                                                        $status = 1; // if today is past 25%, status warning
+                                                                    }
+
+                                                                }else if($d_end < $today){
+                                                                    $status = 0; // time expired, not done = RED
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        <td class="{{$s[$status]}}"></td>
+                                                        
+                                                        <td class="text-center align-middle t-cel-comments">
+                                                            <a href="javascript:;" class="btn btn-secondary my-1 btn-sm text-white btn-edit" data-act="{{$activity->id}}" data-route="{{route("activity.popup.edit")}}">
+                                                                <svg class="icon">
+                                                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
+                                                                </svg>
+                                                            </a>
+                                                            <a href="javascript:;" class="btn btn-danger my-1 btn-sm text-white btn-delete" data-act="{{$activity->id}}" data-route="{{route("activity.popup.delete")}}" data-obj="{{$objective->id}}">
+                                                                <svg class="icon">
+                                                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
+                                                                </svg>
+                                                            </a>
+                                                            @if (in_array(Auth::user()->position->area->nombre, $permissions ))
+                                                            <a href="{{route('comment.popup.show')}}" class="btn btn-success my-1 btn-sm text-white btn-comment" style="display: none;" data-act="{{$activity->id}}">
+                                                                <svg class="icon">
+                                                                    <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-comment-bubble"></use>
+                                                                </svg>
+                                                            </a>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                    <?php $y++; ?>
+                                                    @endforeach
                                                 @endforeach
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
