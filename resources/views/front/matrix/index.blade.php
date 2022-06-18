@@ -213,7 +213,7 @@
                             @endphp
                             <div class="collapse collapseTheme{{$theme->id}}">
                               <div class="td_content">
-                                <a href="javascript:;" class="btn {{sizeof($adjacents)>0?'btn-success':'btn-outline-secondary'}} btn-sm {{sizeof($adjacents)>0?'text-white':''}} btn-show-adjacent" data-route="{{route('front.activity.popup.adjacents')}}" data-id="{{$activity->id}}">
+                                <a href="javascript:;" class="btn {{sizeof($adjacents)>0?'btn-success':'btn-outline-secondary'}} btn-sm {{sizeof($adjacents)>0?'text-white':''}} {{sizeof($adjacents)>0?'btn-show-adjacent':''}}" data-route="{{route('front.activity.popup.adjacents')}}" data-id="{{$activity->id}}">
                                     <svg class="icon">
                                         <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
                                     </svg>
