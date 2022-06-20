@@ -20,7 +20,7 @@ class Role extends Model
     ];
 
     public function themes(){
-        return $this->hasMany(Theme::class,"rol_id","id")->where('estado',1);
+        return $this->hasMany(Theme::class,"rol_id","id");
     }
 
     public function area(){

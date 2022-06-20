@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
     Route::get('dashboard',[DashboardController::class,"index"])->name('dashboard');
-    Route::get('gestor_objetivos', [ObjectiveController::class,"index"])->name("objectives");
 
     Route::group(["prefix"=>"gestor"], function(){
         Route::get('objetivos', [ObjectiveController::class,"index"])->name("objectives");

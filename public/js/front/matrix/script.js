@@ -56,7 +56,7 @@ $(".t_collapsible button[data-bs-toggle='collapse']").on('click', function(ev){
         href = href.replace('cil-chevron-double-down','cil-chevron-double-up');
         icon.attr('xlink:href',href);
         $(target).collapse("show");
-
+        // COMMENTED TO DONT OPEN ALL THEME OPTIONS
         // if(parent == undefined){
         //     console.log('search children:',"button[data-parent='"+target+"']");
         //     var children = $("button[data-parent='"+target+"']");

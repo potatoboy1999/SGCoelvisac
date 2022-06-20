@@ -4,53 +4,7 @@
     
 @section('style')
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-    <style>
-        #edit_activity_form .form-check-input:checked{
-            background-color: #35c107;
-            border-color: #35c107;
-        }
-        thead tr th{
-            background-color: #51607c!important;
-            color: white!important;
-        }
-        .rol-header{
-            background-color: #4190af;
-            color: white;
-        }
-        td.t_role_row{
-            background-color: #8b9bb7!important;
-        }
-        td.t_theme_row{
-            background-color: #cccccc!important;
-        }
-        td.t_red {
-            background-color: #ec1d1d;
-        }
-        td.t_green {
-            background-color: #12c212;
-        }
-        td.t_yellow {
-            background-color: #f9e715;
-        }
-        #ui-datepicker-div{
-            z-index: 10000!important;
-        }
-        .toast{
-            background-color: var(--cui-toast-background-color, rgba(255, 255, 255, 1))
-        }
-        .file-downloadable {
-            padding: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 0.5rem;
-            border-color: #2eb85c;
-        }
-        .file-downloadable p{
-            margin: 0;
-        }
-        #form-area-sel .form-group{
-            max-width: 400px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{asset('css/intranet/objectives.css')}}">
 @endsection
 
 @section('content')
@@ -281,6 +235,140 @@
 </div>
 <!-- End Adjacent Modal -->
 
+@if ($area)
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterModalLabel">Filtros</h5>
+                <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @php
+                    $isFiltered = $filter['active'];
+                    $statusFilter = $filter['status'];
+                    $sGreen = $filter['status']['green'];
+                    $sYellow = $filter['status']['yellow'];
+                    $sRed = $filter['status']['red'];
+                @endphp
+                <form id="search_form" action="{{route('objectives')}}" method="GET" autocomplete="off" onkeydown="return event.key != 'Enter';">
+                    <input type="hidden" name="search" value="Y">
+                    <input type="hidden" name="area" value="{{$area?$area->id:''}}">
+                    <div class="row">
+                        <div class="col-12">
+                            <label class="form-check-label">Estado:</label>
+                            <ul class="status-choice-list mb-1">
+                                <li class="s-choice-item choice-green {{$isFiltered?($sGreen?'active':''):'active'}}">
+                                    <a href="#" class="s-choice" data-target="#s-green" active="{{$isFiltered?($sGreen?'on':'off'):'on'}}">
+                                        Verde
+                                        <svg class="i-check icon">
+                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-check"></use>
+                                        </svg>
+                                    </a href="#">
+                                    <input id="s-green" class="d-none" type="checkbox" name="s_green" {{$isFiltered?($sGreen?'checked':''):'checked'}}>
+                                </li>
+                                <li class="s-choice-item choice-yellow {{$isFiltered?($sYellow?'active':''):'active'}}">
+                                    <a href="#" class="s-choice" data-target="#s-yellow" active="{{$isFiltered?($sYellow?'on':'off'):'on'}}">
+                                        Amarillo
+                                        <svg class="i-check icon">
+                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-check"></use>
+                                        </svg>
+                                    </a href="#">
+                                    <input id="s-yellow" class="d-none" type="checkbox" name="s_yellow" {{$isFiltered?($sYellow?'checked':''):'checked'}}>
+                                </li>
+                                <li class="s-choice-item choice-red {{$isFiltered?($sRed?'active':''):'active'}}">
+                                    <a href="#" class="s-choice" data-target="#s-red" active="{{$isFiltered?($sRed?'on':'off'):'on'}}">
+                                        Rojo
+                                        <svg class="i-check icon">
+                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-check"></use>
+                                        </svg>
+                                    </a href="#">
+                                    <input id="s-red" class="d-none" type="checkbox" name="s_red" {{$isFiltered?($sRed?'checked':''):'checked'}}>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group py-1">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input switch-f-choice" id="searchByRole" name="search_role" type="checkbox" data-object="role" data-target="#search_role" {{$filter['role_word']!=''?'checked':''}}>
+                                    <label class="form-check-label" for="searchByRole">Buscar por Rol:</label>
+                                </div>
+                                <input id="search_role" class="form-control" type="text" name="search_role" placeholder="Busqueda" value="{{$filter['role_word']!=''?$filter['role_word']:''}}" required {{$filter['role_word']!=''?'':'disabled'}}>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group py-1">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input switch-f-choice" id="searchByTheme" name="search_theme" type="checkbox" data-object="role" data-target="#search_theme" {{$filter['theme_word']!=''?'checked':''}}>
+                                    <label class="form-check-label" for="searchByTheme">Buscar por Tema:</label>
+                                </div>
+                                <input id="search_theme" class="form-control" type="text" name="search_theme" placeholder="Busqueda" value="{{$filter['theme_word']!=''?$filter['theme_word']:''}}" required {{$filter['theme_word']!=''?'':'disabled'}}>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group py-1">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input switch-f-choice" id="searchByObj" name="search_objective" type="checkbox" data-object="role" data-target="#search_objective" {{$filter['obj_word']!=''?'checked':''}}>
+                                    <label class="form-check-label" for="searchByObj">Buscar por Objetivo:</label>
+                                </div>
+                                <input id="search_objective" class="form-control" type="text" name="search_objective" placeholder="Busqueda" value="{{$filter['obj_word']!=''?$filter['obj_word']:''}}" required {{$filter['obj_word']!=''?'':'disabled'}}>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group py-1">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input switch-f-choice" id="searchByActivity" name="search_activity" type="checkbox" data-object="role" data-target="#search_activity" {{$filter['act_word']!=''?'checked':''}}>
+                                    <label class="form-check-label" for="searchByActivity">Buscar por nombre:</label>
+                                </div>
+                                <input id="search_activity" class="form-control" type="text" name="search_activity" placeholder="Busqueda" value="{{$filter['act_word']!=''?$filter['act_word']:''}}" required {{$filter['act_word']!=''?'':'disabled'}}>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group py-1">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input switch-f-choice" id="searchFrom" name="search_from" type="checkbox" data-object="role" data-target="#search_from" {{$filter['date_from']!=''?'checked':''}}>
+                                    <label class="form-check-label" for="searchFrom">Buscar desde:</label>
+                                </div>
+                                <div class="input-group">
+                                    <input id="search_from" class="form-control" type="text" name="search_from" value="{{$filter['date_from']!=''?$filter['date_from']:date('d/m/Y', time())}}" required {{$filter['date_from']!=''?'':'disabled'}}>
+                                    <span class="input-group-text">
+                                        <svg class="icon">
+                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group py-1">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input switch-f-choice" id="searchTo" name="search_to" type="checkbox" data-object="role" data-target="#search_to" {{$filter['date_to']!=''?'checked':''}}>
+                                    <label class="form-check-label" for="searchTo">Buscar hasta:</label>
+                                </div>
+                                <div class="input-group">
+                                    <input id="search_to" class="form-control" type="text" name="search_to" value="{{$filter['date_to']!=''?$filter['date_to']:date('d/m/Y', time())}}" required {{$filter['date_to']!=''?'':'disabled'}}>
+                                    <span class="input-group-text">
+                                        <svg class="icon">
+                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input class="btn btn-info text-white" type="submit" form="search_form" value="Guardar">
+                {{-- <button id="item_update" class="btn btn-info text-white" type="button">Guardar</button> --}}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Filter Modal -->
+@endif
+
 <div class="body flex-grow-1 px-3">
     <div class="position-fixed end-0 px-3" style="z-index: 11; margin-top: -20px">
         <div id="liveToast" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
@@ -323,18 +411,11 @@
                         </a>
                     </div>
                     <div class="p-1">
-                        <a href="javascript:;" class="btn btn-secondary text-white">
-                            <svg class="icon">
-                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-search"></use>
-                            </svg> Buscar
-                        </a>
-                    </div>
-                    <div class="p-1">
-                        <a href="javascript:;" class="btn btn-secondary text-white">
+                        <button type="button" class="btn {{$isFiltered?'btn-warning':'btn-secondary'}} text-white" data-coreui-toggle="modal" data-coreui-target="#filterModal">
                             <svg class="icon">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-filter"></use>
-                            </svg> Filtrar
-                        </a>
+                            </svg> {{$isFiltered?'Filtrado':'Filtrar'}}
+                        </button>
                     </div>
                     <div class="p-1">
                         <a href="javascript:;" class="btn btn-secondary text-white toggle-dates" toggle-visible="false">
@@ -379,11 +460,20 @@
             <div class="card-body p-0">
                 <div id="collapseRole{{$role->id}}" class="collapse">
                     <div class="collapse-content p-3">
-                        <?php 
+                        @php
                             $x = 0; 
-                            $themes = $role->themes->where("estado", 1);
-                        ?>
+                            $themes = $role->themes;
+                        @endphp
                         @foreach ($themes as $theme)
+                        @php
+                            $count = 0;
+                            foreach ($theme->objectives as $objective) {
+                                foreach ($objective->activities as $activity) {
+                                    $count++;
+                                }
+                            }
+                        @endphp
+                        @if ($count > 0)
                             <div class="card theme-card {{($x != sizeOf($themes)-1?"mb-3":"")}}" theme-id="{{$theme->id}}">
                                 <div class="card-header">
                                     <div class="float-end">
@@ -419,10 +509,10 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($theme->objectives->where("estado", 1) as $objective)
+                                                        @foreach ($theme->objectives as $objective)
                                                             <?php 
                                                                 $y = 0; 
-                                                                $activities = $objective->activities->where("estado", 1);
+                                                                $activities = $objective->activities;
                                                             ?>
                                                             @foreach ($activities as $activity)
                                                             <tr act-id="{{$activity->id}}">
@@ -521,6 +611,7 @@
                                 </div>
                             </div>
                         <?php $x++; ?>
+                        @endif
                         @endforeach
                     </div>
                 </div>

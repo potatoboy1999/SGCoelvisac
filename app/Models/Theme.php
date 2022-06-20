@@ -23,6 +23,6 @@ class Theme extends Model
     }
 
     public function objectives(){
-        return $this->hasMany(Objective::class,'tema_id','id')->where('estado',1);
+        return $this->hasMany(Objective::class,'tema_id','id');
     }
 }
