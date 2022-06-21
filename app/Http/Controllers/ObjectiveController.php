@@ -157,9 +157,9 @@ class ObjectiveController extends Controller
             "filter" => [
                 "active" => (isset($request->search) && $request->search == "Y")?true:false,
                 "status" => [
-                    "green" => isset($request->s_green),
-                    "yellow" => isset($request->s_yellow),
-                    "red" => isset($request->s_red),
+                    "red" => isset($request->s_red), // = 0
+                    "yellow" => isset($request->s_yellow), // = 1
+                    "green" => isset($request->s_green), // = 2
                 ],
                 "role_word" => isset($request->search_role)?$request->search_role:'',
                 "theme_word" => isset($request->search_theme)?$request->search_theme:'',
