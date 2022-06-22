@@ -224,7 +224,7 @@
               <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
             </form> --}}
             <div class="usuario d-flex">
-                <a class="pt-1" href="{{route('login')}}">Login</a>
+                <a class="pt-1" href="{{route('login')}}" target="_blank">Login</a>
                 <i class="fas fa-user"></i>
             </div>
         </div>

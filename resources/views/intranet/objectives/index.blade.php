@@ -496,7 +496,7 @@
                         <a href="javascript:;" class="btn btn-secondary text-white toggle-dates" toggle-visible="false">
                             <svg class="icon">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
-                            </svg> <span>Ver Fechas</span>
+                            </svg> <span>Ver fecha de inicio</span>
                         </a>
                     </div>
                     <?php $permissions = ["Gestión","Admin"]; ?>
