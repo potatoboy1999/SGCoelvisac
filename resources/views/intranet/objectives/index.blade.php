@@ -335,30 +335,30 @@
                             <label class="form-check-label">Estado:</label>
                             <ul class="status-choice-list mb-1">
                                 <li class="s-choice-item choice-green {{$isFiltered?($sGreen?'active':''):'active'}}">
-                                    <a href="#" class="s-choice" data-target="#s-green" active="{{$isFiltered?($sGreen?'on':'off'):'on'}}">
+                                    <a href="javascript:;" class="s-choice" data-target="#s-green" active="{{$isFiltered?($sGreen?'on':'off'):'on'}}">
                                         Verde
                                         <svg class="i-check icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-check"></use>
                                         </svg>
-                                    </a href="#">
+                                    </a>
                                     <input id="s-green" class="d-none" type="checkbox" name="s_green" {{$isFiltered?($sGreen?'checked':''):'checked'}}>
                                 </li>
                                 <li class="s-choice-item choice-yellow {{$isFiltered?($sYellow?'active':''):'active'}}">
-                                    <a href="#" class="s-choice" data-target="#s-yellow" active="{{$isFiltered?($sYellow?'on':'off'):'on'}}">
+                                    <a href="javascript:;" class="s-choice" data-target="#s-yellow" active="{{$isFiltered?($sYellow?'on':'off'):'on'}}">
                                         Amarillo
                                         <svg class="i-check icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-check"></use>
                                         </svg>
-                                    </a href="#">
+                                    </a>
                                     <input id="s-yellow" class="d-none" type="checkbox" name="s_yellow" {{$isFiltered?($sYellow?'checked':''):'checked'}}>
                                 </li>
                                 <li class="s-choice-item choice-red {{$isFiltered?($sRed?'active':''):'active'}}">
-                                    <a href="#" class="s-choice" data-target="#s-red" active="{{$isFiltered?($sRed?'on':'off'):'on'}}">
+                                    <a href="javascript:;" class="s-choice" data-target="#s-red" active="{{$isFiltered?($sRed?'on':'off'):'on'}}">
                                         Rojo
                                         <svg class="i-check icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-check"></use>
                                         </svg>
-                                    </a href="#">
+                                    </a>
                                     <input id="s-red" class="d-none" type="checkbox" name="s_red" {{$isFiltered?($sRed?'checked':''):'checked'}}>
                                 </li>
                             </ul>

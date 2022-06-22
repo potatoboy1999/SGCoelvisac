@@ -1,3 +1,7 @@
+$(function() {
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+});
+
 // btn that opens adjacent document show/upload modal
 $(".btn-show-adjacent").on("click",function(ev){
     ev.preventDefault();
@@ -81,4 +85,66 @@ $(document).on("click",".btn-file-download",function(ev){
     var id = $(this).attr("file-id");
     route = route+"?id="+id;
     window.location.href = route+"?id="+id;
+});
+
+// FILTER MODAL FUNCTIONS
+
+$("#search_from").datepicker({
+    dateFormat: "dd/mm/yy",
+    onSelect: function(date){
+        $("#act_date_end").datepicker('option', 'minDate', date);
+    }
+});
+
+$("#search_to").datepicker({
+    dateFormat: "dd/mm/yy",
+});
+
+$(".s-choice").on("click", function(ev){
+    var target = $(this).data('target');
+    var active = $(this).attr('active');
+
+    if(active == "on"){
+        $(this).parent().removeClass('active');
+        $(target).prop('checked',false);
+        $(this).attr('active','off');
+    }else{
+        $(this).parent().addClass('active');
+        $(target).prop('checked',true);
+        $(this).attr('active','on');
+    }
+
+    // make sure an status filter is active
+    var isOn = false;
+    $(".s-choice").each(function(){
+        if($(this).attr('active') == "on"){
+            isOn = true;
+        }
+    });
+
+    if(!isOn){
+        var choice = $(".s-choice").first()
+        target = choice.data('target');
+        active = choice.attr('active');
+
+        choice.parent().addClass('active');
+        $(target).prop('checked',true);
+        choice.attr('active','on');
+    }
+
+});
+
+$('.switch-f-choice').on('change',function(ev){
+    var target = $(this).data('target');
+    var active = $(this).prop('checked');
+
+    console.log('target: ',target);
+    console.log('active: ',active);
+
+    if(active == true){
+        $(target).prop('disabled',false);
+    }else{
+        $(target).prop('disabled',true);
+    }
+
 });

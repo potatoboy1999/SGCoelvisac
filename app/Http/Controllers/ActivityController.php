@@ -302,9 +302,110 @@ class ActivityController extends Controller
                         ->where('estado',1)
                         ->first();
             if($area){
-                $roles = Role::where('area_id', $area->id)
-                            ->where("estado", 1)
-                            ->get();
+                $roles = Role::whereNotNull('t_sgcv_roles.id');
+
+                if(isset($request->search) && $request->search == "Y"){
+                    if(isset($request->search_role) 
+                    || isset($request->search_theme) 
+                    || isset($request->search_objective) 
+                    || isset($request->search_activity) 
+                    || isset($request->search_from) 
+                    || isset($request->search_to)
+                    ){
+                        $roles->join('t_sgcv_temas','t_sgcv_temas.rol_id','t_sgcv_roles.id');
+                        $roles->join('t_sgcv_objetivos','t_sgcv_objetivos.tema_id','t_sgcv_temas.id');
+                        $roles->join('t_sgcv_actividades','t_sgcv_actividades.objetivo_id','t_sgcv_objetivos.id');
+                        
+                        $roles->where("t_sgcv_temas.estado", 1);
+                        $roles->where("t_sgcv_objetivos.estado", 1);
+                        $roles->where("t_sgcv_actividades.estado", 1);
+
+                        $role_names = [];
+                        $theme_names = [];
+                        $obj_names = [];
+                        $act_names = [];
+                        if(isset($request->search_role)){
+                            $role_names = explode(" ", $request->search_role);
+                            $roles->where(function($q) use ($role_names){
+                                foreach($role_names as $name){
+                                    $q->where('t_sgcv_roles.nombre' , 'like' , '%'.$name.'%');
+                                }
+                            });
+                        }
+                        if(isset($request->search_theme)){
+                            $theme_names = explode(" ", $request->search_theme);
+                            $roles->where(function($q) use ($theme_names){
+                                foreach($theme_names as $name){
+                                    $q->where('t_sgcv_temas.nombre' , 'like' , '%'.$name.'%');
+                                }
+                            });
+                        }
+                        if(isset($request->search_objective)){
+                            $obj_names = explode(" ", $request->search_objective);
+                            $roles->where(function($q) use ($obj_names){
+                                foreach($obj_names as $name){
+                                    $q->where('t_sgcv_objetivos.nombre' , 'like' , '%'.$name.'%');
+                                }
+                            });
+                        }
+                        if(isset($request->search_activity)){
+                            $act_names = explode(" ", $request->search_activity);
+                            $roles->where(function($q) use ($act_names){
+                                foreach($act_names as $name){
+                                    $q->where('t_sgcv_actividades.nombre' , 'like' , '%'.$name.'%');
+                                }
+                            });
+                        }
+                        if(isset($request->search_from)){
+                            $roles->where('t_sgcv_actividades.fecha_comienzo','>=',''.date_format(date_create_from_format('d/m/Y',$request->search_from),'Y-m-d').'');
+                            
+                        }
+                        if(isset($request->search_to)){
+                            $roles->where('t_sgcv_actividades.fecha_fin','<=',''.date_format(date_create_from_format('d/m/Y',$request->search_to),'Y-m-d').'');
+                        }
+
+                        // eager loading: THEMES
+                        $roles->with(['themes'=>function($qTheme) use ($request,$theme_names,$obj_names,$act_names){
+                            $qTheme->where('estado', 1);
+                            $qTheme->where(function($q) use ($theme_names){
+                                foreach($theme_names as $name){
+                                    $q->where('nombre' , 'like' , '%'.$name.'%');
+                                }
+                            });
+                            // eager loading: OBJETIVES
+                            $qTheme->with(['objectives'=>function($qObj) use ($request, $obj_names,$act_names){
+                                $qObj->where('estado', 1);
+                                $qObj->where(function($q) use ($obj_names){
+                                    foreach($obj_names as $name){
+                                        $q->where('nombre' , 'like' , '%'.$name.'%');
+                                    }
+                                });
+                                // eager loading: ACTIVITIES
+                                $qObj->with(['activities'=>function($qAct) use ($request, $act_names){
+                                    $qAct->where('estado',1);
+                                    $qAct->where(function($q) use ($act_names){
+                                        foreach($act_names as $name){
+                                            $q->where('nombre' , 'like' , '%'.$name.'%');
+                                        }
+                                    });
+                                    if(isset($request->search_from)){
+                                        $qAct->where('fecha_comienzo','>=',''.date_format(date_create_from_format('d/m/Y',$request->search_from),'Y-m-d').'');
+                                    }
+                                    if(isset($request->search_to)){
+                                        $qAct->where('fecha_fin','<=',''.date_format(date_create_from_format('d/m/Y',$request->search_to),'Y-m-d').'');
+                                    }
+                                }]);
+                            }]);
+                        }]);
+                    }
+                }
+
+                $roles->where('t_sgcv_roles.area_id', $area->id)
+                    ->where("t_sgcv_roles.estado", 1)
+                    ->select('t_sgcv_roles.id','t_sgcv_roles.area_id','t_sgcv_roles.nombre','t_sgcv_roles.descripcion','t_sgcv_roles.estado')
+                    ->groupBy('t_sgcv_roles.id','t_sgcv_roles.area_id','t_sgcv_roles.nombre','t_sgcv_roles.descripcion','t_sgcv_roles.estado')
+                    ->orderBy("t_sgcv_roles.created_at", "desc");
+                $roles = $roles->get();
             }
         }
 
@@ -312,7 +413,21 @@ class ActivityController extends Controller
             "page" => $page,
             "m_areas" => $m_areas,
             "roles" => $roles,
-            "area" => $area
+            "area" => $area,
+            "filter" => [
+                "active" => (isset($request->search) && $request->search == "Y")?true:false,
+                "status" => [
+                    "red" => isset($request->s_red), // = 0
+                    "yellow" => isset($request->s_yellow), // = 1
+                    "green" => isset($request->s_green), // = 2
+                ],
+                "role_word" => isset($request->search_role)?$request->search_role:'',
+                "theme_word" => isset($request->search_theme)?$request->search_theme:'',
+                "obj_word" => isset($request->search_objective)?$request->search_objective:'',
+                "act_word" => isset($request->search_activity)?$request->search_activity:'',
+                "date_from" => isset($request->search_from)?$request->search_from:'',
+                "date_to" => isset($request->search_to)?$request->search_to:'',
+            ]
         ]);
     }
 

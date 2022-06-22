@@ -71,7 +71,7 @@ $('.switch-f-choice').on('change',function(ev){
         $(target).prop('disabled',true);
     }
 
-})
+});
 
 $("#area-sel").on("change",function(ev){
     var area_id = $(this).val();
