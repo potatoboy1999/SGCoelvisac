@@ -81,4 +81,14 @@ class TravelScheduleController extends Controller
     {
         //
     }
+
+    public function backIndex(Request $request){
+        $page = "objectives";
+        $bcrums = ["Agenda Estrategica","Objetivos"];
+
+        return view('intranet.travels.index',[
+            "page"=>$page,
+            "bcrums" => $bcrums,
+        ]);
+    }
 }

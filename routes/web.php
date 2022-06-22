@@ -7,6 +7,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ObjectiveController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ThemeController;
+use App\Http\Controllers\TravelScheduleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,10 +22,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
+    Route::get('/',[DashboardController::class,"index"]);
     Route::get('dashboard',[DashboardController::class,"index"])->name('dashboard');
 
-    Route::group(["prefix"=>"gestor"], function(){
-        Route::get('objetivos', [ObjectiveController::class,"index"])->name("objectives");
+    Route::group(["prefix"=>"matriz"], function(){
+        Route::get('/', [ObjectiveController::class,"index"])->name("objectives");
         Route::post('nuevo_item', [ObjectiveController::class,"storeItem"])->name("new_item");
         Route::get("all_items", [ObjectiveController::class,"allItems"])->name("api_all_activities");
     });
@@ -58,6 +60,10 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
 
     Route::group(["prefix"=>"document"], function(){
         Route::post('delete', [DocumentController::class,"delete"])->name('doc.delete');
+    });
+
+    Route::group(["prefix"=>"agenda"], function(){
+        Route::get('/', [TravelScheduleController::class, "backIndex"])->name('agenda.index');
     });
 
 });

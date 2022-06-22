@@ -23,3 +23,10 @@ CREATE TABLE `t_sgcv_act_docs` (
     REFERENCES `t_sgcv_documentos` (`id`));
 
 -- Everything on top of this on Live Server
+
+INSERT INTO t_sgcv_sedes VALUES
+(null, 'Villacurí', null, null, 1, '2022-06-21 12:00:00', '2022-06-21 12:00:00'),
+(null, 'Olmos', null, null, 1, '2022-06-21 12:00:00', '2022-06-21 12:00:00'),
+(null, 'Andahuasi', null, null, 1, '2022-06-21 12:00:00', '2022-06-21 12:00:00');
+
+UPDATE t_sgcv_opciones SET `url` = 'agenda.index' where id = 6;
