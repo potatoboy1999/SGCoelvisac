@@ -148,3 +148,22 @@ $('.switch-f-choice').on('change',function(ev){
     }
 
 });
+
+$(".toggle-dates").on("click",function(ev){
+    ev.preventDefault();
+    if($(this).attr("toggle-visible") == "false"){
+        $(".th-date-start").show();
+        $(".th-date-end").show();
+        $(".t-date-start").show();
+        $(".t-date-end").show();
+        $(this).find("span").html("Ocultar Fechas");
+        $(this).attr("toggle-visible","true");
+    }else{
+        $(".th-date-start").hide();
+        $(".th-date-end").hide();
+        $(".t-date-start").hide();
+        $(".t-date-end").hide();
+        $(this).find("span").html("Ver Fechas");
+        $(this).attr("toggle-visible","false");
+    }
+});

@@ -233,12 +233,21 @@
   </div>
   <div class="marco col-12">
     <div class="box">
-      <div class="cuerpo text-start">
-        <button class="btn {{$isFiltered?'btn-warning':'btn-secondary'}} text-white" data-bs-toggle="modal" data-bs-target="#filterModal">
-          <svg class="icon">
-            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-filter"></use>
-          </svg> {{$isFiltered?'Filtrado':'Filtrar'}}
-        </button>
+      <div class="cuerpo text-start d-flex">
+        <div class="p-1">
+          <button class="btn {{$isFiltered?'btn-warning':'btn-secondary'}} text-white" data-bs-toggle="modal" data-bs-target="#filterModal">
+            <svg class="icon">
+              <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-filter"></use>
+            </svg> {{$isFiltered?'Filtrado':'Filtrar'}}
+          </button>
+        </div>
+        <div class="p-1">
+          <button class="btn btn-secondary text-white toggle-dates" toggle-visible="true">
+            <svg class="icon">
+              <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
+            </svg> <span>Ocultar Fechas</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
