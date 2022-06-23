@@ -88,7 +88,17 @@ class TravelScheduleController extends Controller
         $page = "objectives";
         $bcrums = ["Agendas"];
         $year = intval(isset($request->year)?$request->year:date('Y'));
+        // return $branches->toArray();
 
+        return view('intranet.travels.index',[
+            "page"=>$page,
+            "bcrums" => $bcrums,
+            "year" => $year
+        ]);
+    }
+
+    public function viewCalendar(Request $request){
+        $year = intval(isset($request->year)?$request->year:date('Y'));
         $branches = Branch::where('estado', 1);
         $branches->with(['travel_schedules'=>function($qSchedule) use ($year){
             $qSchedule->where('estado',1)
@@ -98,11 +108,7 @@ class TravelScheduleController extends Controller
             $qSchedule->with(['user.position']);
         }]);
         $branches = $branches->get();
-        // return $branches->toArray();
-
-        return view('intranet.travels.index',[
-            "page"=>$page,
-            "bcrums" => $bcrums,
+        return view('intranet.travels.calendar',[
             "year" => $year,
             "branches" => $branches
         ]);

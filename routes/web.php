@@ -64,6 +64,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
 
     Route::group(["prefix"=>"agenda"], function(){
         Route::get('/', [TravelScheduleController::class, "backIndex"])->name('agenda.index');
+        Route::get('/calendar', [TravelScheduleController::class, "viewCalendar"])->name('agenda.calendar');
     });
 
 });
