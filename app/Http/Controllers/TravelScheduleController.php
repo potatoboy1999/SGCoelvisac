@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
+use App\Models\TravelSchedule;
 use Illuminate\Http\Request;
 
 class TravelScheduleController extends Controller
@@ -84,11 +86,25 @@ class TravelScheduleController extends Controller
 
     public function backIndex(Request $request){
         $page = "objectives";
-        $bcrums = ["Agenda Estrategica","Objetivos"];
+        $bcrums = ["Agendas"];
+        $year = intval(isset($request->year)?$request->year:date('Y'));
+
+        $branches = Branch::where('estado', 1);
+        $branches->with(['travel_schedules'=>function($qSchedule) use ($year){
+            $qSchedule->where('estado',1)
+                    ->where('viaje_comienzo','>=',$year.'-01-01')
+                    ->where('viaje_comienzo','<',($year+1).'-01-01')
+                    ->orderBy('viaje_comienzo','asc');
+            $qSchedule->with(['user.position']);
+        }]);
+        $branches = $branches->get();
+        // return $branches->toArray();
 
         return view('intranet.travels.index',[
             "page"=>$page,
             "bcrums" => $bcrums,
+            "year" => $year,
+            "branches" => $branches
         ]);
     }
 }
