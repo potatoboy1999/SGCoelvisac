@@ -171,12 +171,16 @@ $(".toggle-dates").on("click",function(ev){
     if($(this).attr("toggle-visible") == "false"){
         $(".t-head-date-start").show();
         $(".t-date-start").show();
-        $(this).find("span").html("Ocultar fecha de inicio");
+        $(".t-head-date-end").show();
+        $(".t-date-end").show();
+        $(this).find("span").html("Ocultar fechas");
         $(this).attr("toggle-visible","true");
     }else{
         $(".t-head-date-start").hide();
         $(".t-date-start").hide();
-        $(this).find("span").html("Ver fecha de inicio");
+        $(".t-head-date-end").hide();
+        $(".t-date-end").hide();
+        $(this).find("span").html("Ver fechas");
         $(this).attr("toggle-visible","false");
     }
 });
