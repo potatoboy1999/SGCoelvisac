@@ -67,7 +67,7 @@
                                         @endphp
                                         {{-- {{$dates_r[0]['start']}} - {{$dates_r[0]['end']}} --}}
                                         @foreach ($travels as $travel)
-                                            <p class="m-0 p-1 rounded area-travel">{{$travel->user->position->nombre}}</p>
+                                            <p class="m-0 p-1 rounded area-travel mb-1">{{$travel->user->position->nombre}}</p>
                                         @endforeach
                                     </td>
                                     <td>
@@ -81,7 +81,7 @@
                                         @endphp
                                         {{-- {{$dates_r[1]['start']}} - {{$dates_r[1]['end']}} --}}
                                         @foreach ($travels as $travel)
-                                            <p class="m-0 p-1 rounded area-travel">{{$travel->user->position->nombre}}</p>
+                                            <p class="m-0 p-1 rounded area-travel mb-1">{{$travel->user->position->nombre}}</p>
                                         @endforeach
                                     </td>
                                     <td>
@@ -95,7 +95,7 @@
                                         @endphp
                                         {{-- {{$dates_r[2]['start']}} - {{$dates_r[2]['end']}} --}}
                                         @foreach ($travels as $travel)
-                                            <p class="m-0 p-1 rounded area-travel">{{$travel->user->position->nombre}}</p>
+                                            <p class="m-0 p-1 rounded area-travel mb-1">{{$travel->user->position->nombre}}</p>
                                         @endforeach
                                     </td>
                                     <td>
@@ -109,7 +109,7 @@
                                         @endphp
                                         {{-- {{$dates_r[3]['start']}} - {{$dates_r[3]['end']}} --}}
                                         @foreach ($travels as $travel)
-                                            <p class="m-0 p-1 rounded area-travel">{{$travel->user->position->nombre}}</p>
+                                            <p class="m-0 p-1 rounded area-travel mb-1">{{$travel->user->position->nombre}}</p>
                                         @endforeach
                                     </td>
                                 </tr>
