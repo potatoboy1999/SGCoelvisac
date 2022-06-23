@@ -569,7 +569,7 @@
                                                                 <th class="text-center align-middle t-head-obj-name" width="150">Objetivo</th>
                                                                 <th class="text-center align-middle t-head-act-name" width="180">Actividades Principales</th>
                                                                 <th class="text-center align-middle t-head-date-start" width="100" style="display: none;">Fecha Inicio</th>
-                                                                <th class="text-center align-middle t-head-date-end" width="100">Fecha Fin</th>
+                                                                <th class="text-center align-middle t-head-date-end" width="100" style="display: none;">Fecha Fin</th>
                                                                 <th class="text-center align-middle t-head-policies" width="80"><!--Procedimiento/<br>-->Politica</th>
                                                                 <th class="text-center align-middle t-head-adjacents" width="120">Documento<br>Adjunto</th>
                                                                 <th class="text-center align-middle t-head-status" width="50">Estado</th>
@@ -594,7 +594,7 @@
                 
                                                                         <td class="align-middle t-act-name">{{$activity->nombre}}</td>
                                                                         <td class="text-center align-middle t-date-start" style="display: none;">{{date("d-m-Y", strtotime($activity->fecha_comienzo))}}</td>
-                                                                        <td class="text-center align-middle t-date-end">{{date("d-m-Y", strtotime($activity->fecha_fin))}}</td>
+                                                                        <td class="text-center align-middle t-date-end" style="display: none;">{{date("d-m-Y", strtotime($activity->fecha_fin))}}</td>
                                                                         <td class="text-center align-middle t-policies">
                                                                             @php
                                                                                 $policy = $activity->docPolicy;
