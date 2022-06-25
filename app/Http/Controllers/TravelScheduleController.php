@@ -113,4 +113,18 @@ class TravelScheduleController extends Controller
             "branches" => $branches
         ]);
     }
+
+    public function storeSchedule(Request $request){
+        $schedule = new TravelSchedule;
+        $schedule->usuario_id = null;
+        $schedule->sede_id = null;
+        $schedule->viaje_comienzo = null;
+        $schedule->viaje_fin = null;
+        $schedule->vehiculo = null;
+        $schedule->hospedaje = null;
+        $schedule->viaticos = null;
+        $schedule->estado = null;
+        $schedule->validacion_uno = null;
+        $schedule->validacion_dos = null;
+    }
 }
