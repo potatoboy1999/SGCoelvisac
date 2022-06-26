@@ -161,6 +161,19 @@ class TravelScheduleController extends Controller
     }
 
     public function viewPending(Request $request){
-        return;
+        $page = "objectives";
+        $bcrums = ["Agendas"];
+        $schedules = TravelSchedule::where('estado','>',0)
+                                ->where('estado','<',5)
+                                ->orderBy('created_at','desc')
+                                ->orderBy('viaje_comienzo','desc');
+        $schedules->with(['user']);
+        $schedules->with(['branch']);
+        $schedules = $schedules->get();
+        return view('intranet.travels.pending',[
+            'page' => $page,
+            'bcrums' => $bcrums,
+            'schedules' => $schedules
+        ]);
     }
 }
