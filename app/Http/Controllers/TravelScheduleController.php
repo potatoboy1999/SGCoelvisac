@@ -117,7 +117,7 @@ class TravelScheduleController extends Controller
         ]);
     }
 
-    public function storeSchedule(Request $request){        
+    public function storeSchedule(Request $request){
         $schedule = new TravelSchedule;
         $schedule->usuario_id = $request->user;
         $schedule->sede_id = $request->branch;
@@ -163,16 +163,25 @@ class TravelScheduleController extends Controller
     public function viewPending(Request $request){
         $page = "objectives";
         $bcrums = ["Agendas"];
-        $schedules = TravelSchedule::where('estado','>',0)
-                                ->where('estado','<',5)
-                                ->orderBy('created_at','desc')
-                                ->orderBy('viaje_comienzo','desc');
+        $type = isset($request->type)?$request->type:1;
+        $schedules = TravelSchedule::where('estado','>',0);
+                                //->where('estado','<',5)
+        if($type == 1){
+            $schedules->where('validacion_uno', 0); // not set
+            $schedules->where('validacion_dos', 0); // not set
+        }else if ($type == 2) {
+            $schedules->where('validacion_uno', 2); // aprobado
+            $schedules->where('validacion_dos', 0); // not set
+        }
+        $schedules->orderBy('created_at','desc')
+                  ->orderBy('viaje_comienzo','desc');
         $schedules->with(['user']);
         $schedules->with(['branch']);
         $schedules = $schedules->get();
         return view('intranet.travels.pending',[
             'page' => $page,
             'bcrums' => $bcrums,
+            'type'=> $type,
             'schedules' => $schedules
         ]);
     }

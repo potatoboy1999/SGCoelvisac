@@ -22,6 +22,12 @@ class TravelSchedule extends Model
     // 5 = aprovado a area de gestion
     // 6 = rechazado a area de gestion
 
+    // VALIDACION
+    // ======================================
+    // 0 = not set
+    // 1 = no aprovado
+    // 2 = aprobado
+
     protected $fillable = [
         'usuario_id',
         'sede_id',
