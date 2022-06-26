@@ -12,6 +12,16 @@ class TravelSchedule extends Model
     protected $table = "t_sgcv_agenda_viajes";
     public $timestamps = true;
 
+    // STATUS
+    // ======================================
+    // 0 = eliminado
+    // 1 = enviado a gerente de area
+    // 2 = aprovado por el gerente de area
+    // 3 = rechazado por el gerente de area
+    // 4 = enviado a area de gestion
+    // 5 = aprovado a area de gestion
+    // 6 = rechazado a area de gestion
+
     protected $fillable = [
         'usuario_id',
         'sede_id',

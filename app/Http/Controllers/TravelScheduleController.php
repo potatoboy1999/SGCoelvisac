@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\TravelActivity;
 use App\Models\TravelSchedule;
 use Illuminate\Http\Request;
 
@@ -101,9 +102,11 @@ class TravelScheduleController extends Controller
         $year = intval(isset($request->year)?$request->year:date('Y'));
         $branches = Branch::where('estado', 1);
         $branches->with(['travel_schedules'=>function($qSchedule) use ($year){
-            $qSchedule->where('estado',1)
+            $qSchedule->where('estado','>',0)
                     ->where('viaje_comienzo','>=',$year.'-01-01')
                     ->where('viaje_comienzo','<',($year+1).'-01-01')
+                    ->where('validacion_uno', 1)
+                    ->where('validacion_dos', 1)
                     ->orderBy('viaje_comienzo','asc');
             $qSchedule->with(['user.position']);
         }]);
@@ -114,17 +117,50 @@ class TravelScheduleController extends Controller
         ]);
     }
 
-    public function storeSchedule(Request $request){
+    public function storeSchedule(Request $request){        
         $schedule = new TravelSchedule;
-        $schedule->usuario_id = null;
-        $schedule->sede_id = null;
-        $schedule->viaje_comienzo = null;
-        $schedule->viaje_fin = null;
-        $schedule->vehiculo = null;
-        $schedule->hospedaje = null;
-        $schedule->viaticos = null;
-        $schedule->estado = null;
-        $schedule->validacion_uno = null;
-        $schedule->validacion_dos = null;
+        $schedule->usuario_id = $request->user;
+        $schedule->sede_id = $request->branch;
+        $schedule->viaje_comienzo = date_format(date_create_from_format('d/m/Y',$request->date_start),'Y-m-d');
+        $schedule->viaje_fin = date_format(date_create_from_format('d/m/Y',$request->date_end),'Y-m-d');
+        $schedule->vehiculo = isset($request->vehicle_check)?1:0;
+        $schedule->hospedaje = isset($request->hab_check)?1:0;
+        $schedule->viaticos = isset($request->extras_check)?1:0;
+        $schedule->estado = 1;
+        $schedule->validacion_uno = 0;
+        $schedule->validacion_dos = 0;
+        $schedule->save();
+
+        $schId = $schedule->id;
+        if(isset($request->area_act)){
+            foreach ($request->area_act as $activity) {
+                $new_activity = new TravelActivity;
+                $new_activity->descripcion = $activity;
+                $new_activity->tipo = 1;
+                $new_activity->agenda_viaje_id = $schId;
+                $new_activity->estado = 1;
+                $new_activity->save();
+            }
+        }
+
+        if(isset($request->non_area_act)){
+            foreach ($request->non_area_act as $activity) {
+                $new_activity = new TravelActivity;
+                $new_activity->descripcion = $activity;
+                $new_activity->tipo = 2;
+                $new_activity->agenda_viaje_id = $schId;
+                $new_activity->estado = 1;
+                $new_activity->save();
+            }
+        }
+
+        return [
+            'status' => 'ok'
+        ];
+
+    }
+
+    public function viewPending(Request $request){
+        return;
     }
 }

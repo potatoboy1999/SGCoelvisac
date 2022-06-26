@@ -66,6 +66,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/', [TravelScheduleController::class, "backIndex"])->name('agenda.index');
         Route::get('/calendar', [TravelScheduleController::class, "viewCalendar"])->name('agenda.calendar');
         Route::post('/new/schedule',[TravelScheduleController::class, "storeSchedule"])->name('agenda.nuevo');
+        Route::get('/pendings',[TravelScheduleController::class, "viewPending"])->name("agenda.pending");
     });
 
 });

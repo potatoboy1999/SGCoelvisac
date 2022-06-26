@@ -30,3 +30,11 @@ INSERT INTO t_sgcv_sedes VALUES
 UPDATE t_sgcv_opciones SET `url` = 'agenda.index' where id = 6;
 
 -- Everything on top of this on Live Server
+
+ALTER TABLE t_sgcv_agenda_viajes CHANGE modified_at updated_at DATETIME;
+ALTER TABLE t_sgcv_actividades_viajes CHANGE modified_at updated_at DATETIME;
+
+UPDATE t_sgcv_opciones SET opcion = 'Calendario' WHERE id = 6;
+UPDATE t_sgcv_opciones SET num_orden = 4 WHERE id = 7;
+INSERT INTO t_sgcv_opciones VALUES (null, 'Agendas', 'agenda.pending','cil-book',null,3,2,5,2,1,'2022-06-25 12:00:00','2022-06-25 12:00:00');
+INSERT INTO t_sgcv_opcion_perfil VALUES (null, 1, 10, 1, '2022-06-25 12:00:00', '2022-06-25 12:00:00');
