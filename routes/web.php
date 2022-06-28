@@ -8,6 +8,7 @@ use App\Http\Controllers\ObjectiveController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\TravelScheduleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,6 +68,10 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/calendar', [TravelScheduleController::class, "viewCalendar"])->name('agenda.calendar');
         Route::post('/new/schedule',[TravelScheduleController::class, "storeSchedule"])->name('agenda.nuevo');
         Route::get('/pendings',[TravelScheduleController::class, "viewPending"])->name("agenda.pending");
+    });
+
+    Route::group(["prefix"=>"usuario"], function(){
+        Route::get('/',[UserController::class, 'index'])->name('user.index');
     });
 
 });
