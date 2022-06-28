@@ -38,3 +38,5 @@ UPDATE t_sgcv_opciones SET opcion = 'Calendario' WHERE id = 6;
 UPDATE t_sgcv_opciones SET num_orden = 4 WHERE id = 7;
 INSERT INTO t_sgcv_opciones VALUES (null, 'Agendas', 'agenda.pending','cil-book',null,3,2,5,2,1,'2022-06-25 12:00:00','2022-06-25 12:00:00');
 INSERT INTO t_sgcv_opcion_perfil VALUES (null, 1, 10, 1, '2022-06-25 12:00:00', '2022-06-25 12:00:00');
+
+UPDATE t_sgcv_opciones SET url = 'user.index' WHERE id = 9;
