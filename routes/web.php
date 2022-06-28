@@ -5,6 +5,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ObjectiveController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\TravelScheduleController;
@@ -72,6 +73,10 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
 
     Route::group(["prefix"=>"usuario"], function(){
         Route::get('/',[UserController::class, 'index'])->name('user.index');
+        Route::get('/profiles',[ProfileController::class, 'index'])->name('user.profiles');
+        Route::get('/profiles/save_popup',[ProfileController::class, 'popupSaveShow'])->name('user.profiles.popup');
+        Route::post('/profiles/save',[ProfileController::class, 'popupSaveNew'])->name('user.profiles.popup.save.new');
+        Route::post('/profiles/update',[ProfileController::class, 'popupSaveUpdate'])->name('user.profiles.popup.save.update');
     });
 
 });

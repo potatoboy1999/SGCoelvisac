@@ -24,6 +24,14 @@ class Option extends Model
     ];
 
     public function profiles(){
-        return $this->belongsToMany(Profile::class,"t_sgcv_opcion_perfil","opcion_id","perfil_id")->wherePivot('estado', 1);
+        return $this->belongsToMany(Profile::class,"t_sgcv_opcion_perfil","opcion_id","perfil_id");
+    }
+
+    public function parentOption(){
+        return $this->belongsTo(Option::class,"opcion_padre_id","id");
+    }
+
+    public function childrenOption(){
+        return $this->hasMany(Option::class,"opcion_padre_id","id");
     }
 }

@@ -40,3 +40,5 @@ INSERT INTO t_sgcv_opciones VALUES (null, 'Agendas', 'agenda.pending','cil-book'
 INSERT INTO t_sgcv_opcion_perfil VALUES (null, 1, 10, 1, '2022-06-25 12:00:00', '2022-06-25 12:00:00');
 
 UPDATE t_sgcv_opciones SET url = 'user.index' WHERE id = 9;
+INSERT INTO t_sgcv_opciones VALUES (null, 'Perfiles', 'user.profiles', 'cil-user',null, 3, 3, 8, 2, 1, '2022-06-27 12:00:00','2022-06-27 12:00:00');
+INSERT INTO t_sgcv_opcion_perfil VALUES (null, 1, 11, 1, '2022-06-27 12:00:00', '2022-06-27 12:00:00');

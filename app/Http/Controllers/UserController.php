@@ -12,7 +12,7 @@ class UserController extends Controller
         $page = "users";
         $bcrums = ["Users"];
         
-        $users = User::where('estado', 1);
+        $users = User::whereNotNull('estado');
         $users->orderBy('nombre','asc');
         $users = $users->get();
 
