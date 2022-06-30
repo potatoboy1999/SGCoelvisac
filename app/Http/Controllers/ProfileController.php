@@ -31,6 +31,28 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function deactivate(Request $request)
+    {
+        $profile = Profile::where('id', $request->id)->first();
+        if($profile){
+            $profile->estado = 0;
+            $profile->save();
+        }
+
+        return back();
+    }
+
+    public function activate(Request $request)
+    {
+        $profile = Profile::where('id', $request->id)->first();
+        if($profile){
+            $profile->estado = 1;
+            $profile->save();
+        }
+
+        return back();
+    }
+
     public function popupSaveShow(Request $request){
         $options = Option::where('estado', 1)
                         ->where('tipo_opcion', 1);

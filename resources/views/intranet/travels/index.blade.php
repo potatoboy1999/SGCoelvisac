@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="modal-form">
-                    <form id="form_schedule" action="{{route('agenda.nuevo')}}" method="POST">
+                    <form id="form_schedule" action="{{route('agenda.nuevo')}}" method="POST" onkeydown="return event.key != 'Enter';">
                         @php
                             $user = Auth()->user();
                         @endphp

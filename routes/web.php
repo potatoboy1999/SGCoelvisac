@@ -29,7 +29,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
 
     Route::group(["prefix"=>"matriz"], function(){
         Route::get('/', [ObjectiveController::class,"index"])->name("objectives");
-        Route::post('nuevo_item', [ObjectiveController::class,"storeItem"])->name("new_item");
+        Route::post('new_item', [ObjectiveController::class,"storeItem"])->name("new_item");
         Route::get("all_items", [ObjectiveController::class,"allItems"])->name("api_all_activities");
     });
 
@@ -72,11 +72,22 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
     });
 
     Route::group(["prefix"=>"usuario"], function(){
-        Route::get('/',[UserController::class, 'index'])->name('user.index');
-        Route::get('/profiles',[ProfileController::class, 'index'])->name('user.profiles');
-        Route::get('/profiles/save_popup',[ProfileController::class, 'popupSaveShow'])->name('user.profiles.popup');
-        Route::post('/profiles/save',[ProfileController::class, 'popupSaveNew'])->name('user.profiles.popup.save.new');
-        Route::post('/profiles/update',[ProfileController::class, 'popupSaveUpdate'])->name('user.profiles.popup.save.update');
+        Route::GET('/',[UserController::class, 'index'])->name('user.index');
+        Route::POST('/deactivate',[UserController::class, 'deactivate'])->name('user.deactivate');
+        Route::POST('/activate',[UserController::class, 'activate'])->name('user.activate');
+        Route::GET('/save_popup',[UserController::class, 'popupSaveShow'])->name('user.popup');
+        Route::POST('/save',[UserController::class, 'popupSaveNew'])->name('user.popup.save.new');
+        Route::POST('/update',[UserController::class, 'popupSaveUpdate'])->name('user.popup.save.update');
+    });
+
+    Route::group(["prefix"=>"profiles"], function(){
+        Route::get('/',[ProfileController::class, 'index'])->name('user.profiles');
+        Route::post('/deactivate',[ProfileController::class, 'deactivate'])->name('user.profiles.deactivate');
+        Route::post('/activate',[ProfileController::class, 'activate'])->name('user.profiles.activate');
+
+        Route::get('/save_popup',[ProfileController::class, 'popupSaveShow'])->name('user.profiles.popup');
+        Route::post('/save',[ProfileController::class, 'popupSaveNew'])->name('user.profiles.popup.save.new');
+        Route::post('/update',[ProfileController::class, 'popupSaveUpdate'])->name('user.profiles.popup.save.update');
     });
 
 });

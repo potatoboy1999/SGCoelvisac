@@ -53,11 +53,15 @@
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
                                         </svg>
                                     </a>
-                                    <a href="#" class="btn btn-danger btn-sm">
-                                        <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
-                                        </svg>
-                                    </a>
+                                    <form class="d-inline-block" action="{{route($profile->estado == 0?'user.profiles.activate':'user.profiles.deactivate')}}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{$profile->id}}">
+                                        <button class="btn {{$profile->estado == 0?'btn-warning':'btn-danger'}} btn-sm">
+                                            <svg class="icon">
+                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}{{$profile->estado == 0?'#cil-reload':'#cil-trash'}}"></use>
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach

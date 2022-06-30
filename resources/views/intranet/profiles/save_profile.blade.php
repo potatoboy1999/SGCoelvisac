@@ -3,7 +3,7 @@
     <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-    <form id="form_profile_save" action="{{route($profile?'user.profiles.popup.save.update':'user.profiles.popup.save.new')}}" method="POST">
+    <form id="form_profile_save" action="{{route($profile?'user.profiles.popup.save.update':'user.profiles.popup.save.new')}}" method="POST" onkeydown="return event.key != 'Enter';">
         @csrf
         @if ($profile)
             <input type="hidden" name="id" value="{{$profile->id}}">
