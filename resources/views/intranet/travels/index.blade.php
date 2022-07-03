@@ -4,144 +4,13 @@
     
 @section('style')
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="{{asset('css/intranet/objectives.css')}}">
-    <style>
-        .area-travel{
-            background:#93cdff;
-            cursor: pointer;
-        }
-        .area-travel:hover {
-            background: #246cab;
-            color: white;
-        }
-        .d-week:hover{
-            background: #f3f3f3;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="{{asset('css/intranet/travel.css')}}">
 @endsection
 
 @section('content')
 <div class="modal fade" id="newScheduleModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5>Agenda de Viaje</h5>
-            </div>
-            <div class="modal-body">
-                <div class="modal-loading" style="display: none">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <div class="modal-form">
-                    <form id="form_schedule" action="{{route('agenda.nuevo')}}" method="POST" onkeydown="return event.key != 'Enter';">
-                        @php
-                            $user = Auth()->user();
-                        @endphp
-                        @csrf
-                        <input type="hidden" name="user" value="{{$user->id}}">
-                        <input type="hidden" name="branch" value="">
-                        <div class="row">
-                            <div class="col-12 col-md-6">
-                                <div class="mb-2">
-                                    <label>Área</label>
-                                    <input id="sch_area" class="form-control" type="text" value="{{$user->position->area->nombre}}" readonly>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="mb-2">
-                                    <label>Nombre</label>
-                                    <input id="sch_user" class="form-control" type="text" value="{{$user->nombre}}" readonly>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="mb-2">
-                                    <label>Puesto / Cargo</label>
-                                    <input id="sch_position" class="form-control" type="text" value="{{$user->position->nombre}}" readonly>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <div class="mb-2">
-                                    <label>Sede visitada</label>
-                                    <input id="sch_branch_name" class="form-control" type="text" value="" readonly>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="mb-2">
-                                    <label for="">Fecha Desde</label>
-                                    <input id="sch_date_start" class="form-control" type="text" name="date_start" value="" required>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="mb-2">
-                                    <label for="">Fecha Hasta</label>
-                                    <input id="sch_date_end" class="form-control" type="text" name="date_end" value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="my-2" id="sch_activities_list">
-                            <div class="card">
-                                <div class="card-header">Actividades del área (max: 7)</div>
-                                <div class="card-body p-2">
-                                    <div id="area_act" class="act_areas" count="0"></div>
-                                    <div class="text-end text-white">
-                                        <a href="#" class="btn btn-secondary btn-sm add-act" type="area">
-                                            <svg class="icon">
-                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-plus"></use>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="my-2" id="sch_activities_list">
-                            <div class="card">
-                                <div class="card-header">Actividades de otras áreas (max: 7)</div>
-                                <div class="card-body p-2">
-                                    <div id="non_area_act" class="act_areas" count="0"></div>
-                                    <div class="text-end text-white">
-                                        <a href="#" class="btn btn-secondary btn-sm add-act" type="non_area">
-                                            <svg class="icon">
-                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-plus"></use>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-check">
-                                    <input class="form-check-input" id="vehicle_check" name="vehicle_check" type="checkbox">
-                                    <label class="form-check-label" for="vehicle_check">¿Requiere Vehiculo?</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" id="hab_check" name="hab_check" type="checkbox">
-                                    <label class="form-check-label" for="hab_check">¿Requiere Hospedaje?</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" id="extras_check" name="extras_check" type="checkbox">
-                                    <label class="form-check-label" for="extras_check">¿Requiere Viáticos?</label>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-success" style="display: none">
-                    <p class="m-0">
-                        <span class="text-success"><strong>!ÉXITO!</strong></span>
-                        <br>
-                        Agenda registrada y enviada a revisión
-                    </p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div class="form-btns">
-                    <button class="btn btn-secondary text-white" type="button" data-coreui-dismiss="modal" aria-label="Close">Cerrar</button>
-                    <input class="btn btn-info text-white" type="submit" form="form_schedule" value="Crear">
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -151,11 +20,35 @@
             <div class="card-body">
                 <div class="d-flex flex-row flex-wrap">
                     <form id="form-area-sel" action="{{route('agenda.index')}}" method="get" class="w-100">
-                        <div class="form-group w-100">
+                        <div class="form-group w-100 d-inline-block my-1">
                             <label>Año:</label>
                             <div class="input-group d-inline-flex" style="width: calc(100% - 41px);">
                                 <input class="form-control" type="number" min="2020" value="{{$year}}" name="year" step="1" onkeydown="return false">
-                                <button id="search-year" class="btn btn-secondary" type="submit">
+                                <button id="search-year" class="btn btn-secondary search-calendar" type="submit">
+                                    <svg class="icon">
+                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-zoom"></use>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group w-100 d-inline-block my-1">
+                            <label>Mes:</label>
+                            <div class="input-group d-inline-flex" style="width: calc(100% - 41px);">
+                                <select class="form-select" name="month" id="sel_month">
+                                    <option value="01" {{$month == 1?'selected':''}}>Enero</option>
+                                    <option value="02" {{$month == 2?'selected':''}}>Febrero</option>
+                                    <option value="03" {{$month == 3?'selected':''}}>Marzo</option>
+                                    <option value="04" {{$month == 4?'selected':''}}>Abril</option>
+                                    <option value="05" {{$month == 5?'selected':''}}>Mayo</option>
+                                    <option value="06" {{$month == 6?'selected':''}}>Junio</option>
+                                    <option value="07" {{$month == 7?'selected':''}}>Julio</option>
+                                    <option value="08" {{$month == 8?'selected':''}}>Agosto</option>
+                                    <option value="09" {{$month == 9?'selected':''}}>Septiembre</option>
+                                    <option value="10" {{$month == 10?'selected':''}}>Octubre</option>
+                                    <option value="11" {{$month == 11?'selected':''}}>Noviembre</option>
+                                    <option value="12" {{$month == 12?'selected':''}}>Diciembre</option>
+                                </select>
+                                <button id="search-month" class="btn btn-secondary search-calendar" type="submit">
                                     <svg class="icon">
                                         <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-zoom"></use>
                                     </svg>
