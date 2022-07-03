@@ -40,9 +40,6 @@ td.t_yellow {
 .file-downloadable p{
     margin: 0;
 }
-#form-area-sel .form-group{
-    max-width: 400px;
-}
 ul.status-choice-list {
     display: flex;
     list-style: none;

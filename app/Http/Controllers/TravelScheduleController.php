@@ -89,31 +89,50 @@ class TravelScheduleController extends Controller
         $page = "objectives";
         $bcrums = ["Agendas"];
         $year = intval(isset($request->year)?$request->year:date('Y'));
+        $month = intval(isset($request->month)?$request->month:date('m'));
         // return $branches->toArray();
 
         return view('intranet.travels.index',[
             "page"=>$page,
             "bcrums" => $bcrums,
-            "year" => $year
+            "year" => $year,
+            "month" => $month,
         ]);
     }
 
     public function viewCalendar(Request $request){
         $year = intval(isset($request->year)?$request->year:date('Y'));
-        $branches = Branch::where('estado', 1);
-        $branches->with(['travel_schedules'=>function($qSchedule) use ($year){
-            $qSchedule->where('estado','>',0)
-                    ->where('viaje_comienzo','>=',$year.'-01-01')
-                    ->where('viaje_comienzo','<',($year+1).'-01-01')
+        $month = intval(isset($request->month)?$request->month:date('m'));
+        // $branches = Branch::where('estado', 1);
+        // $branches->with(['travel_schedules'=>function($qSchedule) use ($year, $month){
+        //     $qSchedule->where('estado','>',0)
+        //             ->where('viaje_comienzo','>=',$year.'-01-01')
+        //             ->where('viaje_comienzo','<',($year+1).'-01-01')
+        //             ->where('validacion_uno', 1)
+        //             ->where('validacion_dos', 1)
+        //             ->orderBy('viaje_comienzo','asc');
+        //     $qSchedule->with(['user.position']);
+        // }]);
+        // $branches = $branches->get();
+        $endMonth = $month + 1;
+        if($endMonth > 12){
+            $endMonth = 1;
+        }
+
+        $schedules = TravelSchedule::where('estado','>',0)
+                    ->where('viaje_comienzo','>=',$year.'-'.$month.'-01')
+                    ->where('viaje_comienzo','<',($year+1).'-'.$endMonth.'-01')
                     ->where('validacion_uno', 1)
                     ->where('validacion_dos', 1)
                     ->orderBy('viaje_comienzo','asc');
-            $qSchedule->with(['user.position']);
-        }]);
-        $branches = $branches->get();
+        $schedules->with(['user.position']);
+        $schedules = $schedules->get();
+
         return view('intranet.travels.calendar',[
             "year" => $year,
-            "branches" => $branches
+            "month" => $month,
+            // "branches" => $branches
+            "schedules" => $schedules
         ]);
     }
 

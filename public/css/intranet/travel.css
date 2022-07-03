@@ -1,0 +1,24 @@
+.area-travel{
+    background:#93cdff;
+    cursor: pointer;
+}
+.area-travel:hover {
+    background: #246cab;
+    color: white;
+}
+.d-week:hover{
+    background: #f3f3f3;
+    cursor: pointer;
+}
+#travel_calendar_month th{
+    padding: 0!important;
+}
+#travel_calendar_month td{
+    padding: 0!important;
+}
+td.day-cell {
+    height: 125px;
+}
+#form-area-sel .form-group{
+    max-width: 400px;
+}

@@ -4,10 +4,12 @@ $(function() {
 
 function getCalendar(){
     var year = $("#form-area-sel input[name='year']").val();
+    var month = $("#form-area-sel select[name='month']").val();
     $.ajax({
         url: calendar_route,
         data: {
-            year: year
+            year: year,
+            month: month
         },
         method:'GET',
         beforeSend: function(){
@@ -19,17 +21,14 @@ function getCalendar(){
     });
 }
 
-$("#search-year").on('click',function(ev){
+$(".search-calendar").on('click',function(ev){
     ev.preventDefault();
     getCalendar();
 })
 
-$(document).on('click','.week-clickable',function(ev){
-    var branch = $(this).parent().data('branchname');
-    var branch_id = $(this).parent().data('branchid');
+$(document).on('click','.day-clickable',function(ev){
     var start = $(this).data('start');
-    var end = $(this).data('end');
-    prepareNewSchModal(branch, branch_id, start, end);
+    prepareNewSchModal(null, null, start, null);
     $("#newScheduleModal").modal('show');
 });
 
