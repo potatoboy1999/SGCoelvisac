@@ -27,23 +27,27 @@ $(".search-calendar").on('click',function(ev){
 })
 
 $(document).on('click','.day-clickable',function(ev){
-    var start = $(this).data('start');
-    prepareNewSchModal(null, null, start, null);
-    $("#newScheduleModal").modal('show');
+    // check if click on cell or schedule
+    var schedule_pressed = false;
+    $(".area-travel").each(function(){
+        if($(this).is(":hover")){
+            schedule_pressed = true;
+        }
+    });
+
+    if(!schedule_pressed){
+        // load modal
+        var start = $(this).data('date');
+        prepareNewSchModal(null, start);
+    }
+
 });
 
-$("#sch_date_start").datepicker({
-    dateFormat: "dd/mm/yy",
-    onSelect: function(date){
-        $("#sch_date_end").datepicker('option', 'minDate', date);
-    }
-});
-$("#sch_date_end").datepicker({
-    dateFormat: "dd/mm/yy",
-    beforeShow: function(){
-        var date = $("#sch_date_start").val();
-        $("#sch_date_end").datepicker('option', 'minDate', date);
-    }
+$(document).on('click','.area-travel', function(ev){
+    ev.preventDefault();
+    var id = $(this).data('travelid');
+    var start = $(this).data('date');
+    prepareNewSchModal(id, start);
 });
 
 $(".add-act").on('click', function(ev){
@@ -102,33 +106,61 @@ $("#form_schedule").on('submit', function(ev){
     });
 });
 
-function prepareNewSchModal(branch, id, start, end){
-    $("#sch_branch_name").val(branch);
-    $("#form_schedule input[name='branch']").val(id);
+function prepareNewSchModal(id, start){
+    // $("#sch_branch_name").val(branch);
+    // $("#form_schedule input[name='branch']").val(id);
 
-    var dStart = new Date(start+' 00:00:00');
-    var dEnd = new Date(end+' 00:00:00');
-    dEnd.setDate(dEnd.getDate() - 1);
+    // var dStart = new Date(start+' 00:00:00');
+    // var dEnd = new Date(end+' 00:00:00');
+    // dEnd.setDate(dEnd.getDate() - 1);
 
-    $("#sch_date_start").val(formatDate(dStart));
-    $("#sch_date_end").val(formatDate(dEnd));
-    $("#sch_date_start").datepicker('option', 'minDate', dStart);
-    $("#sch_date_start").datepicker('option', 'maxDate', dEnd);
+    // $("#sch_date_start").val(formatDate(dStart));
+    // $("#sch_date_end").val(formatDate(dEnd));
+    // $("#sch_date_start").datepicker('option', 'minDate', dStart);
+    // $("#sch_date_start").datepicker('option', 'maxDate', dEnd);
 
-    $("#area_act").html('');
-    $("#non_area_act").html('');
-    $("add-act[type='area']").hide();
-    $("add-act[type='non_area']").hide();
-    $("#vehicle_check").prop('checked', false);
-    $("#hab_check").prop('checked', false);
-    $("#extras_check").prop('checked', false);
+    // $("#area_act").html('');
+    // $("#non_area_act").html('');
+    // $("add-act[type='area']").hide();
+    // $("add-act[type='non_area']").hide();
+    // $("#vehicle_check").prop('checked', false);
+    // $("#hab_check").prop('checked', false);
+    // $("#extras_check").prop('checked', false);
 
-    $("#newScheduleModal .modal-form").show();
-    $("#newScheduleModal .modal-loading").hide();
-    $("#newScheduleModal .modal-success").hide();
+    // $("#newScheduleModal .modal-form").show();
+    // $("#newScheduleModal .modal-loading").hide();
+    // $("#newScheduleModal .modal-success").hide();
 
-    $("#newScheduleModal .form-btns").show();
-    $("#newScheduleModal input[type='submit']").show();
+    // $("#newScheduleModal .form-btns").show();
+    // $("#newScheduleModal input[type='submit']").show();
+    var data = {
+        start_date: start,
+        id: id,
+    };
+    console.log(data);
+    $.ajax({
+        url: pop_schedule_route,
+        method: 'GET',
+        data: data,
+        success: function(res){
+            //load modal
+            $("#newScheduleModal .modal-content").html(res);
+
+            //load scripts
+            $("#sch_date_end").datepicker({
+                dateFormat: "dd/mm/yy",
+                beforeShow: function(){
+                    var date = $("#sch_date_start").val();
+                    $("#sch_date_end").datepicker('option', 'minDate', date);
+                }
+            });
+            
+            var dStart = new Date(start+' 00:00:00');
+
+            //show modal
+            $("#newScheduleModal").modal('show');
+        }
+    });
 }
 
 function formatDate(d){

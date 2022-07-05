@@ -5,6 +5,17 @@
 @section('style')
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{{asset('css/intranet/travel.css')}}">
+    <style>
+        .branch1{
+            background: rgb(0, 139, 0);
+        }
+        .branch2{
+            background: rgb(0, 134, 139);
+        }
+        .branch3{
+            background: rgb(116, 0, 139);
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -77,6 +88,7 @@
 <script src="{{asset("js/intranet/travels.js")}}"></script>
 <script>
     var calendar_route = "{{route('agenda.calendar')}}";
+    var pop_schedule_route = "{{route('agenda.popup.schedule')}}";
     $(function(){
         getCalendar();
     });

@@ -9,82 +9,6 @@ use Illuminate\Http\Request;
 
 class TravelScheduleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     public function backIndex(Request $request){
         $page = "objectives";
         $bcrums = ["Agendas"];
@@ -103,17 +27,6 @@ class TravelScheduleController extends Controller
     public function viewCalendar(Request $request){
         $year = intval(isset($request->year)?$request->year:date('Y'));
         $month = intval(isset($request->month)?$request->month:date('m'));
-        // $branches = Branch::where('estado', 1);
-        // $branches->with(['travel_schedules'=>function($qSchedule) use ($year, $month){
-        //     $qSchedule->where('estado','>',0)
-        //             ->where('viaje_comienzo','>=',$year.'-01-01')
-        //             ->where('viaje_comienzo','<',($year+1).'-01-01')
-        //             ->where('validacion_uno', 1)
-        //             ->where('validacion_dos', 1)
-        //             ->orderBy('viaje_comienzo','asc');
-        //     $qSchedule->with(['user.position']);
-        // }]);
-        // $branches = $branches->get();
         $endMonth = $month + 1;
         if($endMonth > 12){
             $endMonth = 1;
@@ -122,17 +35,34 @@ class TravelScheduleController extends Controller
         $schedules = TravelSchedule::where('estado','>',0)
                     ->where('viaje_comienzo','>=',$year.'-'.$month.'-01')
                     ->where('viaje_comienzo','<',($year+1).'-'.$endMonth.'-01')
-                    ->where('validacion_uno', 1)
-                    ->where('validacion_dos', 1)
-                    ->orderBy('viaje_comienzo','asc');
+                    ->where('validacion_uno', 2) // validation 1 accepted
+                    ->where('validacion_dos', 2) // validation 2 accepted
+                    ->orderBy('viaje_comienzo','asc')
+                    ->orderBy('viaje_fin','desc');
         $schedules->with(['user.position']);
         $schedules = $schedules->get();
 
         return view('intranet.travels.calendar',[
             "year" => $year,
             "month" => $month,
-            // "branches" => $branches
             "schedules" => $schedules
+        ]);
+    }
+
+    public function showSchedulePopup(Request $request){
+        $schedule = null;
+        if(isset($request->id)){
+            $schedule = TravelSchedule::where('id', $request->id)
+                                ->where('estado', 5);
+            $schedule->with(['activities']);
+            $schedule = $schedule->first();
+        }
+        $branches = Branch::where('estado', 1)->get();
+        $start_date = $request->start_date;
+        return view('intranet.travels.modal_schedule',[
+            'branches'  => $branches,
+            'schedule'  => $schedule,
+            's_date'    => $start_date
         ]);
     }
 

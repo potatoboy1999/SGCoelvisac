@@ -1,10 +1,15 @@
 .area-travel{
-    background:#93cdff;
+    margin-right: 0.25rem !important;
     cursor: pointer;
 }
 .area-travel:hover {
+    background: #ffffff;
+    color: rgb(0, 0, 0)!important;
+}
+.day-cell:hover{
     background: #246cab;
-    color: white;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
 }
 .d-week:hover{
     background: #f3f3f3;

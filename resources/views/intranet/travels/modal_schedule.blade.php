@@ -37,13 +37,22 @@
                 <div class="col-12 col-md-6">
                     <div class="mb-2">
                         <label>Sede visitada</label>
-                        <input id="sch_branch_name" class="form-control" type="text" value="" readonly>
+                        {{-- <input id="sch_branch_name" class="form-control" type="text" value="" readonly> --}}
+                        <select class="form-select" name="branch" id="branch_sel">
+                            @foreach ($branches as $branch)
+                                <option value="{{$branch->id}}">{{$branch->nombre}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="mb-2">
                         <label for="">Fecha Desde</label>
-                        <input id="sch_date_start" class="form-control" type="text" name="date_start" value="" required>
+                        @if ($schedule)
+                        <input id="sch_date_start" class="form-control" type="text" name="date_start" value="{{date("d/m/Y", strtotime($schedule->viaje_comienzo))}}" required readonly>
+                        @else
+                        <input id="sch_date_start" class="form-control" type="text" name="date_start" value="{{date("d/m/Y", strtotime($s_date))}}" required readonly>
+                        @endif
                     </div>
                 </div>
                 <div class="col-6">

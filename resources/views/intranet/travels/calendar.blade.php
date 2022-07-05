@@ -1,4 +1,10 @@
 @php
+    function day_data($y,$m,$day){
+        return [
+            'date_d' => $day,
+            'date' => date($y.'-'.$m.'-'.$day)
+        ];
+    }
     function calendar_data($y, $m){
         $fir_date = date($y.'-'.$m.'-01');
         $fir_day = date('w', strtotime($fir_date));
@@ -22,7 +28,7 @@
         for ($i = 1; $i <= $days_count; $i++){
             $date = date($y.'-'.$m.'-'.$i);
             $w_day = intval(date('w', strtotime($date)));
-            $week[$w_day] = $i;
+            $week[$w_day] = day_data($y,$m,$i);
             if($w_day == 6 || $i == $days_count){
                 $weeks[] = $week;
                 $week = [
@@ -60,27 +66,29 @@
                 @endphp
                 @foreach ($weeks as $w => $week)
                     <tr class="r-week-{{$w}}">
-                        <td class="d-week-{{$w}} {{$week[0]?'day-cell area-travel day-clickable':''}}" data-date="{{$week[0] ? date($year.'-'.$month.'-'.$week[0]) : ''}}">
-                            <p class="text-center m-0">{{$week[0]?$week[0]:''}}</p>
-                        </td>
-                        <td class="d-week-{{$w}} {{$week[1]?'day-cell area-travel day-clickable':''}}" data-date="{{$week[1] ? date($year.'-'.$month.'-'.$week[1]) : ''}}">
-                            <p class="text-center m-0">{{$week[1]?$week[1]:''}}</p>
-                        </td>
-                        <td class="d-week-{{$w}} {{$week[2]?'day-cell area-travel day-clickable':''}}" data-date="{{$week[2] ? date($year.'-'.$month.'-'.$week[2]) : ''}}">
-                            <p class="text-center m-0">{{$week[2]?$week[2]:''}}</p>
-                        </td>
-                        <td class="d-week-{{$w}} {{$week[3]?'day-cell area-travel day-clickable':''}}" data-date="{{$week[3] ? date($year.'-'.$month.'-'.$week[3]) : ''}}">
-                            <p class="text-center m-0">{{$week[3]?$week[3]:''}}</p>
-                        </td>
-                        <td class="d-week-{{$w}} {{$week[4]?'day-cell area-travel day-clickable':''}}" data-date="{{$week[4] ? date($year.'-'.$month.'-'.$week[4]) : ''}}">
-                            <p class="text-center m-0">{{$week[4]?$week[4]:''}}</p>
-                        </td>
-                        <td class="d-week-{{$w}} {{$week[5]?'day-cell area-travel day-clickable':''}}" data-date="{{$week[5] ? date($year.'-'.$month.'-'.$week[5]) : ''}}">
-                            <p class="text-center m-0">{{$week[5]?$week[5]:''}}</p>
-                        </td>
-                        <td class="d-week-{{$w}} {{$week[6]?'day-cell area-travel day-clickable':''}}" data-date="{{$week[6] ? date($year.'-'.$month.'-'.$week[6]) : ''}}">
-                            <p class="text-center m-0">{{$week[6]?$week[6]:''}}</p>
-                        </td>
+                        @foreach ($days as $k => $day)
+                            @php
+                                $w_day = $week[$k];
+                            @endphp
+                            <td class="d-week-{{$w}} {{$w_day?'day-cell day-clickable':''}}" data-date="{{$w_day ? $w_day['date'] : ''}}">
+                                <p class="text-center m-0">{{$w_day ? $w_day['date_d'] : ''}}</p>
+                                @if ($w_day)
+                                    @php
+                                        $cur_date = strtotime($w_day['date']);
+                                        $travels = $schedules->filter(function($value, $key) use ($cur_date){
+                                            $a_date = strtotime($value->viaje_comienzo);
+                                            $d_date = strtotime($value->viaje_fin);
+                                            return ($a_date <= $cur_date && $cur_date <= $d_date);
+                                        });
+                                    @endphp
+                                    @foreach ($travels as $travel)
+                                        <p class="m-0 p-1 rounded area-travel mb-1 text-white branch{{$travel->branch->id}}" data-date="{{$w_day['date']}}" data-travelid="{{$travel->id}}">
+                                            {{$travel->user->position->nombre}}
+                                        </p>
+                                    @endforeach
+                                @endif
+                            </td>
+                        @endforeach
                     </tr>
                 @endforeach
             </tbody>

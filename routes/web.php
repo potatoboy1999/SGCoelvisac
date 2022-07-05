@@ -67,6 +67,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
     Route::group(["prefix"=>"agenda"], function(){
         Route::get('/', [TravelScheduleController::class, "backIndex"])->name('agenda.index');
         Route::get('/calendar', [TravelScheduleController::class, "viewCalendar"])->name('agenda.calendar');
+        Route::get('/calendar/popup/schedule', [TravelScheduleController::class, "showSchedulePopup"])->name("agenda.popup.schedule");
         Route::post('/new/schedule',[TravelScheduleController::class, "storeSchedule"])->name('agenda.nuevo');
         Route::get('/pendings',[TravelScheduleController::class, "viewPending"])->name("agenda.pending");
     });

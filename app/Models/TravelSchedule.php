@@ -49,4 +49,8 @@ class TravelSchedule extends Model
         return $this->belongsTo(Branch::class,"sede_id","id");
     }
 
+    public function activities(){
+        return $this->hasMany(TravelActivity::class,"agenda_viaje_id","id");
+    }
+
 }
