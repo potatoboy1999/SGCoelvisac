@@ -50,17 +50,41 @@ class TravelScheduleController extends Controller
     }
 
     public function showSchedulePopup(Request $request){
+        $action = $request->action;
+        /*
+            ACTION
+            ==========
+            1 = NEW
+            2 = SHOW
+            3 = CONFIRMATION ONE
+            4 = CONFIRMATION TWO
+        */
         $schedule = null;
-        if(isset($request->id)){
-            $schedule = TravelSchedule::where('id', $request->id)
-                                ->where('estado', 5);
+        if($action > 1 && isset($request->id)){
+            if($action == 2){
+                $schedule = TravelSchedule::where('id', $request->id)
+                                    ->where('estado', 5); // aprovado a area de gestion
+            }
+            if($action == 3){
+                $schedule = TravelSchedule::where('id', $request->id)
+                                    ->where('estado', 1); // enviado a gerente de area
+            }
+            if($action == 4){
+                $schedule = TravelSchedule::where('id', $request->id)
+                                    ->where('estado', 2)// aprovado por el gerente de area
+                                    ->where('validacion_uno', 2); // validation 1 accepted
+            }
             $schedule->with(['activities']);
             $schedule->with(['user']);
             $schedule = $schedule->first();
         }
         $branches = Branch::where('estado', 1)->get();
         $start_date = $request->start_date;
+        if($action > 1 && !$schedule){
+            return "ERROR, AGENDA NO ENCONTRADA";
+        }
         return view('intranet.travels.modal_schedule',[
+            'action'    => $action,
             'branches'  => $branches,
             'schedule'  => $schedule,
             's_date'    => $start_date

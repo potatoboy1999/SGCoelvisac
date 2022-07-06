@@ -70,6 +70,8 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/calendar/popup/schedule', [TravelScheduleController::class, "showSchedulePopup"])->name("agenda.popup.schedule");
         Route::post('/new/schedule',[TravelScheduleController::class, "storeSchedule"])->name('agenda.nuevo');
         Route::get('/pendings',[TravelScheduleController::class, "viewPending"])->name("agenda.pending");
+        Route::post('/confirm/schedule',[TravelScheduleController::class, "storeSchedule"])->name('agenda.confirm');
+        Route::post('/deny/schedule',[TravelScheduleController::class, "storeSchedule"])->name('agenda.deny');
     });
 
     Route::group(["prefix"=>"usuario"], function(){

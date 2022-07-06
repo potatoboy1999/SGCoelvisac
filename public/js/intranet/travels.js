@@ -107,40 +107,18 @@ $(document).on('submit', "#form_schedule", function(ev){
 });
 
 function prepareNewSchModal(id, start){
-    // $("#sch_branch_name").val(branch);
-    // $("#form_schedule input[name='branch']").val(id);
-
-    // var dStart = new Date(start+' 00:00:00');
-    // var dEnd = new Date(end+' 00:00:00');
-    // dEnd.setDate(dEnd.getDate() - 1);
-
-    // $("#sch_date_start").val(formatDate(dStart));
-    // $("#sch_date_end").val(formatDate(dEnd));
-    // $("#sch_date_start").datepicker('option', 'minDate', dStart);
-    // $("#sch_date_start").datepicker('option', 'maxDate', dEnd);
-
-    // $("#area_act").html('');
-    // $("#non_area_act").html('');
-    // $("add-act[type='area']").hide();
-    // $("add-act[type='non_area']").hide();
-    // $("#vehicle_check").prop('checked', false);
-    // $("#hab_check").prop('checked', false);
-    // $("#extras_check").prop('checked', false);
-
-    // $("#newScheduleModal .modal-form").show();
-    // $("#newScheduleModal .modal-loading").hide();
-    // $("#newScheduleModal .modal-success").hide();
-
-    // $("#newScheduleModal .form-btns").show();
-    // $("#newScheduleModal input[type='submit']").show();
-    var data = {
-        start_date: start,
-        id: id,
-    };
+    var action = 1; // NEW
+    if(id != null){
+        action = 2; // SHOW
+    }
     $.ajax({
         url: pop_schedule_route,
         method: 'GET',
-        data: data,
+        data: {
+            start_date: start,
+            id: id,
+            action: action, // SHOW or NEW
+        },
         success: function(res){
             //load modal
             $("#newScheduleModal .modal-content").html(res);

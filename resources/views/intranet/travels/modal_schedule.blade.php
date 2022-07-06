@@ -8,7 +8,14 @@
         </div>
     </div>
     <div class="modal-form">
-        <form id="form_schedule" action="{{$schedule?'':route('agenda.nuevo')}}" method="POST" onkeydown="return event.key != 'Enter';">
+        @php
+            $form_action = "";
+            if($action == 1){ // NEW
+                route('agenda.nuevo');
+            }
+        @endphp
+        <form id="form_schedule" action="{{$form_action}}" method="POST" onkeydown="return event.key != 'Enter';">
+            @csrf
             @if ($schedule)
                 <div class="row">
                     <div class="col-12 col-md-6">
@@ -52,7 +59,6 @@
                 @php
                     $user = Auth()->user();
                 @endphp
-                @csrf
                 <input type="hidden" name="user" value="{{$user->id}}">
                 <input type="hidden" name="branch" value="">
                 <div class="row">
@@ -193,8 +199,11 @@
 <div class="modal-footer">
     <div class="form-btns">
         <button class="btn btn-secondary text-white" type="button" data-coreui-dismiss="modal" aria-label="Close">Cerrar</button>
-        @if (!$schedule)
-        <input class="btn btn-info text-white" type="submit" form="form_schedule" value="Crear">
+        @if ($action == 1)
+            <input class="btn btn-info text-white" type="submit" form="form_schedule" value="Crear">
+        @elseif ($action >= 3)
+            <button class="btn btn-danger text-white travel-deny" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Rechazar</button>
+            <button class="btn btn-success text-white travel-confirm" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Confirmar</button>
         @endif
     </div>
 </div>

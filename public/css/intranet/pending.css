@@ -1,0 +1,3 @@
+#form_schedule textarea.form-control[readonly] {
+    background-color: inherit;
+}

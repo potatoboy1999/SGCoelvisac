@@ -4,7 +4,7 @@
     
 @section('style')
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="{{asset('css/intranet/objectives.css')}}">
+    <link rel="stylesheet" href="{{asset('css/intranet/pending.css')}}">
     <style>
         .nav-item-custom {
             border: 1px solid rgba(86, 61, 124, .2) !important;
@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-<div class="modal fade" id="newScheduleModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
+<div class="modal fade" id="scheduleModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header"><h5>Agendas Pendientes</h5></div>
@@ -38,12 +38,12 @@
                     <table class="table table-bordered m-0">
                         <thead>
                             <tr>
-                                <th width="50px">Creado</th>
-                                <th width="80px">Usuario</th>
-                                <th width="150px">Sede</th>
-                                <th width="50px">Desde</th>
-                                <th width="50px">Hasta</th>
-                                <th width="50px"></th>
+                                <th class="bg-dark text-white" width="50px">Creado</th>
+                                <th class="bg-dark text-white" width="80px">Usuario</th>
+                                <th class="bg-dark text-white" width="150px">Sede</th>
+                                <th class="bg-dark text-white" width="50px">Desde</th>
+                                <th class="bg-dark text-white" width="50px">Hasta</th>
+                                <th class="bg-dark text-white" width="50px"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,7 +55,7 @@
                                 <td>{{date("d-m-Y", strtotime($schedule->viaje_comienzo))}}</td>
                                 <td>{{date("d-m-Y", strtotime($schedule->viaje_fin))}}</td>
                                 <td class="text-center">
-                                    <button class="btn btn-sm btn-info">
+                                    <button class="btn btn-sm btn-info show-schedule" data-travelid="{{$schedule->id}}" data-action="{{$type == 1?'3':'4'}}">
                                         <svg class="icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-info"></use>
                                         </svg>
@@ -77,5 +77,8 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
 <script src="{{asset("js/intranet/pendings.js")}}"></script>
 <script>
+    var pop_schedule_route = "{{route('agenda.popup.schedule')}}";
+    var confirm_route = "{{route('agenda.confirm')}}";
+    var deny_route = "{{route('agenda.deny')}}";
 </script>
 @endsection
