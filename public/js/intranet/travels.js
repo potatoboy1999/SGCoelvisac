@@ -101,7 +101,6 @@ $(document).on('submit', "#form_schedule", function(ev){
             }else{
                 alert("ERROR: No se pudieron guardar los datos");
             }
-
         }
     });
 });

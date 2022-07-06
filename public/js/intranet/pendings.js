@@ -16,3 +16,71 @@ $('.show-schedule').on('click', function(ev){
         }
     });
 });
+
+$(document).on('click', ".travel-confirm", function(ev){
+    ev.preventDefault();
+    var id = $(this).data('travelid');
+    var confirmation = $(this).data('confirmation');
+    $.ajax({
+        url: confirm_route,
+        method: 'POST',
+        data: {
+            id: id,
+            confirmation: confirmation,
+            _token: $("input[name='_token']").val()
+        },
+        beforeSend: function(){
+            $("#scheduleModal .form-btns").hide();
+            $("#scheduleModal .modal-form").hide();
+            $("#scheduleModal .modal-loading").show();
+        },
+        success: function(res){
+            console.log(res);
+            if(res.status == "ok"){
+                $("#scheduleModal .form-btns").show();
+                $("#scheduleModal .modal-loading").hide();
+                $("#scheduleModal .modal-success").show();
+                $("#scheduleModal .btn-actions").hide();
+                // destroy row
+                $("tr[data-travelid='"+id+"']").remove();
+                $("#scheduleModal .modal-success p").html('<span class="text-success"><strong>!ÉXITO!</strong></span><br> La agenda fue validada');
+            }else{
+                alert("ERROR: No se pudieron guardar los datos");
+            }
+        }
+    });
+});
+
+$(document).on('click', ".travel-deny", function(ev){
+    ev.preventDefault();
+    var id = $(this).data('travelid');
+    var confirmation = $(this).data('confirmation');
+    $.ajax({
+        url: deny_route,
+        method: 'POST',
+        data: {
+            id: id,
+            confirmation: confirmation,
+            _token: $("input[name='_token']").val()
+        },
+        beforeSend: function(){
+            $("#scheduleModal .form-btns").hide();
+            $("#scheduleModal .modal-form").hide();
+            $("#scheduleModal .modal-loading").show();
+        },
+        success: function(res){
+            console.log(res);
+            if(res.status == "ok"){
+                $("#scheduleModal .form-btns").show();
+                $("#scheduleModal .modal-loading").hide();
+                $("#scheduleModal .modal-success").show();
+                $("#scheduleModal .btn-actions").hide();
+                // destroy row
+                $("tr[data-travelid='"+id+"']").remove();
+                $("#scheduleModal .modal-success p").html('<span class="text-success"><strong>!ÉXITO!</strong></span><br> La agenda fue rechazada');
+            }else{
+                alert("ERROR: No se pudieron guardar los datos");
+            }
+        }
+    });
+});

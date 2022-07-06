@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\TravelActivity;
 use App\Models\TravelSchedule;
+use Exception;
 use Illuminate\Http\Request;
 
 class TravelScheduleController extends Controller
@@ -128,6 +129,11 @@ class TravelScheduleController extends Controller
             }
         }
 
+        try{
+            // send mail link to "gerente del area"
+        }catch(Exception $e){
+        }
+
         return [
             'status' => 'ok'
         ];
@@ -158,5 +164,56 @@ class TravelScheduleController extends Controller
             'type'=> $type,
             'schedules' => $schedules
         ]);
+    }
+
+    public function confirmSchedule(Request $request)
+    {
+        $schedule = TravelSchedule::find($request->id);
+        if($schedule){
+            if($request->confirmation == 1){
+                $schedule->validacion_uno = 2; // confirmed
+            }else{
+                $schedule->validacion_dos = 2; // confirmed
+            }
+            $schedule->estado = 2; // aprovado por el gerente de area
+            $schedule->save();
+    
+            try{
+                // send mail link to "area de gestion"
+            }catch(Exception $e){
+            }
+        }else{
+            return [
+                'status' => 'error',
+                'msg' => 'Agenda de viaje no encontrada'
+            ];
+        }
+
+        return [
+            'status' => 'ok'
+        ];
+    }
+    
+    public function denySchedule(Request $request)
+    {
+        $schedule = TravelSchedule::find($request->id);
+        if($schedule){
+            if($request->confirmation == 1){
+                $schedule->validacion_uno = 1; // denied
+            }else{
+                $schedule->validacion_dos = 1; // denied
+            }
+            $schedule->estado = 3; // rechazado por el gerente de area
+            $schedule->save();
+        }else{
+            return [
+                'status' => 'error',
+                'msg' => 'Agenda de viaje no encontrada'
+            ];
+        }
+
+        return [
+            'status' => 'ok'
+        ];
     }
 }

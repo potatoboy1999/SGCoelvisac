@@ -190,9 +190,15 @@
     </div>
     <div class="modal-success" style="display: none">
         <p class="m-0">
-            <span class="text-success"><strong>!ÉXITO!</strong></span>
-            <br>
-            Agenda registrada y enviada a revisión
+            @if ($action == 1)
+                <span class="text-success"><strong>!ÉXITO!</strong></span>
+                <br> Agenda registrada y enviada a revisión
+            @endif
+
+            @if ($action >= 3)
+                <span class="text-success"><strong>!ÉXITO!</strong></span>
+                <br> La agenda fue validada
+            @endif
         </p>
     </div>
 </div>
@@ -202,8 +208,8 @@
         @if ($action == 1)
             <input class="btn btn-info text-white" type="submit" form="form_schedule" value="Crear">
         @elseif ($action >= 3)
-            <button class="btn btn-danger text-white travel-deny" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Rechazar</button>
-            <button class="btn btn-success text-white travel-confirm" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Confirmar</button>
+            <button class="btn btn-danger text-white btn-actions travel-deny" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Rechazar</button>
+            <button class="btn btn-success text-white btn-actions travel-confirm" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Confirmar</button>
         @endif
     </div>
 </div>

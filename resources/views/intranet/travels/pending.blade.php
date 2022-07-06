@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-<div class="modal fade" id="scheduleModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
+<div class="modal fade" id="scheduleModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header"><h5>Agendas Pendientes</h5></div>
@@ -48,7 +48,7 @@
                         </thead>
                         <tbody>
                             @foreach ($schedules as $schedule)
-                            <tr>
+                            <tr data-travelid="{{$schedule->id}}">
                                 <td>{{date("d-m-Y", strtotime($schedule->created_at))}}</td>
                                 <td>{{$schedule->user->nombre}}</td>
                                 <td>{{$schedule->branch->nombre}}</td>

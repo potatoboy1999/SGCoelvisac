@@ -28,7 +28,7 @@ td.day-cell {
     height: 125px;
 }
 #form-area-sel .form-group{
-    max-width: 400px;
+    max-width: fit-content;
 }
 
 #form_schedule textarea.form-control[readonly] {
