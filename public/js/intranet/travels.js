@@ -50,7 +50,7 @@ $(document).on('click','.area-travel', function(ev){
     prepareNewSchModal(id, start);
 });
 
-$(".add-act").on('click', function(ev){
+$(document).on('click',".add-act", function(ev){
     ev.preventDefault();
     var type = $(this).attr('type');
     var areas = $(this).parent().parent().find('.act_areas');
@@ -79,7 +79,7 @@ $(document).on('click', '.btn-del-act', function(ev){
     }
 });
 
-$("#form_schedule").on('submit', function(ev){
+$(document).on('submit', "#form_schedule", function(ev){
     ev.preventDefault();
     
     $.ajax({
@@ -137,7 +137,6 @@ function prepareNewSchModal(id, start){
         start_date: start,
         id: id,
     };
-    console.log(data);
     $.ajax({
         url: pop_schedule_route,
         method: 'GET',
@@ -154,8 +153,6 @@ function prepareNewSchModal(id, start){
                     $("#sch_date_end").datepicker('option', 'minDate', date);
                 }
             });
-            
-            var dStart = new Date(start+' 00:00:00');
 
             //show modal
             $("#newScheduleModal").modal('show');

@@ -55,6 +55,7 @@ class TravelScheduleController extends Controller
             $schedule = TravelSchedule::where('id', $request->id)
                                 ->where('estado', 5);
             $schedule->with(['activities']);
+            $schedule->with(['user']);
             $schedule = $schedule->first();
         }
         $branches = Branch::where('estado', 1)->get();

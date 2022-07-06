@@ -56,7 +56,9 @@
             <thead>
                 <tr>
                     @foreach ($days as $k => $day)
-                        <th class="text-center th-day-{{$k}}" width="250">{{$day}}</th>
+                        <th class="text-center th-day-{{$k}}" width="250">
+                            <p class="m-0 px-2">{{$day}}</p>
+                        </th>
                     @endforeach
                 </tr>
             </thead>
