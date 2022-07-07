@@ -140,21 +140,3 @@ function prepareNewSchModal(id, start){
 function formatDate(d){
     return d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear();
 }
-
-function newActivity(name, type){
-    var html = '<div class="mb-2 act-ta">'+
-                    '<div style="display: flex;">'+
-                        '<div style="flex: 0 40px;">'+
-                            '<a class="btn btn-danger btn-sm btn-del-act" type="'+type+'">'+
-                                '<svg class="icon">'+
-                                    '<use xlink:href="http://localhost:8000/icons/sprites/free.svg#cil-minus"></use>'+
-                                '</svg>'+
-                            '</a>'+
-                        '</div>'+
-                            '<div style="flex: 1;">'+
-                            '<textarea name="'+name+'[]" rows="2" class="form-control" required></textarea>'+
-                        '</div>'+
-                    '</div>'+
-                '</div>';
-    return html;
-}

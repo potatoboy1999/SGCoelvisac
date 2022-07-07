@@ -87,11 +87,30 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
 <script src="{{asset("js/intranet/travels.js")}}"></script>
 <script>
+    var base_url = "{{url()}}";
     var calendar_route = "{{route('agenda.calendar')}}";
     var pop_schedule_route = "{{route('agenda.popup.schedule')}}";
     $(function(){
         getCalendar();
     });
+
+    function newActivity(name, type){
+    var html = '<div class="mb-2 act-ta">'+
+                    '<div style="display: flex;">'+
+                        '<div style="flex: 0 40px;">'+
+                            '<a class="btn btn-danger btn-sm btn-del-act" type="'+type+'">'+
+                                '<svg class="icon">'+
+                                    '<use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-minus"></use>'+
+                                '</svg>'+
+                            '</a>'+
+                        '</div>'+
+                            '<div style="flex: 1;">'+
+                            '<textarea name="'+name+'[]" rows="2" class="form-control" required></textarea>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>';
+    return html;
+}
 
 </script>
 @endsection
