@@ -29,8 +29,6 @@ INSERT INTO t_sgcv_sedes VALUES
 
 UPDATE t_sgcv_opciones SET `url` = 'agenda.index' where id = 6;
 
--- Everything on top of this on Live Server
-
 ALTER TABLE t_sgcv_agenda_viajes CHANGE modified_at updated_at DATETIME;
 ALTER TABLE t_sgcv_actividades_viajes CHANGE modified_at updated_at DATETIME;
 
@@ -42,3 +40,32 @@ INSERT INTO t_sgcv_opcion_perfil VALUES (null, 1, 10, 1, '2022-06-25 12:00:00', 
 UPDATE t_sgcv_opciones SET url = 'user.index' WHERE id = 9;
 INSERT INTO t_sgcv_opciones VALUES (null, 'Perfiles', 'user.profiles', 'cil-user',null, 3, 3, 8, 2, 1, '2022-06-27 12:00:00','2022-06-27 12:00:00');
 INSERT INTO t_sgcv_opcion_perfil VALUES (null, 1, 11, 1, '2022-06-27 12:00:00', '2022-06-27 12:00:00');
+
+-- Everything on top of this on Live Server
+
+ALTER TABLE t_sgcv_posiciones ADD COLUMN es_gerente TINYINT DEFAULT 0 AFTER area_id;
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Gestion', 11, 1, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+UPDATE t_sgcv_posiciones SET nombre = 'Gerente de Prueba' where id = 3;
+
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Secretario de Gestion', 11, 0, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Secretario de Administracion', 4, 0, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Administracion', 4, 1, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Secretario de Finanzas', 5, 0, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Finanzas', 5, 1, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Secretario de Comercial', 6, 0, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Comercial', 6, 1, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Secretario de Operaciones', 7, 0, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Operaciones', 7, 1, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Secretario de DDNN', 8, 0, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de DDNN', 8, 1, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Secretario de Legal', 9, 0, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Legal', 9, 1, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Secretario de Gestión Humana', 10, 0, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
+INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Gestión Humana', 10, 1, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');

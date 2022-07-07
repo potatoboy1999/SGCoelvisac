@@ -7,6 +7,7 @@ use App\Models\TravelActivity;
 use App\Models\TravelSchedule;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TravelScheduleController extends Controller
 {
@@ -144,20 +145,55 @@ class TravelScheduleController extends Controller
         $page = "objectives";
         $bcrums = ["Agendas"];
         $type = isset($request->type)?$request->type:1;
-        $schedules = TravelSchedule::where('estado','>',0);
+        $user = Auth::user();
+        $schedules = TravelSchedule::where('t_sgcv_agenda_viajes.estado','>',0);
                                 //->where('estado','<',5)
-        if($type == 1){
-            $schedules->where('validacion_uno', 0); // not set
-            $schedules->where('validacion_dos', 0); // not set
-        }else if ($type == 2) {
-            $schedules->where('validacion_uno', 2); // aprobado
-            $schedules->where('validacion_dos', 0); // not set
+        $u_area = $user->position->area->id;
+        // if is from DEV ADMIN, 
+        if($u_area == 1){
+
+            if($type == 1){
+                $schedules->where('t_sgcv_agenda_viajes.validacion_uno', 0); // not set
+                $schedules->where('t_sgcv_agenda_viajes.validacion_dos', 0); // not set
+            }else if ($type == 2) {
+                $schedules->where('t_sgcv_agenda_viajes.validacion_uno', 2); // aprobado
+                $schedules->where('t_sgcv_agenda_viajes.validacion_dos', 0); // not set
+            }
+
+            $schedules->orderBy('t_sgcv_agenda_viajes.created_at','desc')
+                  ->orderBy('t_sgcv_agenda_viajes.viaje_comienzo','desc');
+            $schedules->with(['user']);
+            $schedules->with(['branch']);
+            $schedules = $schedules->get();
+
+        }else{
+            
+            if($u_area == 11){ // area 'gestion', check schedules with 1st validation approved, ALL AREAS
+                $type = 2;
+                $schedules->where('t_sgcv_agenda_viajes.validacion_uno', 2);
+                $schedules->where('t_sgcv_agenda_viajes.validacion_dos', 0);
+            }else if($user->position->es_gerente == 1){ // if not from area 'gestion', check if user is manager
+                // get schedules with no validation approved from an specific area
+                $type = 1;
+                $schedules->where('t_sgcv_agenda_viajes.validacion_uno', 0);
+                $schedules->where('t_sgcv_agenda_viajes.validacion_dos', 0);
+                $schedules->join('t_sgcv_usuarios','t_sgcv_agenda_viajes.usuario_id','t_sgcv_usuarios.id')
+                          ->join('t_sgcv_posiciones','t_sgcv_usuarios.posicion_id','t_sgcv_posiciones.id')
+                          ->join('t_sgcv_areas','t_sgcv_posiciones.area_id','t_sgcv_areas.id')
+                          ->where('t_sgcv_areas.id',$u_area);
+                $schedules->select('t_sgcv_agenda_viajes.*');
+            }else{
+                // user not valid, go back;
+                return back();
+            }
+            $schedules->orderBy('t_sgcv_agenda_viajes.created_at','desc')
+                      ->orderBy('t_sgcv_agenda_viajes.viaje_comienzo','desc');
+            $schedules->with(['user']);
+            $schedules->with(['branch']);
+            $schedules = $schedules->get();
+
         }
-        $schedules->orderBy('created_at','desc')
-                  ->orderBy('viaje_comienzo','desc');
-        $schedules->with(['user']);
-        $schedules->with(['branch']);
-        $schedules = $schedules->get();
+
         return view('intranet.travels.pending',[
             'page' => $page,
             'bcrums' => $bcrums,
@@ -172,10 +208,11 @@ class TravelScheduleController extends Controller
         if($schedule){
             if($request->confirmation == 1){
                 $schedule->validacion_uno = 2; // confirmed
+                $schedule->estado = 2; // aprovado por el gerente de area
             }else{
                 $schedule->validacion_dos = 2; // confirmed
+                $schedule->estado = 5; // aprovado a area de gestion
             }
-            $schedule->estado = 2; // aprovado por el gerente de area
             $schedule->save();
     
             try{
@@ -200,10 +237,11 @@ class TravelScheduleController extends Controller
         if($schedule){
             if($request->confirmation == 1){
                 $schedule->validacion_uno = 1; // denied
+                $schedule->estado = 3; // rechazado por el gerente de area
             }else{
                 $schedule->validacion_dos = 1; // denied
+                $schedule->estado = 6; // rechazado por el gerente de area
             }
-            $schedule->estado = 3; // rechazado por el gerente de area
             $schedule->save();
         }else{
             return [

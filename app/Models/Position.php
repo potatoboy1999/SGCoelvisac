@@ -15,6 +15,7 @@ class Position extends Model
     protected $fillable = [
         'nombre',
         'area_id',
+        'es_gerente',
         'estado',
     ];
 

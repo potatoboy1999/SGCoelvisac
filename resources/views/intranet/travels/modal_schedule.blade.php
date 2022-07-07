@@ -11,7 +11,7 @@
         @php
             $form_action = "";
             if($action == 1){ // NEW
-                route('agenda.nuevo');
+                $form_action = route('agenda.nuevo');
             }
         @endphp
         <form id="form_schedule" action="{{$form_action}}" method="POST" onkeydown="return event.key != 'Enter';">

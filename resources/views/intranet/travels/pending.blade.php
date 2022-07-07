@@ -23,14 +23,17 @@
 </div>
 <div class="body flex-grow-1 px-3">
     <div class="container-lg">
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="nav nav-pills nav-fill">
-                    <a href="{{route('agenda.pending')}}?type=1" class="nav-item nav-link nav-item-custom mx-2 {{$type == 1?'active':''}}">1era Validacion</a>
-                    <a href="{{route('agenda.pending')}}?type=2" class="nav-item nav-link nav-item-custom mx-2 {{$type == 2?'active':''}}">2da Validacion</a>
+        {{-- if area is ADMIN, show both options --}}
+        @if (Auth::user()->position->area->id == 1)
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="nav nav-pills nav-fill">
+                        <a href="{{route('agenda.pending')}}?type=1" class="nav-item nav-link nav-item-custom mx-2 {{$type == 1?'active':''}}">1era Validacion</a>
+                        <a href="{{route('agenda.pending')}}?type=2" class="nav-item nav-link nav-item-custom mx-2 {{$type == 2?'active':''}}">2da Validacion</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
         <div class="card mb-4">
             <div class="card-header"><span>Pendientes</span></div>
             <div class="card-body">
