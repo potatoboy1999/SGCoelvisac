@@ -26,7 +26,7 @@
             <div class="col-12">
                 <div class="mb-2">
                     <label for="">Email</label>
-                    <input class="form-control" type="text" name="email" value="{{$user?$user->nombre:''}}" required>
+                    <input class="form-control" type="email" name="email" value="{{$user?$user->email:''}}" required>
                 </div>
             </div>
             <div class="col-12 col-md-6">
