@@ -87,7 +87,6 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
 <script src="{{asset("js/intranet/travels.js")}}"></script>
 <script>
-    var base_url = "{{url()}}";
     var calendar_route = "{{route('agenda.calendar')}}";
     var pop_schedule_route = "{{route('agenda.popup.schedule')}}";
     $(function(){
