@@ -65,13 +65,19 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
     });
 
     Route::group(["prefix"=>"agenda"], function(){
+        // -- schedule calendar
         Route::get('/', [TravelScheduleController::class, "backIndex"])->name('agenda.index');
         Route::get('/calendar', [TravelScheduleController::class, "viewCalendar"])->name('agenda.calendar');
         Route::get('/calendar/popup/schedule', [TravelScheduleController::class, "showSchedulePopup"])->name("agenda.popup.schedule");
         Route::post('/new/schedule',[TravelScheduleController::class, "storeSchedule"])->name('agenda.nuevo');
+        // -- pendings schedules
         Route::get('/pendings',[TravelScheduleController::class, "viewPending"])->name("agenda.pending");
         Route::post('/confirm/schedule',[TravelScheduleController::class, "confirmSchedule"])->name('agenda.confirm');
         Route::post('/deny/schedule',[TravelScheduleController::class, "denySchedule"])->name('agenda.deny');
+        // -- reports schedules
+        Route::get('/reports',[TravelScheduleController::class, "viewReports"])->name("agenda.reports");
+        Route::get('/reports/details',[TravelScheduleController::class, "showReport"])->name("agenda.reports.show");
+        Route::post('/report/delete',[TravelScheduleController::class, "deleteReport"])->name('agenda.reports.deactivate');
     });
 
     Route::group(["prefix"=>"usuario"], function(){

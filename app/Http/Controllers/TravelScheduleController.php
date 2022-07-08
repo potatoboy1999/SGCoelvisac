@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\ReportActivity;
 use App\Models\TravelActivity;
 use App\Models\TravelSchedule;
 use Exception;
@@ -253,5 +254,72 @@ class TravelScheduleController extends Controller
         return [
             'status' => 'ok'
         ];
+    }
+
+    public function viewReports(Request $request)
+    {
+        $page = "objectives";
+        $bcrums = ["Agendas"];
+
+        $user = Auth::user();
+        $position = $user->position;
+        $area = $position->area;
+
+        $schedules = TravelSchedule::where('estado', 5)
+                                ->where('validacion_uno', 2)
+                                ->where('validacion_dos', 2);
+        if($area->id != 1){
+            $schedules->where('usuario_id', $user->id);
+        }
+        $schedules->with(['user']);
+        $schedules->with(['branch']);
+        $schedules = $schedules->orderBy('created_at','desc')
+                               ->orderBy('viaje_comienzo','desc')
+                               ->get();
+
+        return view('intranet.reports.index',[
+            'page' => $page,
+            'bcrums' => $bcrums,
+            'schedules' => $schedules
+        ]);
+    }
+
+    public function deleteReport(Request $request)
+    {
+        $schedule = TravelSchedule::where('id', $request->id)->first();
+        if($schedule){
+            $schedule->estado = 0;
+            $schedule->save();
+
+            TravelActivity::where('agenda_viaje_id', $request->id)->update(['estado' => 0]);
+            ReportActivity::where('agenda_viaje_id', $request->id)->update(['estado' => 0]);
+
+            return back();
+        }
+
+        return back();
+    }
+
+    public function showReport(Request $request)
+    {
+        $page = "objectives";
+        $bcrums = ["Agendas"];
+        $user = Auth::user();
+        $schedule = TravelSchedule::where('id', $request->id)
+                                  ->where('usuario_id', $user->id)
+                                  ->first();
+        $report = null;
+        if($schedule){
+            $report = ReportActivity::where('agenda_viaje_id', $schedule->id);
+        }else{
+            // schedule not found or doesn't belong to current user
+            return back();
+        }
+        return view('intranet.reports.details',[
+            'page' => $page,
+            'bcrums' => $bcrums,
+            "schedule" => $schedule,
+            "report" => $report,
+        ]);
     }
 }
