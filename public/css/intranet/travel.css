@@ -31,6 +31,10 @@ td.day-cell {
     max-width: fit-content;
 }
 
+#form_schedule input.form-control.read-clear[readonly] {
+    background-color: inherit;
+}
+
 #form_schedule textarea.form-control[readonly] {
     background-color: inherit;
 }

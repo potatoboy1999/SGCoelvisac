@@ -100,7 +100,7 @@
                     <div class="col-6">
                         <div class="mb-2">
                             <label for="">Fecha Hasta</label>
-                            <input id="sch_date_end" class="form-control" type="text" name="date_end" value="{{date("d/m/Y", strtotime('+3 day',strtotime($s_date)))}}" required>
+                            <input id="sch_date_end" class="form-control read-clear" type="text" name="date_end" value="{{date("d/m/Y", strtotime('+3 day',strtotime($s_date)))}}" required readonly>
                         </div>
                     </div>
                 </div>
