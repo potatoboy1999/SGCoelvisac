@@ -22,21 +22,28 @@
                         <thead>
                             <tr>
                                 <th class="bg-dark text-white h-created" width="100">Creado</th>
+                                @if (Auth::user()->position->area->id == 1)
+                                <th class="bg-dark text-white h-user" width="50">Usuario</th>
+                                @endif
                                 <th class="bg-dark text-white h-branch" width="200">Sede</th>
                                 <th class="bg-dark text-white h-from" width="100">Desde</th>
                                 <th class="bg-dark text-white h-to" width="100">Hasta</th>
                                 <th class="bg-dark text-white h-status" width="100">Estado</th>
-                                <th class="bg-dark text-white h-action" width="50"></th>
+                                <th class="bg-dark text-white h-report" width="100">Reporte</th>
+                                <th class="bg-dark text-white h-action" width="{{Auth::user()->position->area->id == 1?'85':'70'}}"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($schedules as $schedule)
                             <tr>
                                 <td class="d-created align-middle">{{date("d-m-Y", strtotime($schedule->created_at))}}</td>
-                                <td class="d-branch">{{$schedule->branch->nombre}}</td>
-                                <td class="d-from">{{date("d-m-Y", strtotime($schedule->viaje_comienzo))}}</td>
-                                <td class="d-to">{{date("d-m-Y", strtotime($schedule->viaje_fin))}}</td>
-                                <td class="d-status">
+                                @if (Auth::user()->position->area->id == 1)
+                                <td class="d-user align-middle" width="100">{{Auth::user()->nombre}}</td>
+                                @endif
+                                <td class="d-branch align-middle">{{$schedule->branch->nombre}}</td>
+                                <td class="d-from align-middle">{{date("d-m-Y", strtotime($schedule->viaje_comienzo))}}</td>
+                                <td class="d-to align-middle">{{date("d-m-Y", strtotime($schedule->viaje_fin))}}</td>
+                                <td class="d-status align-middle">
                                     @if ($schedule->estado == 3 || $schedule->estado == 6)
                                         <span class="text-danger">RECHAZADO</span>
                                     @else
@@ -54,7 +61,8 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="d-action text-center">
+                                <td class="d-report align-middle {{$schedule->reportActivities?'text-success':'text-danger'}}">{{$schedule->reportActivities?'CREADO':'SIN CREAR'}}</td>
+                                <td class="d-action align-middle text-center">
                                     <a href="{{route('agenda.reports.show')}}?id={{$schedule->id}}" class="btn btn-success btn-sm text-white btn-view">
                                         <svg class="icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar-check"></use>

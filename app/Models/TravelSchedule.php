@@ -53,4 +53,8 @@ class TravelSchedule extends Model
         return $this->hasMany(TravelActivity::class,"agenda_viaje_id","id");
     }
 
+    public function reportActivities(){
+        return $this->hasMany(ReportActivity::class, "agenda_viaje_id", "id");
+    }
+
 }

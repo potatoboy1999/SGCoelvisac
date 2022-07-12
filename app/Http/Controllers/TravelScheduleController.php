@@ -271,8 +271,9 @@ class TravelScheduleController extends Controller
         if($area->id != 1){
             $schedules->where('usuario_id', $user->id);
         }
-        $schedules->with(['user']);
-        $schedules->with(['branch']);
+        $schedules->with(['user'])
+                  ->with(['branch'])
+                  ->with(['report']);
         $schedules = $schedules->orderBy('created_at','desc')
                                ->orderBy('viaje_comienzo','desc')
                                ->get();
@@ -320,6 +321,24 @@ class TravelScheduleController extends Controller
             'bcrums' => $bcrums,
             "schedule" => $schedule,
             "report" => $report,
+        ]);
+    }
+
+    public function showReportActivity(Request $request)
+    {
+        $schedule = TravelSchedule::find($request->schedule_id);
+        $repActivity = null;
+        if($schedule){
+            if(isset($request->report_id)){
+                $repActivity = ReportActivity::where('id', $request->report_id)
+                                            ->where('estado', 1)
+                                            ->first();
+            }
+        }
+        return view('intranet.reports.modal_activity',[
+            'schedule' => $schedule,
+            'rep_activity' => $repActivity,
+            'type' => $request->type
         ]);
     }
 }

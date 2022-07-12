@@ -1,0 +1,3 @@
+#form_activity input.form-control.read-clear[readonly] {
+    background-color: inherit;
+}

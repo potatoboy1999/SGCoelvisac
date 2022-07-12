@@ -78,6 +78,9 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/reports',[TravelScheduleController::class, "viewReports"])->name("agenda.reports");
         Route::get('/reports/details',[TravelScheduleController::class, "showReport"])->name("agenda.reports.show");
         Route::post('/report/delete',[TravelScheduleController::class, "deleteReport"])->name('agenda.reports.deactivate');
+        Route::get('/reports/activity/modal',[TravelScheduleController::class, "showReportActivity"])->name("agenda.reports.activity.popup");
+        Route::post('/reports/activity/save',[TravelScheduleController::class, "saveActivity"])->name("agenda.reports.activity.save");
+        Route::post('/reports/activity/delete',[TravelScheduleController::class, "deleteActivity"])->name("agenda.reports.activity.delete");
     });
 
     Route::group(["prefix"=>"usuario"], function(){
