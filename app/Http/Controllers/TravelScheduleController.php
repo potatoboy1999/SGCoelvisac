@@ -273,7 +273,7 @@ class TravelScheduleController extends Controller
         }
         $schedules->with(['user'])
                   ->with(['branch'])
-                  ->with(['report']);
+                  ->with(['reportActivities']);
         $schedules = $schedules->orderBy('created_at','desc')
                                ->orderBy('viaje_comienzo','desc')
                                ->get();
@@ -340,5 +340,60 @@ class TravelScheduleController extends Controller
             'rep_activity' => $repActivity,
             'type' => $request->type
         ]);
+    }
+
+    public function saveActivity(Request $request)
+    {
+        $schedule = TravelSchedule::find($request->schedule_id);
+        if($schedule){
+            $report = null;
+            if(isset($request->report_id) && !empty($request->report_id)){
+                $report = ReportActivity::find($request->report_id);
+                if(!$schedule){
+                    return [
+                        'status' => 'error',
+                        'msg' => 'No se encontro la actividad'
+                    ];
+                }
+            }else{
+                $report = new ReportActivity;
+            }
+            $report->descripcion        = $request->descripcion;
+            $report->tipo               = $request->tipo;
+            $report->acuerdo            = $request->acuerdo;
+            $report->fecha_comienzo     = date_format(date_create_from_format('d/m/Y',$request->date_start),'Y-m-d');
+            $report->fecha_fin          = date_format(date_create_from_format('d/m/Y',$request->date_end),'Y-m-d');
+            $report->agenda_viaje_id    = $schedule->id;
+            $report->estado             = $request->estado;
+            $report->save();
+            return ['status' => 'ok', 'report' => [
+                    'id' => $report->id,
+                    'descripcion' => $report->descripcion,
+                    'acuerdo' => $report->acuerdo,
+                    'fecha_comienzo' => date('d/m/Y', strtotime($report->fecha_comienzo)),
+                    'fecha_fin' => date('d/m/Y', strtotime($report->fecha_fin)),
+                    'estado' => $report->estado,
+                ]
+            ];
+        }
+
+        return [
+            'status' => 'error',
+            'msg' => 'No se encontro la agenda de viaje'
+        ];
+    }
+
+    public function deleteActivity(Request $request)
+    {
+        $report = ReportActivity::find($request->id);
+        if($report){
+            $report->estado = 0;
+            $report->save();
+            return ['status' => 'ok'];
+        }
+        return [
+            'status' => 'error',
+            'msg' => 'No se encontro la actividad'
+        ];
     }
 }

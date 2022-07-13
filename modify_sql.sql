@@ -69,3 +69,5 @@ INSERT INTO t_sgcv_posiciones VALUES (null, 'Secretario de Gestion', 11, 0, 1, '
 INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Gestion', 11, 1, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
 
 -- Everything on top of this on Live Server
+
+ALTER TABLE t_sgcv_reporte_actividades CHANGE modified_at updated_at DATETIME;

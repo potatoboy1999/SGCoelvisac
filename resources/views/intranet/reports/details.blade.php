@@ -93,7 +93,7 @@
                     </div>
                     <div class="col-12">
                         <div class="overflow-auto mt-2 mb-4">
-                            <table id="rep_activities" class="table table-bordered activity-table m-0">
+                            <table id="rep_activities" class="table table-bordered activity-table m-0" data-type="1">
                                 <thead>
                                     <tr>
                                         <th class="bg-dark text-white h-description" width="250">Descripción</th>
@@ -109,16 +109,16 @@
                                     <tr>
                                         <td class="d-description align-middle">{{$activity->descripcion}}</td>
                                         <td class="d-deal align-middle">{{$activity->acuerdo}}</td>
-                                        <td class="d-start align-middle">{{$activity->fecha_comienzo}}</td>
-                                        <td class="d-end align-middle">{{$activity->fecha_fin}}</td>
+                                        <td class="d-start align-middle">{{date('d/m/Y', strtotime($activity->fecha_comienzo))}}</td>
+                                        <td class="d-end align-middle">{{date('d/m/Y', strtotime($activity->fecha_fin))}}</td>
                                         <td class="d-status align-middle">{{$activity->estado}}</td>
                                         <td class="d-action align-middle">
-                                            <a href="#" class="btn btn-info btn-sm text-white btn-edit">
+                                            <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}">
                                                 <svg class="icon">
                                                     <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
                                                 </svg>
                                             </a>
-                                            <a href="#" class="btn btn-danger btn-sm text-white btn-delete">
+                                            <a href="#" class="btn btn-danger btn-sm text-white btn-delete" data-id="{{$activity->id}}">
                                                 <svg class="icon">
                                                     <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                 </svg>
@@ -138,7 +138,7 @@
                     </div>
                     <div class="col-12">
                         <div class="overflow-auto mt-2">
-                            <table id="rep_activities_others" class="table table-bordered activity-table m-0">
+                            <table id="rep_activities_others" class="table table-bordered activity-table m-0" data-type="2">
                                 <thead>
                                     <tr>
                                         <th class="bg-dark text-white h-description" width="250">Descripción</th>
@@ -154,16 +154,16 @@
                                     <tr>
                                         <td class="d-description align-middle">{{$activity->descripcion}}</td>
                                         <td class="d-deal align-middle">{{$activity->acuerdo}}</td>
-                                        <td class="d-start align-middle">{{$activity->fecha_comienzo}}</td>
-                                        <td class="d-end align-middle">{{$activity->fecha_fin}}</td>
+                                        <td class="d-start align-middle">{{date('d/m/Y', strtotime($activity->fecha_comienzo))}}</td>
+                                        <td class="d-end align-middle">{{date('d/m/Y', strtotime($activity->fecha_fin))}}</td>
                                         <td class="d-status align-middle">{{$activity->estado}}</td>
                                         <td class="d-action align-middle">
-                                            <a href="#" class="btn btn-info btn-sm text-white btn-edit">
+                                            <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}">
                                                 <svg class="icon">
                                                     <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
                                                 </svg>
                                             </a>
-                                            <a href="#" class="btn btn-danger btn-sm text-white btn-delete">
+                                            <a href="#" class="btn btn-danger btn-sm text-white btn-delete" data-id="{{$activity->id}}">
                                                 <svg class="icon">
                                                     <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                 </svg>
@@ -191,5 +191,6 @@
 <script>
     var activity_modal = "{{route('agenda.reports.activity.popup')}}";
     var delete_route = "{{route('agenda.reports.activity.delete')}}";
+    var asset_url = "{{asset('icons/sprites/free.svg')}}";
 </script>
 @endsection

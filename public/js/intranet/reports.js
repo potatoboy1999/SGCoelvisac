@@ -15,7 +15,7 @@ $(".new_activity").on('click', function(ev){
             type: type
         },
         beforeSend: function(){
-
+            console.log('loading modal...');
         },
         success: function(res){
             $('#modalActivity .modal-content').html(res);
@@ -39,7 +39,64 @@ $(".new_activity").on('click', function(ev){
             $('#modalActivity').modal('show');
         }
     });
+});
+
+$("#modalActivity").on('submit', '#form_activity', function(ev){
+    ev.preventDefault();
+    console.log('submit');
+    var route = $(this).attr('action');
+    var dStart = $("#act_date_start").val();
+    var dEnd = $("#act_date_end").val();
+    var type = $("#form_activity input[name='tipo']").val();
+    if(dStart != "" && dEnd != ""){
+        $.ajax({
+            url: route,
+            method: 'POST',
+            data: $(this).serialize(),
+            beforeSend: function(){
+                $("#modalActivity .modal-area").hide();
+                $("#modalActivity .modal-loading").show();
+                $("#modalActivity .btn-actions").hide();
+            },
+            success: function(res){
+                console.log(res);
+                $("#modalActivity .modal-area").hide();
     
+                if(res.status == 'ok'){
+                    //$("#modalActivity .modal-success").show();
+                    $("#modalActivity").modal('hide');
+        
+                    // add row to table
+                    var html = "<tr>"+
+                                    "<td class='d-description align-middle'>"+res.report.descripcion+"</td>"+
+                                    "<td class='d-deal align-middle'>"+res.report.acuerdo+"</td>"+
+                                    "<td class='d-start align-middle'>"+res.report.fecha_desde+"</td>"+
+                                    "<td class='d-end align-middle'>"+res.report.fecha_hasta+"</td>"+
+                                    "<td class='d-status align-middle'>"+res.report.estado+"</td>"+
+                                    "<td class='d-action align-middle'>"+
+                                        '<a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="'+res.report.id+'">'+
+                                            '<svg class="icon">'+
+                                                '<use xlink:href="'+asset_url+'#cil-pencil"></use>'+
+                                            '</svg>'+
+                                        '</a>'+
+                                        '<a href="#" class="btn btn-info btn-sm text-white btn-delete" data-id="'+res.report.id+'">'+
+                                            '<svg class="icon">'+
+                                                '<use xlink:href="'+asset_url+'#cil-trash"></use>'+
+                                            '</svg>'+
+                                        '</a>'+
+                                    "</td>"+
+                                "</tr>";
+                    $(".activity-table[data-type='"+type+"']").append(html);
+                }else{
+                    $("#modalActivity .modal-error").show();
+                }
+            },
+            error: function(e){
+                $("#modalActivity .modal-area").hide();
+                $("#modalActivity .modal-error").show();
+            }
+        });
+    }
 });
 
 $(".activity-table").on('click', '.btn-edit', function(ev){

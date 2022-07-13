@@ -29,7 +29,7 @@
                                 <th class="bg-dark text-white h-from" width="100">Desde</th>
                                 <th class="bg-dark text-white h-to" width="100">Hasta</th>
                                 <th class="bg-dark text-white h-status" width="100">Estado</th>
-                                <th class="bg-dark text-white h-report" width="100">Reporte</th>
+                                {{-- <th class="bg-dark text-white h-report" width="100">Reporte</th> --}}
                                 <th class="bg-dark text-white h-action" width="{{Auth::user()->position->area->id == 1?'85':'70'}}"></th>
                             </tr>
                         </thead>
@@ -61,7 +61,7 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td class="d-report align-middle {{$schedule->reportActivities?'text-success':'text-danger'}}">{{$schedule->reportActivities?'CREADO':'SIN CREAR'}}</td>
+                                {{-- <td class="d-report align-middle {{sizeof($schedule->reportActivities)>0?'text-success':'text-danger'}}">{{sizeof($schedule->reportActivities)>0?'CREADO':'SIN CREAR'}}</td> --}}
                                 <td class="d-action align-middle text-center">
                                     <a href="{{route('agenda.reports.show')}}?id={{$schedule->id}}" class="btn btn-success btn-sm text-white btn-view">
                                         <svg class="icon">
