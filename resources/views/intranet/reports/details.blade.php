@@ -106,14 +106,14 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($schedule->reportActivities->where('tipo', 1) as $activity)
-                                    <tr>
+                                    <tr class="rep-act" act-id="{{$activity->id}}">
                                         <td class="d-description align-middle">{{$activity->descripcion}}</td>
                                         <td class="d-deal align-middle">{{$activity->acuerdo}}</td>
                                         <td class="d-start align-middle">{{date('d/m/Y', strtotime($activity->fecha_comienzo))}}</td>
                                         <td class="d-end align-middle">{{date('d/m/Y', strtotime($activity->fecha_fin))}}</td>
                                         <td class="d-status align-middle">{{$activity->estado}}</td>
                                         <td class="d-action align-middle">
-                                            <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}">
+                                            <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}" data-type="{{$activity->tipo}}" travelid="{{$schedule->id}}">
                                                 <svg class="icon">
                                                     <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
                                                 </svg>
@@ -151,7 +151,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($schedule->reportActivities->where('tipo', 2) as $activity)
-                                    <tr>
+                                    <tr class="rep-act" act-id="{{$activity->id}}">
                                         <td class="d-description align-middle">{{$activity->descripcion}}</td>
                                         <td class="d-deal align-middle">{{$activity->acuerdo}}</td>
                                         <td class="d-start align-middle">{{date('d/m/Y', strtotime($activity->fecha_comienzo))}}</td>

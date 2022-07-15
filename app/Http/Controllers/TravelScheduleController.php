@@ -345,6 +345,7 @@ class TravelScheduleController extends Controller
     public function saveActivity(Request $request)
     {
         $schedule = TravelSchedule::find($request->schedule_id);
+        $action = "new";
         if($schedule){
             $report = null;
             if(isset($request->report_id) && !empty($request->report_id)){
@@ -355,6 +356,7 @@ class TravelScheduleController extends Controller
                         'msg' => 'No se encontro la actividad'
                     ];
                 }
+                $action = "edit";
             }else{
                 $report = new ReportActivity;
             }
@@ -366,7 +368,10 @@ class TravelScheduleController extends Controller
             $report->agenda_viaje_id    = $schedule->id;
             $report->estado             = $request->estado;
             $report->save();
-            return ['status' => 'ok', 'report' => [
+            return [
+                'status' => 'ok', 
+                'action' => $action,
+                'report' => [
                     'id' => $report->id,
                     'descripcion' => $report->descripcion,
                     'acuerdo' => $report->acuerdo,
