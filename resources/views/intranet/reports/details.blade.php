@@ -17,15 +17,25 @@
 </div>
 <div class="modal fade" id="deleteActivity" data-coreui-backdrop="static" data-coreui-keyboard="false">
     <div class="modal-dialog">
-        <div class="modal-header">
-            <h5 class="text-center">Eliminar actividad</h5>
-        </div>
         <div class="modal-content">
-            <p>¿Estás seguro de eliminar esta actividad?</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#" id="dltActivity" class="btn btn-danger text-white" activity-id="">Si, Eliminar</a>
-            <a href="#" class="btn btn-secondary text-white" data-coreui-dismiss="modal">No, Cancelar</a>
+            <div class="modal-header">
+                <h5 class="text-center">Eliminar actividad</h5>
+            </div>
+            <div class="modal-body">
+                <div class="modal-area modal-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                <div class="modal-area modal-text">
+                    <p>¿Estás seguro de eliminar esta actividad?</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @csrf
+                <a href="#" id="dltActivity" class="btn btn-danger text-white btn-actions" activity-id="">Si, Eliminar</a>
+                <a href="#" class="btn btn-secondary text-white btn-actions" data-coreui-dismiss="modal">No, Cancelar</a>
+            </div>
         </div>
     </div>
 </div>
@@ -158,7 +168,7 @@
                                         <td class="d-end align-middle">{{date('d/m/Y', strtotime($activity->fecha_fin))}}</td>
                                         <td class="d-status align-middle">{{$activity->estado}}</td>
                                         <td class="d-action align-middle">
-                                            <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}">
+                                            <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}" data-type="{{$activity->tipo}}" travelid="{{$schedule->id}}">
                                                 <svg class="icon">
                                                     <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
                                                 </svg>

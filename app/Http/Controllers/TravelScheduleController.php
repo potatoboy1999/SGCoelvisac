@@ -307,20 +307,21 @@ class TravelScheduleController extends Controller
         $bcrums = ["Agendas"];
         $user = Auth::user();
         $schedule = TravelSchedule::where('id', $request->id)
-                                  ->where('usuario_id', $user->id)
-                                  ->first();
-        $report = null;
-        if($schedule){
-            $report = ReportActivity::where('agenda_viaje_id', $schedule->id);
-        }else{
+                                  ->where('usuario_id', $user->id);
+        $schedule->with(['reportActivities'=>function($q){
+            $q->where('estado','>','0');
+        }]);
+        $schedule = $schedule->first();
+
+        if(!$schedule){
             // schedule not found or doesn't belong to current user
             return back();
         }
+        
         return view('intranet.reports.details',[
             'page' => $page,
             'bcrums' => $bcrums,
             "schedule" => $schedule,
-            "report" => $report,
         ]);
     }
 
@@ -371,6 +372,7 @@ class TravelScheduleController extends Controller
             return [
                 'status' => 'ok', 
                 'action' => $action,
+                'schedule_id' => $schedule->id,
                 'report' => [
                     'id' => $report->id,
                     'descripcion' => $report->descripcion,

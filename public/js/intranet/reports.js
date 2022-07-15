@@ -74,7 +74,7 @@ $("#modalActivity").on('submit', '#form_activity', function(ev){
                                     "<td class='d-end align-middle'>"+res.report.fecha_fin+"</td>"+
                                     "<td class='d-status align-middle'>"+res.report.estado+"</td>"+
                                     "<td class='d-action align-middle'>"+
-                                        '<a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="'+res.report.id+'">'+
+                                        '<a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="'+res.report.id+'" data-type="'+res.report.type+'" travelid="'+res.schedule_id+'">'+
                                             '<svg class="icon">'+
                                                 '<use xlink:href="'+asset_url+'#cil-pencil"></use>'+
                                             '</svg>'+
@@ -95,7 +95,7 @@ $("#modalActivity").on('submit', '#form_activity', function(ev){
                             "<td class='d-end align-middle'>"+res.report.fecha_fin+"</td>"+
                             "<td class='d-status align-middle'>"+res.report.estado+"</td>"+
                             "<td class='d-action align-middle'>"+
-                                '<a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="'+res.report.id+'">'+
+                                '<a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="'+res.report.id+'" data-type="'+res.report.type+'" travelid="'+res.schedule_id+'">'+
                                     '<svg class="icon">'+
                                         '<use xlink:href="'+asset_url+'#cil-pencil"></use>'+
                                     '</svg>'+
@@ -163,5 +163,33 @@ $(".activity-table").on('click', '.btn-edit', function(ev){
 
 $(".activity-table").on('click', '.btn-delete', function(ev){
     ev.preventDefault();
+    var act_id = $(this).data('id');
+    $("#dltActivity").attr('activity-id', act_id);
     $("#deleteActivity").modal("show");
+});
+
+$(document).on('click','#dltActivity', function(ev){
+    ev.preventDefault();
+    var act_id = $(this).attr('activity-id');
+    var data = {
+        id: act_id,
+        _token: $('input[name="_token"]').val(),
+    };
+    
+    $.ajax({
+        url: delete_route,
+        method: 'POST',
+        data: data,
+        beforeSend: function(){
+            $(".modal-area").hide();
+            $(".modal-loading").show();
+            $(".btn-actions").hide();
+        },
+        success: function(res){
+            if(res.status == "ok"){
+                $(".rep-act[act-id="+act_id+"]").remove();
+                $("#deleteActivity").modal("hide");
+            }
+        }
+    });
 });
