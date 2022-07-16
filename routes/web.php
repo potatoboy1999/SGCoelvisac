@@ -109,5 +109,6 @@ Route::get("/menu", [ActivityController::class,'showMenu'])->name('front.menu');
 Route::get("/matriz", [ActivityController::class,'showMatrix'])->name('front.activity.matrix.show');
 Route::get("/activity/popup_adjacent_docs", [ActivityController::class,"popupFrontAdjacentDocs"])->name("front.activity.popup.adjacents");
 Route::get("/document/download", [DocumentController::class,"download"])->name('doc.download');
+// Route::get("/test_mail", [DashboardController::class,"testMail"])->name('');
 
 require __DIR__.'/auth.php';

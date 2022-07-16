@@ -63,11 +63,13 @@
                                 </td>
                                 {{-- <td class="d-report align-middle {{sizeof($schedule->reportActivities)>0?'text-success':'text-danger'}}">{{sizeof($schedule->reportActivities)>0?'CREADO':'SIN CREAR'}}</td> --}}
                                 <td class="d-action align-middle text-center">
+                                    @if ($progress >= 100)
                                     <a href="{{route('agenda.reports.show')}}?id={{$schedule->id}}" class="btn btn-success btn-sm text-white btn-view">
                                         <svg class="icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar-check"></use>
                                         </svg>
                                     </a>
+                                    @endif
                                     <form class="d-inline-block" action="{{route('agenda.reports.deactivate')}}" method="POST">
                                         @csrf
                                         <input type="hidden" name="id" value="{{$schedule->id}}">

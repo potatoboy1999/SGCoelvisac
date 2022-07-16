@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TravelAlert;
+use App\Mail\TravelValidationAlert;
+use App\Models\Area;
 use App\Models\Branch;
 use App\Models\ReportActivity;
 use App\Models\TravelActivity;
 use App\Models\TravelSchedule;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class TravelScheduleController extends Controller
 {
@@ -131,13 +136,36 @@ class TravelScheduleController extends Controller
             }
         }
 
+        $user = Auth::user();
+        $area = $user->position->area_id;
+
+        // find manager
+        $manager = User::join('t_sgcv_posiciones','t_sgcv_usuarios.posicion_id','t_sgcv_posiciones.id')
+                ->where('t_sgcv_posiciones.es_gerente', 1)
+                ->where('t_sgcv_posiciones.area_id',$area)
+                ->first();
         try{
-            // send mail link to "gerente del area"
+            if($manager){
+                // send mail link to "gerente del area"
+                Mail::to($manager->email)//'alejandrodazaculqui@hotmail.com'
+                    ->send(new TravelAlert($user->nombre, route('agenda.pending')));
+            }
+            return [
+                'status' => 'ok',
+                'mail' => 'sent'
+            ];
         }catch(Exception $e){
+            return [
+                'status' => 'ok',
+                'mail' => 'not sent',
+                'manager' => $manager
+            ];
         }
 
         return [
-            'status' => 'ok'
+            'status' => 'ok',
+            'mail' => 'not sent',
+            'manager' => $manager
         ];
 
     }
@@ -215,10 +243,33 @@ class TravelScheduleController extends Controller
                 $schedule->estado = 5; // aprovado a area de gestion
             }
             $schedule->save();
-    
-            try{
-                // send mail link to "area de gestion"
-            }catch(Exception $e){
+
+            if($request->confirmation == 1){
+                // find users from "area de gestion"
+                $gestion = User::join('t_sgcv_posiciones','t_sgcv_usuarios.posicion_id','t_sgcv_posiciones.id')
+                        ->where('t_sgcv_posiciones.area_id', 11) // Area de gestion
+                        ->get();
+
+                $emails = [];
+                //$emails[] = 'alejandrodazaculqui@hotmail.com';
+
+                foreach ($gestion as $k => $g) {
+                    $emails[] = $g->email;
+                }
+
+                if(sizeof($emails) > 0){
+                    $user = $schedule->user;
+                    $area = Area::find($user->position->area_id);
+                    if($area){
+                        // send mail link to "area de gestion" users
+                        try{
+                            Mail::to($emails)
+                                ->send(new TravelValidationAlert($area->nombre, route('agenda.pending')));//'https://workat.fulltimeforce.com'));
+                        }catch(Exception $e){
+        
+                        }
+                    }
+                }
             }
         }else{
             return [
@@ -265,9 +316,10 @@ class TravelScheduleController extends Controller
         $position = $user->position;
         $area = $position->area;
 
-        $schedules = TravelSchedule::where('estado', 5)
-                                ->where('validacion_uno', 2)
-                                ->where('validacion_dos', 2);
+        // $schedules = TravelSchedule::where('estado', 5)
+        //                         ->where('validacion_uno', 2)
+        //                         ->where('validacion_dos', 2);
+        $schedules = TravelSchedule::whereNotIn('estado', [0,3,6]);
         if($area->id != 1){
             $schedules->where('usuario_id', $user->id);
         }
