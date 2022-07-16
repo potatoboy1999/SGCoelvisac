@@ -118,6 +118,6 @@ Route::get('/schedules/popup', [TravelScheduleController::class, "showSchedulePo
 
 // EXTRAS
 Route::get("/document/download", [DocumentController::class,"download"])->name('doc.download');
-// Route::get("/test_mail", [DashboardController::class,"testMail"])->name('');
+Route::get("/test_mail", [DashboardController::class,"testMail"])->name('');
 
 require __DIR__.'/auth.php';
