@@ -1,10 +1,9 @@
-@extends('layouts.admin')
+@extends('layouts.front')
 
-@section('title', 'Viajes')
+@section('title', 'Calendario de Viaje')
     
 @section('style')
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="{{asset('css/intranet/travel.css')}}">
+    <link rel="stylesheet" href="{{asset('css/front/travels.css')}}">
     <style>
         .branch1{
             background: rgb(0, 139, 0);
@@ -19,16 +18,24 @@
 @endsection
 
 @section('content')
-<div class="modal fade" id="newScheduleModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
+<!-- Travel Schedule Modal -->
+<div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-        </div>
+      <div class="modal-content">
+      </div>
     </div>
 </div>
-<div class="body flex-grow-1 px-3">
-    <div class="container-lg">
-        <div class="card mb-4">
-            <div class="card-body">
+<!-- END Travel Schedule Modal -->
+
+<div class="row">
+    <div class="marco col-md-12 col-xs-12">
+        <div class="box">
+            <h2 class="titulo"><i class="fas fa-cog"></i>Calendario de Viajes</h2>
+        </div>
+    </div>
+    <div class="marco">
+        <div class="box">
+            <div class="cuerpo">
                 <div class="d-flex flex-row flex-wrap">
                     <form id="form-area-sel" action="{{route('agenda.index')}}" method="get" class="w-100">
                         <div class="form-group w-100 d-inline-block my-1">
@@ -70,9 +77,10 @@
                 </div>
             </div>
         </div>
-        <div id="calendar-card" class="card mb-4">
-            <div class="card-header"><span>Viajes</span></div>
-            <div class="card-body">
+    </div>
+    <div class="marco" id="calendar-wrapper">
+        <div class="box">
+            <div class="cuerpo">
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
@@ -80,36 +88,19 @@
         </div>
     </div>
 </div>
+  <!-- End Travel Schedule Modal -->
 @endsection
 
 @section('script')
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
-<script src="{{asset("js/intranet/travels.js")}}"></script>
+
+<script src="{{asset("js/front/travels/script.js")}}"></script>
 <script>
-    var calendar_route = "{{route('agenda.calendar')}}";
-    var pop_schedule_route = "{{route('agenda.popup.schedule')}}";
+    var calendar_route = "{{route('front.schedules.calendar')}}";
+    var pop_schedule_route = "{{route('front.schedules.popup')}}";
     $(function(){
         getCalendar();
     });
 
-    function newActivity(name, type){
-        var html = '<div class="mb-2 act-ta">'+
-                        '<div style="display: flex;">'+
-                            '<div style="flex: 0 40px;">'+
-                                '<a class="btn btn-danger btn-sm btn-del-act" type="'+type+'">'+
-                                    '<svg class="icon">'+
-                                        '<use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-minus"></use>'+
-                                    '</svg>'+
-                                '</a>'+
-                            '</div>'+
-                                '<div style="flex: 1;">'+
-                                '<textarea name="'+name+'[]" rows="2" class="form-control" required></textarea>'+
-                            '</div>'+
-                        '</div>'+
-                    '</div>';
-        return html;
-    }
-
 </script>
+
 @endsection

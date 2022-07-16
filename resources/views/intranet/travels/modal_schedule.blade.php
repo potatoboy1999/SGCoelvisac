@@ -204,7 +204,7 @@
 </div>
 <div class="modal-footer">
     <div class="form-btns">
-        <button class="btn btn-secondary text-white" type="button" data-coreui-dismiss="modal" aria-label="Close">Cerrar</button>
+        <button class="btn btn-secondary text-white" type="button" data-{{($source == 'front')?"bs":"coreui"}}-dismiss="modal" aria-label="Close">Cerrar</button>
         @if ($action == 1)
             <input class="btn btn-info text-white" type="submit" form="form_schedule" value="Crear">
         @elseif ($action >= 3)

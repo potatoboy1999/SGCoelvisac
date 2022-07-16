@@ -95,7 +95,8 @@ class TravelScheduleController extends Controller
             'action'    => $action,
             'branches'  => $branches,
             'schedule'  => $schedule,
-            's_date'    => $start_date
+            's_date'    => $start_date,
+            'source'    => isset($request->source)?$request->source:'back',
         ]);
     }
 
@@ -454,5 +455,22 @@ class TravelScheduleController extends Controller
             'status' => 'error',
             'msg' => 'No se encontro la actividad'
         ];
+    }
+
+    // FRONT
+    public function frontIndex(Request $request)
+    {   
+        $page = [];
+        $m_areas = Area::where('vis_matriz', 1)
+                    ->where('estado',1)
+                    ->get();
+        $year = intval(isset($request->year)?$request->year:date('Y'));
+        $month = intval(isset($request->month)?$request->month:date('m'));
+        return view('front.travels.index',[
+            "page" => $page,
+            "m_areas" => $m_areas,
+            "year" => $year,
+            "month" => $month,
+        ]);
     }
 }

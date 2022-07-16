@@ -106,8 +106,17 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
 
 Route::get("/", function(){return view("front.index"); });
 Route::get("/menu", [ActivityController::class,'showMenu'])->name('front.menu');
+
+// MATRIZ
 Route::get("/matriz", [ActivityController::class,'showMatrix'])->name('front.activity.matrix.show');
 Route::get("/activity/popup_adjacent_docs", [ActivityController::class,"popupFrontAdjacentDocs"])->name("front.activity.popup.adjacents");
+
+// TRAVEL SCHEDULES
+Route::get("/schedules", [TravelScheduleController::class,'frontIndex'])->name('front.schedules');
+Route::get("/schedules/calendar", [TravelScheduleController::class,'viewCalendar'])->name('front.schedules.calendar');
+Route::get('/schedules/popup', [TravelScheduleController::class, "showSchedulePopup"])->name("front.schedules.popup");
+
+// EXTRAS
 Route::get("/document/download", [DocumentController::class,"download"])->name('doc.download');
 // Route::get("/test_mail", [DashboardController::class,"testMail"])->name('');
 

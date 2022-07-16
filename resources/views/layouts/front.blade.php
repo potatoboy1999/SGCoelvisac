@@ -61,7 +61,9 @@
                 </button>
               </div>
               <div id="menu2Body" class="accordion-collapse collapse" aria-labelledby="menu2Head" data-bs-parent="#menuInterna">
-                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+                <div class="accordion-body">
+                  <a href="{{route('front.schedules')}}">Calendario</a>
+                </div>
               </div>
             </div>
             <div class="accordion-item">
