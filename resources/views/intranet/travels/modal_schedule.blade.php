@@ -118,7 +118,11 @@
                                 @endforeach
                             </div>
                         @else
-                            <div id="area_act" class="act_areas" count="0"></div>
+                            <div id="area_act" class="act_areas" count="0">
+                                <div class="mb-2 act-ta">
+                                    <textarea name="area_act[]" rows="2" class="form-control" required></textarea>
+                                </div>
+                            </div>
                             <div class="text-end text-white">
                                 <a href="#" class="btn btn-secondary btn-sm add-act" type="area">
                                     <svg class="icon">

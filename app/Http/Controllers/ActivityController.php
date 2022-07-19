@@ -203,7 +203,7 @@ class ActivityController extends Controller
     // ------------- FRONT FUNCTIONS --------------//
 
     public function showMenu(Request $request){
-        $page = [];
+        $page = 'matrix';
         $m_areas = Area::where('vis_matriz', 1)
                     ->where('estado',1)
                     ->get();
@@ -215,7 +215,7 @@ class ActivityController extends Controller
     }
 
     public function showMatrix(Request $request){
-        $page = [];
+        $page = 'matrix';
         $m_areas = Area::where('vis_matriz', 1)
                     ->where('estado',1)
                     ->get();

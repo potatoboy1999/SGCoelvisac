@@ -18,11 +18,13 @@ class TravelAlert extends Mailable
      */
     public $name;
     public $link;
+    public $schedule;
 
-    public function __construct($name, $link)
+    public function __construct($name, $link, $schedule)
     {
         $this->name = $name;
         $this->link = $link;
+        $this->schedule = $schedule;
     }
 
     /**
@@ -35,8 +37,9 @@ class TravelAlert extends Mailable
         return $this->subject('COELVISAC - Nueva agenda de viaje')
                     ->markdown('emails.travel_alert')
                     ->with([
-                        'name'=>$this->name,
-                        'link'=>$this->link,
+                        'name'      =>$this->name,
+                        'link'      =>$this->link,
+                        'schedule'  =>$this->schedule,
                     ]);
     }
 }

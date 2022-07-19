@@ -72,14 +72,14 @@ $("#modalActivity").on('submit', '#form_activity', function(ev){
                                     "<td class='d-deal align-middle'>"+res.report.acuerdo+"</td>"+
                                     "<td class='d-start align-middle'>"+res.report.fecha_comienzo+"</td>"+
                                     "<td class='d-end align-middle'>"+res.report.fecha_fin+"</td>"+
-                                    "<td class='d-status align-middle'>"+res.report.estado+"</td>"+
-                                    "<td class='d-action align-middle'>"+
+                                    "<td class='d-status align-middle "+res.report.color+"'></td>"+
+                                    "<td class='d-action align-middle text-center'>"+
                                         '<a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="'+res.report.id+'" data-type="'+res.report.type+'" travelid="'+res.schedule_id+'">'+
                                             '<svg class="icon">'+
                                                 '<use xlink:href="'+asset_url+'#cil-pencil"></use>'+
                                             '</svg>'+
                                         '</a>'+
-                                        '<a href="#" class="btn btn-info btn-sm text-white btn-delete" data-id="'+res.report.id+'">'+
+                                        '<a href="#" class="btn btn-danger btn-sm text-white btn-delete" data-id="'+res.report.id+'" style="margin-left: 5px;">'+
                                             '<svg class="icon">'+
                                                 '<use xlink:href="'+asset_url+'#cil-trash"></use>'+
                                             '</svg>'+
@@ -93,14 +93,14 @@ $("#modalActivity").on('submit', '#form_activity', function(ev){
                             "<td class='d-deal align-middle'>"+res.report.acuerdo+"</td>"+
                             "<td class='d-start align-middle'>"+res.report.fecha_comienzo+"</td>"+
                             "<td class='d-end align-middle'>"+res.report.fecha_fin+"</td>"+
-                            "<td class='d-status align-middle'>"+res.report.estado+"</td>"+
-                            "<td class='d-action align-middle'>"+
+                            "<td class='d-status align-middle "+res.report.color+"'></td>"+
+                            "<td class='d-action align-middle text-center'>"+
                                 '<a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="'+res.report.id+'" data-type="'+res.report.type+'" travelid="'+res.schedule_id+'">'+
                                     '<svg class="icon">'+
                                         '<use xlink:href="'+asset_url+'#cil-pencil"></use>'+
                                     '</svg>'+
                                 '</a>'+
-                                '<a href="#" class="btn btn-danger btn-sm text-white btn-delete" data-id="'+res.report.id+'">'+
+                                '<a href="#" class="btn btn-danger btn-sm text-white btn-delete" data-id="'+res.report.id+'" style="margin-left: 5px;">'+
                                     '<svg class="icon">'+
                                         '<use xlink:href="'+asset_url+'#cil-trash"></use>'+
                                     '</svg>'+

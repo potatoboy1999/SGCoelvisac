@@ -14,14 +14,14 @@
     <div class="container-lg">
         <div class="card">
             <div class="card-header">
-                Reportes
+                Reporte de Agendas
             </div>
             <div class="card-body">
                 <div class="overflow-auto">
                     <table class="table table-bordered m-0">
                         <thead>
                             <tr>
-                                <th class="bg-dark text-white h-created" width="100">Creado</th>
+                                <th class="bg-dark text-white h-created" width="100">Fecha de creación</th>
                                 @if (Auth::user()->position->area->id == 1)
                                 <th class="bg-dark text-white h-user" width="50">Usuario</th>
                                 @endif
@@ -49,6 +49,9 @@
                                     @else
                                         @php
                                             $progress = 0;
+                                            if($schedule->estado == 1){
+                                                $progress += 25;
+                                            }
                                             if($schedule->validacion_uno == 2){
                                                 $progress += 50;
                                             }
@@ -57,7 +60,7 @@
                                             }
                                         @endphp
                                         <div class="progress">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: {{$progress}}%" aria-valuenow="{{$progress}}" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div class="progress-bar {{$progress>=100?'bg-success':'bg-warning'}}" role="progressbar" style="width: {{$progress}}%" aria-valuenow="{{$progress}}" aria-valuemin="0" aria-valuemax="100">%{{$progress}}</div>
                                         </div>
                                     @endif
                                 </td>

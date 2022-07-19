@@ -245,7 +245,7 @@
                     </div>
                     <div class="col-2">
                         <div class="box">
-                            <a href="javascript:;">
+                            <a href="{{route('front.schedules')}}">
                                 <i class="fas fa-suitcase"></i>
                                 Rol de viajes
                             </a>

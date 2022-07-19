@@ -21,7 +21,7 @@
         <div class="fondo container-fluid">
             <div class="logo-int">
               <span onclick="openNav('menu','contenido')">&#9776;</span>
-              <a href="{{route('front.menu')}}"><img src="{{asset("img/logo.png")}}" height="60" alt=""></a>
+              <a href="{{url('')}}"><img src="{{asset("img/logo.png")}}" height="60" alt=""></a>
             </div>
             {{-- <form class="d-flex" role="search">
               <input class="form-control" type="search" placeholder="Buscar" aria-label="Search">
@@ -45,7 +45,7 @@
                   <span>Matríz de Agenda de Gestión Estratégica</span>
                 </button>
               </div>
-              <div id="menu1Body" class="accordion-collapse collapse show" aria-labelledby="menu1Head" data-bs-parent="#menuInterna">
+              <div id="menu1Body" class="accordion-collapse collapse {{$page == 'matrix'? 'show':''}}" aria-labelledby="menu1Head" data-bs-parent="#menuInterna">
                 <div class="accordion-body">
                   @foreach ($m_areas as $area)
                       <a href="{{route('front.activity.matrix.show').'?area='.$area->id}}">{{$area->nombre}}</a>
@@ -60,7 +60,7 @@
                   <span>Rol de Viajes</span>
                 </button>
               </div>
-              <div id="menu2Body" class="accordion-collapse collapse" aria-labelledby="menu2Head" data-bs-parent="#menuInterna">
+              <div id="menu2Body" class="accordion-collapse collapse {{$page == 'schedules'? 'show':''}}" aria-labelledby="menu2Head" data-bs-parent="#menuInterna">
                 <div class="accordion-body">
                   <a href="{{route('front.schedules')}}">Calendario</a>
                 </div>
@@ -73,7 +73,7 @@
                   <span>Resultados</span>
                 </button>
               </div>
-              <div id="menu3Body" class="accordion-collapse collapse" aria-labelledby="menu3Head" data-bs-parent="#menuInterna">
+              <div id="menu3Body" class="accordion-collapse collapse {{$page == 'results'? 'show':''}}" aria-labelledby="menu3Head" data-bs-parent="#menuInterna">
                 <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
               </div>
             </div>
@@ -84,7 +84,7 @@
                   <span>Reunión de Resultado mensual</span>                  
                 </button>
               </div>
-              <div id="menu4Body" class="accordion-collapse collapse" aria-labelledby="menu4Head" data-bs-parent="#menuInterna">
+              <div id="menu4Body" class="accordion-collapse collapse {{$page == 'result_reunion'? 'show':''}}" aria-labelledby="menu4Head" data-bs-parent="#menuInterna">
                 <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
               </div>
             </div>
@@ -95,7 +95,7 @@
                   <span>Documentos de gestión</span>                  
                 </button>
               </div>
-              <div id="menu5Body" class="accordion-collapse collapse" aria-labelledby="menu5Head" data-bs-parent="#menuInterna">
+              <div id="menu5Body" class="accordion-collapse collapse {{$page == 'documents'? 'show':''}}" aria-labelledby="menu5Head" data-bs-parent="#menuInterna">
                 <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
               </div>
             </div>

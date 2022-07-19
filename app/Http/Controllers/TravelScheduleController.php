@@ -149,7 +149,7 @@ class TravelScheduleController extends Controller
             if($manager){
                 // send mail link to "gerente del area"
                 Mail::to($manager->email)//'alejandrodazaculqui@hotmail.com'
-                    ->send(new TravelAlert($user->nombre, route('agenda.pending')));
+                    ->send(new TravelAlert($user->nombre, route('agenda.pending'), $schedule));
             }
             return [
                 'status' => 'ok',
@@ -265,7 +265,7 @@ class TravelScheduleController extends Controller
                         // send mail link to "area de gestion" users
                         try{
                             Mail::to($emails)
-                                ->send(new TravelValidationAlert($area->nombre, route('agenda.pending')));//'https://workat.fulltimeforce.com'));
+                                ->send(new TravelValidationAlert($area->nombre, route('agenda.pending'), $schedule));//'https://workat.fulltimeforce.com'));
                         }catch(Exception $e){
         
                         }
@@ -422,17 +422,48 @@ class TravelScheduleController extends Controller
             $report->agenda_viaje_id    = $schedule->id;
             $report->estado             = $request->estado;
             $report->save();
+
+            // get status color
+            $s = ['t_red','t_yellow','t_green'];
+            $status = 0; // not done = RED
+            if($report->estado == 2){
+                $status = 2; // done = GREEN
+            }else{
+                $today = time();
+                $d_start = strtotime($report->fecha_comienzo);
+                $d_end = strtotime($report->fecha_fin);
+                if($d_start <= $today && $today <= $d_end){
+                    // calculate 25% of time remaining
+                    $diff = ($d_end - $d_start)*0.25;
+                    $d_limit = $d_start + $diff;
+
+                    if($today < $d_limit){
+                        $status = 2; // if today is within 25% of start, status OK = GREEN
+                    }
+                    
+                    if($d_limit <= $today){
+                        $status = 1; // if today is past 25%, status warning = YELLOW
+                    }
+
+                }else if($d_end < $today){
+                    $status = 0; // time expired, not done = RED
+                }
+            }
+            $color = $s[$status];
+
             return [
                 'status' => 'ok', 
                 'action' => $action,
                 'schedule_id' => $schedule->id,
                 'report' => [
-                    'id' => $report->id,
-                    'descripcion' => $report->descripcion,
-                    'acuerdo' => $report->acuerdo,
-                    'fecha_comienzo' => date('d/m/Y', strtotime($report->fecha_comienzo)),
-                    'fecha_fin' => date('d/m/Y', strtotime($report->fecha_fin)),
-                    'estado' => $report->estado,
+                    'id'                => $report->id,
+                    'descripcion'       => $report->descripcion,
+                    'acuerdo'           => $report->acuerdo,
+                    'fecha_comienzo'    => date('d/m/Y', strtotime($report->fecha_comienzo)),
+                    'fecha_fin'         => date('d/m/Y', strtotime($report->fecha_fin)),
+                    'type'              => $report->tipo,
+                    'estado'            => $report->estado,
+                    'color'             => $color
                 ]
             ];
         }
@@ -460,7 +491,7 @@ class TravelScheduleController extends Controller
     // FRONT
     public function frontIndex(Request $request)
     {   
-        $page = [];
+        $page = 'schedules';
         $m_areas = Area::where('vis_matriz', 1)
                     ->where('estado',1)
                     ->get();

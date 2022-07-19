@@ -103,7 +103,7 @@
                                     '</svg>'+
                                 '</a>'+
                             '</div>'+
-                                '<div style="flex: 1;">'+
+                            '<div style="flex: 1;">'+
                                 '<textarea name="'+name+'[]" rows="2" class="form-control" required></textarea>'+
                             '</div>'+
                         '</div>'+

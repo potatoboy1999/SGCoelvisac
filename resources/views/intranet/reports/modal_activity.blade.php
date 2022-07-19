@@ -11,7 +11,7 @@
         @php
             $form_action = route('agenda.reports.activity.save');
         @endphp
-        <form id="form_activity" action="{{$form_action}}" method="POST" onkeydown="return event.key != 'Enter';">
+        <form id="form_activity" action="{{$form_action}}" method="POST" autocomplete="off" onkeydown="return event.key != 'Enter';">
             @csrf
             @php
                 $user = Auth()->user();
@@ -32,16 +32,19 @@
                         <textarea class="form-control" name="acuerdo" id="act_deal" rows="3" required>{{$rep_activity?$rep_activity->acuerdo:''}}</textarea>
                     </div>
                 </div>
+                @php
+                    $date = date('d/m/Y');
+                @endphp
                 <div class="col-6">
                     <div class="mb-2">
                         <label for="">Fecha Desde</label>
-                        <input id="act_date_start" class="form-control read-clear" type="text" name="date_start" value="{{$rep_activity?date("d/m/Y", strtotime($rep_activity->fecha_comienzo)):''}}" required readonly>
+                        <input id="act_date_start" class="form-control read-clear" type="text" name="date_start" value="{{$rep_activity?date("d/m/Y", strtotime($rep_activity->fecha_comienzo)):$date}}" required readonly>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="mb-2">
                         <label for="">Fecha Hasta</label>
-                        <input id="act_date_end" class="form-control read-clear" type="text" name="date_end" value="{{$rep_activity?date("d/m/Y", strtotime($rep_activity->fecha_fin)):''}}" required readonly>
+                        <input id="act_date_end" class="form-control read-clear" type="text" name="date_end" value="{{$rep_activity?date("d/m/Y", strtotime($rep_activity->fecha_fin)):$date}}" required readonly>
                     </div>
                 </div>
                 <div class="col-12">

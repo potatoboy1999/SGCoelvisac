@@ -1,3 +1,33 @@
+@php
+    function progressStatus($activity){
+        $status = 0; // not done = RED
+        if($activity->estado == 2){
+            $status = 2; // done = GREEN
+        }else{
+            $today = time();
+            $d_start = strtotime($activity->fecha_comienzo);
+            $d_end = strtotime($activity->fecha_fin);
+            if($d_start <= $today && $today <= $d_end){
+                // calculate 25% of time remaining
+                $diff = ($d_end - $d_start)*0.25;
+                $d_limit = $d_start + $diff;
+
+                if($today < $d_limit){
+                    $status = 2; // if today is within 25% of start, status OK = GREEN
+                }
+                
+                if($d_limit <= $today){
+                    $status = 1; // if today is past 25%, status warning = YELLOW
+                }
+
+            }else if($d_end < $today){
+                $status = 0; // time expired, not done = RED
+            }
+        }
+        return $status;
+    }
+@endphp
+
 @extends('layouts.admin')
 
 @section('title', 'Reportes')
@@ -6,6 +36,17 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
     <link rel="stylesheet" href="{{asset("css/intranet/reports.css")}}" />
+    <style>
+        td.t_red {
+            background-color: #ec1d1d;
+        }
+        td.t_green {
+            background-color: #12c212;
+        }
+        td.t_yellow {
+            background-color: #f9e715;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -121,8 +162,11 @@
                                         <td class="d-deal align-middle">{{$activity->acuerdo}}</td>
                                         <td class="d-start align-middle">{{date('d/m/Y', strtotime($activity->fecha_comienzo))}}</td>
                                         <td class="d-end align-middle">{{date('d/m/Y', strtotime($activity->fecha_fin))}}</td>
-                                        <td class="d-status align-middle">{{$activity->estado}}</td>
-                                        <td class="d-action align-middle">
+                                        @php
+                                            $s = ['t_red','t_yellow','t_green'];
+                                        @endphp
+                                        <td class="d-status align-middle {{ $s[progressStatus($activity)] }}"></td>
+                                        <td class="d-action align-middle text-center">
                                             <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}" data-type="{{$activity->tipo}}" travelid="{{$schedule->id}}">
                                                 <svg class="icon">
                                                     <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
@@ -167,7 +211,7 @@
                                         <td class="d-start align-middle">{{date('d/m/Y', strtotime($activity->fecha_comienzo))}}</td>
                                         <td class="d-end align-middle">{{date('d/m/Y', strtotime($activity->fecha_fin))}}</td>
                                         <td class="d-status align-middle">{{$activity->estado}}</td>
-                                        <td class="d-action align-middle">
+                                        <td class="d-action align-middle text-center">
                                             <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}" data-type="{{$activity->tipo}}" travelid="{{$schedule->id}}">
                                                 <svg class="icon">
                                                     <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
