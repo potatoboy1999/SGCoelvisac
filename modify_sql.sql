@@ -68,9 +68,9 @@ INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Gestión Humana', 10, 1,
 INSERT INTO t_sgcv_posiciones VALUES (null, 'Secretario de Gestion', 11, 0, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
 INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Gestion', 11, 1, 1, '2022-07-06 12:00:00', '2022-07-06 12:00:00');
 
--- Everything on top of this on Live Server
-
 ALTER TABLE t_sgcv_reporte_actividades CHANGE modified_at updated_at DATETIME;
 
 ALTER TABLE t_sgcv_agenda_viajes ADD COLUMN val_uno_por BIGINT NULL AFTER validacion_dos;
 ALTER TABLE t_sgcv_agenda_viajes ADD COLUMN val_dos_por BIGINT NULL AFTER val_uno_por;
+
+-- Everything on top of this on Live Server
