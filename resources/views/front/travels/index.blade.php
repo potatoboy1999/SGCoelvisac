@@ -5,6 +5,10 @@
 @section('style')
     <link rel="stylesheet" href="{{asset('css/front/travels.css')}}">
     <style>
+        .text-block {
+            padding: 0.1rem;
+            border-radius: 5px;
+        }
         .branch1{
             background: rgb(0, 139, 0);
         }
@@ -84,6 +88,16 @@
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="marco col-12">
+        <div class="box">
+            <h3 class="titulo">Leyenda</h3>
+            <div class="cuerpo text-start">
+                <p><span class="d-inline-block text-block branch1" style="width: 20px;">&nbsp;</span> Sede Villacurí</p>
+                <p><span class="d-inline-block text-block branch2" style="width: 20px;">&nbsp;</span> Sede Andahuasi</p>
+                <p><span class="d-inline-block text-block branch3" style="width: 20px;">&nbsp;</span> Sede Olmos</p>
             </div>
         </div>
     </div>
