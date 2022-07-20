@@ -86,27 +86,24 @@
             <div class="card-header">
                 Agenda de Viaje #{{$schedule->id}}
             </div>
-            @php
-                $user = Auth::user();
-            @endphp
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <div class="mb-2">
                             <p class="m-0 border-bottom "><strong>Área</strong></p>
-                            <p class="">{{$user->position->area->nombre}}</p>
+                            <p class="">{{$schedule->user->position->area->nombre}}</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
                         <div class="mb-2">
                             <p class="m-0 border-bottom "><strong>Nombre</strong></p>
-                            <p class="">{{$user->nombre}}</p>
+                            <p class="">{{$schedule->user->nombre}}</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
                         <div class="mb-2">
                             <p class="m-0 border-bottom "><strong>Puesto / Cargo</strong></p>
-                            <p class="">{{$user->position->nombre}}</p>
+                            <p class="">{{$schedule->user->position->nombre}}</p>
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
@@ -130,7 +127,7 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header">
                 Informe del viaje
             </div>
@@ -138,7 +135,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="float-end">
-                            <a href="#" class="btn btn-info new_activity" data-target="rep_activities" data-type="1" travelid="{{$schedule->id}}">+ Nueva Actividad</a>
+                            <a href="#" class="btn btn-info text-white new_activity" data-target="rep_activities" data-type="1" travelid="{{$schedule->id}}">+ Nueva Actividad</a>
                         </div>
                         <p class="m-0 mt-2">Actividades Realizadas</p>
                     </div>
@@ -186,7 +183,7 @@
                     </div>
                     <div class="col-12">
                         <div class="float-end">
-                            <a href="#" class="btn btn-info new_activity" data-target="rep_activities_others" data-type="2" travelid="{{$schedule->id}}">+ Nueva Actividad</a>
+                            <a href="#" class="btn btn-info text-white new_activity" data-target="rep_activities_others" data-type="2" travelid="{{$schedule->id}}">+ Nueva Actividad</a>
                         </div>
                         <p class="m-0 mt-2">Otras Actividades</p>
                     </div>
@@ -228,6 +225,19 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <a href="{{route('agenda.reports.pdf')}}?id={{$schedule->id}}" class="btn btn-info text-white">
+                            <svg class="icon">
+                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
+                            </svg> Exportar a PDF
+                        </a>
                     </div>
                 </div>
             </div>

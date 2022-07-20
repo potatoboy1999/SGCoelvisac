@@ -81,6 +81,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/reports/activity/modal',[TravelScheduleController::class, "showReportActivity"])->name("agenda.reports.activity.popup");
         Route::post('/reports/activity/save',[TravelScheduleController::class, "saveActivity"])->name("agenda.reports.activity.save");
         Route::post('/reports/activity/delete',[TravelScheduleController::class, "deleteActivity"])->name("agenda.reports.activity.delete");
+        Route::get('/reports/pdf/download',[TravelScheduleController::class,"exportReportPdf"])->name('agenda.reports.pdf');
     });
 
     Route::group(["prefix"=>"usuario"], function(){
@@ -118,6 +119,7 @@ Route::get('/schedules/popup', [TravelScheduleController::class, "showSchedulePo
 
 // EXTRAS
 Route::get("/document/download", [DocumentController::class,"download"])->name('doc.download');
-Route::get("/test_mail", [DashboardController::class,"testMail"])->name('');
+Route::get("/test_mail", [DashboardController::class,"testMail"])->name('test.mail');
+Route::get("/test_pdf", [DashboardController::class,"testPdf"])->name('test.pdf');
 
 require __DIR__.'/auth.php';

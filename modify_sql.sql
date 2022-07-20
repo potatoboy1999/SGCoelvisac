@@ -71,3 +71,6 @@ INSERT INTO t_sgcv_posiciones VALUES (null, 'Gerente de Gestion', 11, 1, 1, '202
 -- Everything on top of this on Live Server
 
 ALTER TABLE t_sgcv_reporte_actividades CHANGE modified_at updated_at DATETIME;
+
+ALTER TABLE t_sgcv_agenda_viajes ADD COLUMN val_uno_por BIGINT NULL AFTER validacion_dos;
+ALTER TABLE t_sgcv_agenda_viajes ADD COLUMN val_dos_por BIGINT NULL AFTER val_uno_por;

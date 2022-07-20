@@ -6,6 +6,7 @@ use App\Mail\TravelAlert;
 use App\Mail\TravelValidationAlert;
 use App\Models\TravelSchedule;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -31,5 +32,21 @@ class DashboardController extends Controller
         Mail::to('alejandrodazaculqui@hotmail.com')->send(new TravelValidationAlert('Finanzas', route('agenda.pending'), $schedule));
 
         return ["status"=>"ok"];
+    }
+
+    public function testPdf(){
+        $schedule = TravelSchedule::whereNotNull('id')->first();
+        if($schedule){
+            $pdf = FacadePdf::loadView('pdf.activity_report', [
+                "schedule" => $schedule
+            ]);
+
+            return $pdf->download('report.pdf');
+            
+            // return view('pdf.activity_report', [
+            //     "schedule" => $schedule
+            // ]);
+        }
+        return ['status'=>'ok'];
     }
 }

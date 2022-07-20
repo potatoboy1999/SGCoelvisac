@@ -10,6 +10,7 @@ use App\Models\ReportActivity;
 use App\Models\TravelActivity;
 use App\Models\TravelSchedule;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -238,9 +239,11 @@ class TravelScheduleController extends Controller
         if($schedule){
             if($request->confirmation == 1){
                 $schedule->validacion_uno = 2; // confirmed
+                $schedule->val_uno_por = Auth::user()->id;
                 $schedule->estado = 2; // aprovado por el gerente de area
             }else{
                 $schedule->validacion_dos = 2; // confirmed
+                $schedule->val_dos_por = Auth::user()->id;
                 $schedule->estado = 5; // aprovado a area de gestion
             }
             $schedule->save();
@@ -290,9 +293,11 @@ class TravelScheduleController extends Controller
         if($schedule){
             if($request->confirmation == 1){
                 $schedule->validacion_uno = 1; // denied
+                $schedule->val_uno_por = Auth::user()->id;
                 $schedule->estado = 3; // rechazado por el gerente de area
             }else{
                 $schedule->validacion_dos = 1; // denied
+                $schedule->val_dos_por = Auth::user()->id;
                 $schedule->estado = 6; // rechazado por el gerente de area
             }
             $schedule->save();
@@ -359,8 +364,10 @@ class TravelScheduleController extends Controller
         $page = "objectives";
         $bcrums = ["Agendas"];
         $user = Auth::user();
-        $schedule = TravelSchedule::where('id', $request->id)
-                                  ->where('usuario_id', $user->id);
+        $schedule = TravelSchedule::where('id', $request->id);
+        if($user->position->area->id != 1){ // IF USER ISN'T ADMIN
+            $schedule->where('usuario_id', $user->id);
+        }
         $schedule->with(['reportActivities'=>function($q){
             $q->where('estado','>','0');
         }]);
@@ -503,5 +510,22 @@ class TravelScheduleController extends Controller
             "year" => $year,
             "month" => $month,
         ]);
+    }
+
+    public function exportReportPdf(Request $request)
+    {
+        $schedule = TravelSchedule::find($request->id);
+        if($schedule){
+            $pdf = Pdf::loadView('pdf.activity_report', [
+                "schedule" => $schedule
+            ]);
+
+            return $pdf->download('report.pdf');
+            
+            // return view('pdf.activity_report', [
+            //     "schedule" => $schedule
+            // ]);
+        }
+        return back()->with(['error'=>'No se encontró la agenda']);
     }
 }

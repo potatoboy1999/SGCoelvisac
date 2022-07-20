@@ -38,7 +38,7 @@
                             <tr>
                                 <td class="d-created align-middle">{{date("d-m-Y", strtotime($schedule->created_at))}}</td>
                                 @if (Auth::user()->position->area->id == 1)
-                                <td class="d-user align-middle" width="100">{{Auth::user()->nombre}}</td>
+                                <td class="d-user align-middle" width="100">{{$schedule->user->nombre}}</td>
                                 @endif
                                 <td class="d-branch align-middle">{{$schedule->branch->nombre}}</td>
                                 <td class="d-from align-middle">{{date("d-m-Y", strtotime($schedule->viaje_comienzo))}}</td>
@@ -82,6 +82,13 @@
                                             </svg>
                                         </button>
                                     </form>
+                                    @if ($progress >= 100)
+                                    <a href="{{route('agenda.reports.pdf')}}?id={{$schedule->id}}" class="btn btn-info btn-sm text-white">
+                                        <svg class="icon">
+                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
+                                        </svg>
+                                    </a>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

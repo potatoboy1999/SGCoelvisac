@@ -39,6 +39,8 @@ class TravelSchedule extends Model
         'estado',
         'validacion_uno',
         'validacion_dos',
+        'val_uno_por',
+        'val_dos_por',
     ];
 
     public function user(){
@@ -55,6 +57,14 @@ class TravelSchedule extends Model
 
     public function reportActivities(){
         return $this->hasMany(ReportActivity::class, "agenda_viaje_id", "id");
+    }
+
+    public function val_one_by(){
+        return $this->belongsTo(User::class,"val_uno_por","id");
+    }
+
+    public function val_two_by(){
+        return $this->belongsTo(User::class,"val_dos_por","id");
     }
 
 }

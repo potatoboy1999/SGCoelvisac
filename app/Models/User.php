@@ -55,6 +55,14 @@ class User extends Authenticatable
         return $this->hasMany(TravelSchedule::class,'usuario_id','id');
     }
 
+    public function schedules_validation_one(){
+        return $this->hasMany(TravelSchedule::class,'val_uno_por','id');
+    }
+
+    public function schedules_validation_two(){
+        return $this->hasMany(TravelSchedule::class,'val_dos_por','id');
+    }
+
     public function comments(){
         return $this->hasMany(Comment::class,'usuario_id','id');
     }
