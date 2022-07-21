@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" href="{{asset("css/intranet/reports.css")}}" />
 @endsection
 
@@ -19,19 +20,19 @@
             </div>
             <div class="card-body">
                 <div class="overflow-auto">
-                    <table class="table table-bordered m-0">
+                    <table id="schedules_tbl" class="table table-bordered m-0 cell-border ">
                         <thead>
                             <tr>
-                                <th class="bg-dark text-white h-created" width="100">Fecha de creación</th>
+                                <th class="bg-dark text-white align-middle h-created" width="120">Fecha de creación</th>
                                 @if (Auth::user()->position->area->id == 1)
-                                <th class="bg-dark text-white h-user" width="50">Usuario</th>
+                                <th class="bg-dark text-white align-middle h-user" width="50">Usuario</th>
                                 @endif
-                                <th class="bg-dark text-white h-branch" width="200">Sede</th>
-                                <th class="bg-dark text-white h-from" width="100">Desde</th>
-                                <th class="bg-dark text-white h-to" width="100">Hasta</th>
-                                <th class="bg-dark text-white h-status" width="100">Estado</th>
-                                {{-- <th class="bg-dark text-white h-report" width="100">Reporte</th> --}}
-                                <th class="bg-dark text-white h-action" width="{{Auth::user()->position->area->id == 1?'85':'70'}}"></th>
+                                <th class="bg-dark text-white align-middle h-branch" width="200">Sede</th>
+                                <th class="bg-dark text-white align-middle h-from" width="100">Desde</th>
+                                <th class="bg-dark text-white align-middle h-to" width="100">Hasta</th>
+                                <th class="bg-dark text-white align-middle h-status no-sort" width="100">Estado</th>
+                                {{-- <th class="bg-dark text-white align-middle h-report" width="100">Reporte</th> --}}
+                                <th class="bg-dark text-white align-middle h-action no-sort" width="{{Auth::user()->position->area->id == 1?'85':'70'}}"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,5 +110,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script>
+    var colDefaultSort = {{Auth::user()->position->area->id == 1?'2':'1'}};
+</script>
 <script src="{{asset("js/intranet/reports.js")}}"></script>
 @endsection

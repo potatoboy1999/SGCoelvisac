@@ -2,6 +2,19 @@ $(function() {
     $.datepicker.setDefaults($.datepicker.regional['es']);
 });
 
+$(document).ready(function(){
+    $('#schedules_tbl').DataTable({
+        paging: false,
+        bInfo: false,
+        searching: false,
+        order: [[colDefaultSort, 'asc']],
+        columnDefs: [{
+            orderable: false,
+            targets: "no-sort"
+        }]
+    });
+});
+
 $(".new_activity").on('click', function(ev){
     ev.preventDefault();
     var type = $(this).data('type');
