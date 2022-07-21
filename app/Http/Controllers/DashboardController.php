@@ -53,9 +53,9 @@ class DashboardController extends Controller
             ]);
 
             // --------- STORE PDF ---------------
-            $path = public_path('pdf/');
-            $fileName =  'report-'.time().'.pdf' ;
-            $pdf->save($path . '/' . $fileName);
+            // $path = public_path('pdf/');
+            // $fileName =  'report-'.time().'.pdf' ;
+            // $pdf->save($path . '/' . $fileName);
 
             // return $pdf->download($fileName);
 

@@ -168,7 +168,8 @@
 <body>
     <div class="container">
         {{-- PAGE 1: SCHEDULE DETAILS --}}
-        <img class="logo" src="img/logo.png" height="50" alt="">
+        {{-- <img class="logo" src="img/logo.png" height="50" alt=""> --}}
+        <h3 style="font-family: sans-serif; color:#008cff">COELVISAC</h3>
         <h2 style="text-align: center;">Agenda de viaje</h2>
         <div id="schedule_info">
             <table>
@@ -355,7 +356,8 @@
         </div>
         <div class="page-break"></div>
         {{-- PAGE 2: REPORT ACTIVITIES --}}
-        <img class="logo" src="img/logo.png" height="50" alt="">
+        {{-- <img class="logo" src="img/logo.png" height="50" alt=""> --}}
+        <h3 style="font-family: sans-serif; color:#008cff">COELVISAC</h3>
         <h2 style="text-align: center;">Informe del Viaje</h2>
         <div id="report_activities">
             <table>
