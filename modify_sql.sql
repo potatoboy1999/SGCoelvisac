@@ -74,3 +74,20 @@ ALTER TABLE t_sgcv_agenda_viajes ADD COLUMN val_uno_por BIGINT NULL AFTER valida
 ALTER TABLE t_sgcv_agenda_viajes ADD COLUMN val_dos_por BIGINT NULL AFTER val_uno_por;
 
 -- Everything on top of this on Live Server
+
+CREATE TABLE `t_sgcv_report_files` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `agenda_viaje_id` BIGINT NOT NULL,
+  `documento_id` BIGINT NOT NULL,
+  `estado` TINYINT NULL DEFAULT 1,
+  `created_at` DATETIME NULL,
+  `updated_at` DATETIME NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_t_sgcv_report_files_T_SGCV_Agenda_Viajes1_idx` (`agenda_viaje_id` ASC),
+  INDEX `fk_t_sgcv_report_files_T_SGCV_Documentos1_idx` (`documento_id` ASC),
+  CONSTRAINT `fk_t_sgcv_report_files_T_SGCV_Agenda_Viajes1`
+    FOREIGN KEY (`agenda_viaje_id`)
+    REFERENCES `t_sgcv_agenda_viajes` (`id`),
+  CONSTRAINT `fk_t_sgcv_report_files_T_SGCV_Documentos1`
+    FOREIGN KEY (`documento_id`)
+    REFERENCES `t_sgcv_documentos` (`id`));

@@ -6,7 +6,9 @@ use App\Mail\TravelAlert;
 use App\Mail\TravelValidationAlert;
 use App\Models\Area;
 use App\Models\Branch;
+use App\Models\Document;
 use App\Models\ReportActivity;
+use App\Models\ReportFile;
 use App\Models\TravelActivity;
 use App\Models\TravelSchedule;
 use App\Models\User;
@@ -520,11 +522,24 @@ class TravelScheduleController extends Controller
                 "schedule" => $schedule
             ]);
 
-            return $pdf->download('report.pdf');
-            
-            // return view('pdf.activity_report', [
-            //     "schedule" => $schedule
-            // ]);
+            $path = public_path('pdf/');
+            $name = 'report-'.time();
+            $fileName =  $name.'.pdf';
+            $pdf->save($path . '/' . $fileName);
+
+            $document = new Document();
+            $document->nombre = $fileName;
+            $document->file = $fileName;
+            $document->estado = 1;
+            $document->save();
+
+            $reportFile = new ReportFile();
+            $reportFile->agenda_viaje_id = $schedule->id;
+            $reportFile->documento_id = $document->id;
+            $reportFile->estado = 1;
+            $reportFile->save();
+
+            return $pdf->download('report'.time().'.pdf');
         }
         return back()->with(['error'=>'No se encontró la agenda']);
     }

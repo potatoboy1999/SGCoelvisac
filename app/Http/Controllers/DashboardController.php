@@ -8,8 +8,10 @@ use App\Models\TravelSchedule;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -37,11 +39,27 @@ class DashboardController extends Controller
     public function testPdf(){
         $schedule = TravelSchedule::whereNotNull('id')->first();
         if($schedule){
-            $pdf = FacadePdf::loadView('pdf.activity_report', [
+
+            // --------- DOWNLOAD PDF ---------------
+            // $pdf = FacadePdf::loadView('pdf.activity_report', [
+            //     "schedule" => $schedule
+            // ]);
+            // return $pdf->download('report-'.time().'.pdf');
+
+            // --------- STREAM PDF ---------------
+            $pdf = App::make('dompdf.wrapper');
+            $pdf->loadView('pdf.activity_report', [
                 "schedule" => $schedule
             ]);
 
-            return $pdf->download('report.pdf');
+            // --------- STORE PDF ---------------
+            $path = public_path('pdf/');
+            $fileName =  'report-'.time().'.pdf' ;
+            $pdf->save($path . '/' . $fileName);
+
+            // return $pdf->download($fileName);
+
+            return $pdf->stream();
             
             // return view('pdf.activity_report', [
             //     "schedule" => $schedule

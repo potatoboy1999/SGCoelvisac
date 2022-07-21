@@ -67,4 +67,8 @@ class TravelSchedule extends Model
         return $this->belongsTo(User::class,"val_dos_por","id");
     }
 
+    public function report_files(){
+        return $this->belongsToMany(ReportFile::class,"t_sgcv_report_files", "agenda_viaje_id", "documento_id")->wherePivot('estado', 1);;
+    }
+
 }

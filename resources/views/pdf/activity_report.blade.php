@@ -124,18 +124,20 @@
         }
 
         #val_signatures .table th {
-            border-radius: 5px 0 0 5px;
+            border-radius: 0 0 5px 5px;
         }
         #val_signatures .table th p{
-            border-radius: 5px 0 0 5px;
+            border-radius: 0 0 5px 5px;
+            padding: 2px 8px;
         }
-        #val_signatures .table td:last-child {
-            border-radius: 0 5px 5px 0;
-        }
-        #val_signatures .table td:last-child p{
-            border-radius: 0 5px 5px 0;
+        #val_signatures .table td {
+            border-radius: 5px 5px 0 0;
         }
         #val_signatures .table td p{
+            border-radius: 5px 5px 0 0;
+        }
+        #val_signatures .table td p,
+        #val_signatures .table th p{
             text-align: center;
         }
 
@@ -166,6 +168,7 @@
 <body>
     <div class="container">
         {{-- PAGE 1: SCHEDULE DETAILS --}}
+        <img class="logo" src="img/logo.png" height="50" alt="">
         <h2 style="text-align: center;">Agenda de viaje</h2>
         <div id="schedule_info">
             <table>
@@ -322,18 +325,37 @@
                 </table>
             </div>
         @endif
-
+        
         <div id="val_signatures" style="margin-top: 45px;">
-            <table class="table">
+            <p><strong>Validado Por:</strong></p>
+            <table>
                 <tr>
-                    <th align="left" width="15%"><p>Validado Por:</p></th>
-                    <td align="center"><p>{{$schedule->val_one_by->nombre}}</p></td>
-                    <td align="center"><p>{{$schedule->val_two_by->nombre}}</p></td>
+                    <td width="50%">
+                        <table class="table">
+                            <tr>
+                                <td align="center"><p>{{$schedule->val_one_by->nombre}}</p></td>
+                            </tr>
+                            <tr>
+                                <th align="center"><p>{{$schedule->val_one_by->position->nombre}}</p></th>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="50%">
+                        <table class="table">
+                            <tr>
+                                <td align="center"><p>{{$schedule->val_two_by->nombre}}</p></td>
+                            </tr>
+                            <tr>
+                                <th align="center"><p>{{$schedule->val_two_by->position->nombre}}</p></th>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
             </table>
         </div>
         <div class="page-break"></div>
         {{-- PAGE 2: REPORT ACTIVITIES --}}
+        <img class="logo" src="img/logo.png" height="50" alt="">
         <h2 style="text-align: center;">Informe del Viaje</h2>
         <div id="report_activities">
             <table>
