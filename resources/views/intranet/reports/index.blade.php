@@ -5,6 +5,7 @@
 @section('style')
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <link rel="stylesheet" href="{{asset("css/intranet/reports.css")}}" />
 @endsection
 
@@ -83,10 +84,11 @@
                                         </button>
                                     </form>
                                     @if ($progress >= 100)
-                                    <a href="{{route('agenda.reports.pdf')}}?id={{$schedule->id}}" class="btn btn-info btn-sm text-white">
-                                        <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
-                                        </svg>
+                                    <a href="{{route('agenda.reports.pdf')}}?id={{$schedule->id}}" class="btn btn-info btn-sm text-white" style="padding: 4px 10px;">
+                                        <i class="fa-regular fa-file-pdf"></i>
+                                        {{-- <svg class="icon">
+                                            <use xlink:href="{{asset("icons/sprites/brand.svg")}}#cib-adobe-acrobat-reader"></use>
+                                        </svg> --}}
                                     </a>
                                     @endif
                                 </td>
@@ -106,5 +108,6 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 <script src="{{asset("js/intranet/reports.js")}}"></script>
 @endsection

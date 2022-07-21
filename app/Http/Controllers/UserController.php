@@ -99,6 +99,9 @@ class UserController extends Controller
         $user->nombre = $request->nombre;
         $user->email = $request->email;
         $user->posicion_id = $request->position;
+        if($request->password != ""){
+            $user->password = bcrypt($request->password);
+        }
         $user->estado = 1;
         $user->save();
 

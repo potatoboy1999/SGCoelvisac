@@ -35,6 +35,7 @@
 @section('style')
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <link rel="stylesheet" href="{{asset("css/intranet/reports.css")}}" />
     <style>
         td.t_red {
@@ -234,9 +235,7 @@
                 <div class="row">
                     <div class="col-12">
                         <a href="{{route('agenda.reports.pdf')}}?id={{$schedule->id}}" class="btn btn-info text-white">
-                            <svg class="icon">
-                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
-                            </svg> Exportar a PDF
+                            <i class="fa-solid fa-file-pdf"></i> Exportar a PDF
                         </a>
                     </div>
                 </div>
@@ -251,6 +250,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 <script src="{{asset("js/intranet/reports.js")}}"></script>
 <script>
     var activity_modal = "{{route('agenda.reports.activity.popup')}}";

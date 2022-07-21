@@ -15,14 +15,16 @@
                     <input class="form-control" type="text" name="nombre" value="{{$user?$user->nombre:''}}" required>
                 </div>
             </div>
-            @if (!$user)
             <div class="col-12">
                 <div class="mb-2">
-                    <label for="">Contraseña</label>
-                    <input class="form-control" type="password" name="password" value="" required>
+                    <label for="">Contraseña 
+                        @if ($user)
+                        <i>(Dejar en blanco si no va a ser cambiada)</i>
+                        @endif
+                    </label>
+                    <input class="form-control" type="password" name="password" value="" {{!$user?'required':''}}>
                 </div>
             </div>
-            @endif
             <div class="col-12">
                 <div class="mb-2">
                     <label for="">Email</label>
