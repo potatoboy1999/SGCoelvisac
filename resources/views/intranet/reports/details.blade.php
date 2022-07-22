@@ -57,16 +57,41 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="deleteActivity" data-coreui-backdrop="static" data-coreui-keyboard="false">
+<div class="modal fade" id="confirmFinalVersion" data-coreui-backdrop="static" data-coreui-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="text-center">Eliminar actividad</h5>
+                <h5 class="m-0 text-center">Guardar como version final</h5>
             </div>
             <div class="modal-body">
                 <div class="modal-area modal-loading" style="display: none">
                     <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+                <div class="modal-area modal-text">
+                    <p>¿Estás seguro de guardar esta actividad?</p>
+                    <p>No podrá realizar más modificaciones a la lista de actividades realizadas</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @csrf
+                <a href="#" id="confirmFinalBtn" class="btn btn-danger text-white btn-actions" data-id="{{$schedule->id}}">Si, Guardar</a>
+                <a href="#" class="btn btn-secondary text-white btn-actions" data-coreui-dismiss="modal">No, Cancelar</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteActivity" data-coreui-backdrop="static" data-coreui-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="m-0 text-center">Eliminar actividad</h5>
+            </div>
+            <div class="modal-body">
+                <div class="modal-area modal-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Cargando...</span>
                     </div>
                 </div>
                 <div class="modal-area modal-text">
@@ -134,12 +159,16 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    @if ($schedule->finalizado == 0)
                     <div class="col-12">
                         <div class="float-end">
                             <a href="#" class="btn btn-info text-white new_activity" data-target="rep_activities" data-type="1" travelid="{{$schedule->id}}">+ Nueva Actividad</a>
                         </div>
                         <p class="m-0 mt-2">Actividades Realizadas</p>
                     </div>
+                    @endif
+
+                    @if (($schedule->finalizado == 1 && sizeof($schedule->reportActivities->where('tipo', 1)) > 0) || $schedule->finalizado == 0 )
                     <div class="col-12">
                         <div class="overflow-auto mt-2 mb-4">
                             <table id="rep_activities" class="table table-bordered activity-table m-0" data-type="1">
@@ -150,7 +179,9 @@
                                         <th class="bg-dark text-white h-start" width="100">Desde</th>
                                         <th class="bg-dark text-white h-end" width="100">Hasta</th>
                                         <th class="bg-dark text-white h-status" width="50">Estado</th>
+                                        @if ($schedule->finalizado == 0)
                                         <th class="bg-dark text-white h-action" width="75"></th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -164,6 +195,7 @@
                                             $s = ['t_red','t_yellow','t_green'];
                                         @endphp
                                         <td class="d-status align-middle {{ $s[progressStatus($activity)] }}"></td>
+                                        @if ($schedule->finalizado == 0)
                                         <td class="d-action align-middle text-center">
                                             <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}" data-type="{{$activity->tipo}}" travelid="{{$schedule->id}}">
                                                 <svg class="icon">
@@ -176,18 +208,25 @@
                                                 </svg>
                                             </a>
                                         </td>
+                                        @endif
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    @endif
+
+                    @if ($schedule->finalizado == 0)
                     <div class="col-12">
                         <div class="float-end">
                             <a href="#" class="btn btn-info text-white new_activity" data-target="rep_activities_others" data-type="2" travelid="{{$schedule->id}}">+ Nueva Actividad</a>
                         </div>
                         <p class="m-0 mt-2">Otras Actividades</p>
                     </div>
+                    @endif
+
+                    @if (($schedule->finalizado == 1 && sizeof($schedule->reportActivities->where('tipo', 2)) > 0) || $schedule->finalizado == 0 )
                     <div class="col-12">
                         <div class="overflow-auto mt-2">
                             <table id="rep_activities_others" class="table table-bordered activity-table m-0" data-type="2">
@@ -198,7 +237,9 @@
                                         <th class="bg-dark text-white h-start" width="100">Desde</th>
                                         <th class="bg-dark text-white h-end" width="100">Hasta</th>
                                         <th class="bg-dark text-white h-status" width="50">Estado</th>
+                                        @if ($schedule->finalizado == 0)
                                         <th class="bg-dark text-white h-action" width="75"></th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -209,6 +250,7 @@
                                         <td class="d-start align-middle">{{date('d/m/Y', strtotime($activity->fecha_comienzo))}}</td>
                                         <td class="d-end align-middle">{{date('d/m/Y', strtotime($activity->fecha_fin))}}</td>
                                         <td class="d-status align-middle">{{$activity->estado}}</td>
+                                        @if ($schedule->finalizado == 0)
                                         <td class="d-action align-middle text-center">
                                             <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}" data-type="{{$activity->tipo}}" travelid="{{$schedule->id}}">
                                                 <svg class="icon">
@@ -221,12 +263,14 @@
                                                 </svg>
                                             </a>
                                         </td>
+                                        @endif
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -234,9 +278,15 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{route('agenda.reports.pdf')}}?id={{$schedule->id}}" class="btn btn-info text-white">
-                            <i class="fa-solid fa-file-pdf"></i> Exportar a PDF
+                        @if ($schedule->finalizado == 0)
+                        <a href="#" id="saveFinalBtn" class="btn btn-success text-white">
+                            <i class="fa-solid fa-lock"></i> Guardar como versión final
                         </a>
+                        @else    
+                        <a href="{{route('agenda.reports.pdf')}}?id={{$schedule->id}}" class="btn btn-info text-white">
+                            <i class="fa-regular fa-file-pdf"></i> Exportar a PDF
+                        </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -256,5 +306,6 @@
     var activity_modal = "{{route('agenda.reports.activity.popup')}}";
     var delete_route = "{{route('agenda.reports.activity.delete')}}";
     var asset_url = "{{asset('icons/sprites/free.svg')}}";
+    var finalize_url = "{{route('agenda.reports.finalize')}}";
 </script>
 @endsection

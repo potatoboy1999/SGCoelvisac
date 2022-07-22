@@ -60,7 +60,7 @@
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-info show-schedule" data-travelid="{{$schedule->id}}" data-action="{{$type == 1?'3':'4'}}">
                                         <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-info"></use>
+                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-check"></use>
                                         </svg>
                                     </button>
                                 </td>

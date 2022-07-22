@@ -194,14 +194,45 @@ $(document).on('click','#dltActivity', function(ev){
         method: 'POST',
         data: data,
         beforeSend: function(){
-            $(".modal-area").hide();
-            $(".modal-loading").show();
-            $(".btn-actions").hide();
+            $("#deleteActivity .modal-area").hide();
+            $("#deleteActivity .modal-loading").show();
+            $("#deleteActivity .btn-actions").hide();
         },
         success: function(res){
             if(res.status == "ok"){
                 $(".rep-act[act-id="+act_id+"]").remove();
                 $("#deleteActivity").modal("hide");
+            }
+        }
+    });
+});
+
+$('#saveFinalBtn').on('click', function(ev){
+    ev.preventDefault();
+    $("#confirmFinalVersion").modal("show");
+});
+
+$("#confirmFinalBtn").on('click',function(ev){
+    var act_id = $(this).data('id');
+    var data = {
+        id: act_id,
+        _token: $('input[name="_token"]').val(),
+    };
+    
+    $.ajax({
+        url: finalize_url,
+        method: 'POST',
+        data: data,
+        beforeSend: function(){
+            $("#confirmFinalVersion .modal-area").hide();
+            $("#confirmFinalVersion .btn-actions").hide();
+            $("#confirmFinalVersion .modal-loading").show();
+        },
+        success: function(res){
+            if(res.status == "ok"){
+                location.reload()
+            }else{
+                alert("Ha ocurrido un error");
             }
         }
     });

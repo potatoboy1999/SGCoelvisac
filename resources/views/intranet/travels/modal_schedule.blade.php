@@ -4,7 +4,7 @@
 <div class="modal-body">
     <div class="modal-loading" style="display: none">
         <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">Cargando...</span>
         </div>
     </div>
     <div class="modal-form">
@@ -213,7 +213,7 @@
             <input class="btn btn-info text-white" type="submit" form="form_schedule" value="Crear">
         @elseif ($action >= 3)
             <button class="btn btn-danger text-white btn-actions travel-deny" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Rechazar</button>
-            <button class="btn btn-success text-white btn-actions travel-confirm" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Confirmar</button>
+            <button class="btn btn-success text-white btn-actions travel-confirm" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Aprovar</button>
         @endif
     </div>
 </div>

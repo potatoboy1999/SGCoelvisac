@@ -41,6 +41,7 @@ class TravelSchedule extends Model
         'validacion_dos',
         'val_uno_por',
         'val_dos_por',
+        'finalizado'
     ];
 
     public function user(){

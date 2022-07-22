@@ -13,7 +13,7 @@ function getCalendar(){
         },
         method:'GET',
         beforeSend: function(){
-            $("#calendar-card .card-body").html('<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>');
+            $("#calendar-card .card-body").html('<div class="spinner-border" role="status"><span class="visually-hidden">Cargando...</span></div>');
         },
         success:function(res){
             $("#calendar-card .card-body").html(res);

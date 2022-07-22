@@ -73,7 +73,7 @@ ALTER TABLE t_sgcv_reporte_actividades CHANGE modified_at updated_at DATETIME;
 ALTER TABLE t_sgcv_agenda_viajes ADD COLUMN val_uno_por BIGINT NULL AFTER validacion_dos;
 ALTER TABLE t_sgcv_agenda_viajes ADD COLUMN val_dos_por BIGINT NULL AFTER val_uno_por;
 
--- Everything on top of this on Live Server
+ALTER TABLE t_sgcv_agenda_viajes ADD COLUMN finalizado TINYINT NOT NULL DEFAULT 0 AFTER val_dos_por;
 
 CREATE TABLE `t_sgcv_report_files` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -91,3 +91,5 @@ CREATE TABLE `t_sgcv_report_files` (
   CONSTRAINT `fk_t_sgcv_report_files_T_SGCV_Documentos1`
     FOREIGN KEY (`documento_id`)
     REFERENCES `t_sgcv_documentos` (`id`));
+
+-- Everything on top of this on Live Server

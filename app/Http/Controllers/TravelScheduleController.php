@@ -394,7 +394,7 @@ class TravelScheduleController extends Controller
         if($schedule){
             if(isset($request->report_id)){
                 $repActivity = ReportActivity::where('id', $request->report_id)
-                                            ->where('estado', 1)
+                                            ->where('estado', '>','0')
                                             ->first();
             }
         }
@@ -543,4 +543,16 @@ class TravelScheduleController extends Controller
         }
         return back()->with(['error'=>'No se encontró la agenda']);
     }
+
+    public function finalizeReport(Request $request)
+    {
+        $schedule = TravelSchedule::find($request->id);
+        if($schedule){
+            $schedule->finalizado = 1;
+            $schedule->save();
+            return ['status'=>'ok'];
+        }
+        return back()->with(['error'=>'No se encontró la agenda']);
+    }
 }
+

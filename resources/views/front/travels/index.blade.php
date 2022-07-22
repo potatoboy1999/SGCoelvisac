@@ -86,7 +86,7 @@
         <div class="box">
             <div class="cuerpo">
                 <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">Cargando...</span>
                 </div>
             </div>
         </div>

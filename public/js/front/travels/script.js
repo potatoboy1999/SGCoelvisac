@@ -10,7 +10,7 @@ function getCalendar(){
         },
         method:'GET',
         beforeSend: function(){
-            $("#calendar-wrapper .cuerpo").html('<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>');
+            $("#calendar-wrapper .cuerpo").html('<div class="spinner-border" role="status"><span class="visually-hidden">Cargando...</span></div>');
         },
         success:function(res){
             $("#calendar-wrapper .cuerpo").html(res);

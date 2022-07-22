@@ -74,7 +74,7 @@
             <div class="card-header"><span>Viajes</span></div>
             <div class="card-body">
                 <div class="spinner-border" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">Cargando...</span>
                 </div>
             </div>
         </div>

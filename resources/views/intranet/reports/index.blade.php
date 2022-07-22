@@ -84,7 +84,7 @@
                                             </svg>
                                         </button>
                                     </form>
-                                    @if ($progress >= 100)
+                                    @if ($progress >= 100 && $schedule->finalizado == 1)
                                     <a href="{{route('agenda.reports.pdf')}}?id={{$schedule->id}}" class="btn btn-info btn-sm text-white" style="padding: 4px 10px;">
                                         <i class="fa-regular fa-file-pdf"></i>
                                         {{-- <svg class="icon">

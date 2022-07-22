@@ -4,7 +4,7 @@
 <div class="modal-body">
     <div class="modal-area modal-loading" style="display: none">
         <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+            <span class="visually-hidden">Cargando...</span>
         </div>
     </div>
     <div class="modal-area modal-form">
@@ -52,8 +52,8 @@
                         <label for="">Estado</label>
                         <select class="form-select" name="estado" id="act_status">
                             @if ($rep_activity)
-                                <option value="1" {{$rep_activity->fecha_fin == 0? 'selected':''}}>No terminado</option>
-                                <option value="2" {{$rep_activity->fecha_fin == 1? 'selected':''}}>Terminado</option>
+                                <option value="1" {{$rep_activity->estado == 1? 'selected':''}}>No terminado</option>
+                                <option value="2" {{$rep_activity->estado == 2? 'selected':''}}>Terminado</option>
                             @else
                                 <option value="1">No terminado</option>
                                 <option value="2">Terminado</option>
