@@ -249,7 +249,10 @@
                                         <td class="d-deal align-middle">{{$activity->acuerdo}}</td>
                                         <td class="d-start align-middle">{{date('d/m/Y', strtotime($activity->fecha_comienzo))}}</td>
                                         <td class="d-end align-middle">{{date('d/m/Y', strtotime($activity->fecha_fin))}}</td>
-                                        <td class="d-status align-middle">{{$activity->estado}}</td>
+                                        @php
+                                            $s = ['t_red','t_yellow','t_green'];
+                                        @endphp
+                                        <td class="d-status align-middle {{ $s[progressStatus($activity)] }}"></td>
                                         @if ($schedule->finalizado == 0)
                                         <td class="d-action align-middle text-center">
                                             <a href="#" class="btn btn-info btn-sm text-white btn-edit" data-id="{{$activity->id}}" data-type="{{$activity->tipo}}" travelid="{{$schedule->id}}">
