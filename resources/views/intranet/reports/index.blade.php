@@ -62,7 +62,7 @@
                                             }
                                         @endphp
                                         <div class="progress">
-                                            <div class="progress-bar {{$progress>=100?'bg-success':'bg-warning'}}" role="progressbar" style="width: {{$progress}}%" aria-valuenow="{{$progress}}" aria-valuemin="0" aria-valuemax="100">%{{$progress}}</div>
+                                            <div class="progress-bar {{$progress>=100?'bg-success':'bg-warning'}}" role="progressbar" style="width: {{$progress}}%" aria-valuenow="{{$progress}}" aria-valuemin="0" aria-valuemax="100">{{$progress}}%</div>
                                         </div>
                                     @endif
                                 </td>
