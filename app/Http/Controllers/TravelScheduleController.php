@@ -39,13 +39,15 @@ class TravelScheduleController extends Controller
         $year = intval(isset($request->year)?$request->year:date('Y'));
         $month = intval(isset($request->month)?$request->month:date('m'));
         $endMonth = $month + 1;
+        $endYear = $year;
         if($endMonth > 12){
             $endMonth = 1;
+            $endYear = $year+1;
         }
 
         $schedules = TravelSchedule::where('estado','>',0)
                     ->where('viaje_comienzo','>=',$year.'-'.$month.'-01')
-                    ->where('viaje_comienzo','<',($year+1).'-'.$endMonth.'-01')
+                    ->where('viaje_comienzo','<',($endYear).'-'.$endMonth.'-01')
                     ->where('validacion_uno', 2) // validation 1 accepted
                     ->where('validacion_dos', 2) // validation 2 accepted
                     ->orderBy('viaje_comienzo','asc')
