@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ObjectiveController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReunionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\TravelScheduleController;
@@ -102,6 +103,14 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/save_popup',[ProfileController::class, 'popupSaveShow'])->name('user.profiles.popup');
         Route::post('/save',[ProfileController::class, 'popupSaveNew'])->name('user.profiles.popup.save.new');
         Route::post('/update',[ProfileController::class, 'popupSaveUpdate'])->name('user.profiles.popup.save.update');
+    });
+
+    Route::group(["prefix"=>"results"], function(){
+        // -- reunion calendar
+        Route::get('/', [ReunionController::class, "backIndex"])->name('results.index');
+        Route::get('/calendar', [ReunionController::class, "viewCalendar"])->name('results.calendar');
+        Route::get('/calendar/popup/reunion', [ReunionController::class, "showReunionPopup"])->name('results.popup.reunion');
+        Route::post('/new/reunion', [ReunionController::class, "storeReunion"])->name('results.new');
     });
 
 });

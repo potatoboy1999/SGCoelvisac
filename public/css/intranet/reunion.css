@@ -1,0 +1,41 @@
+.area-travel{
+    margin-right: 0.25rem !important;
+    background: rgb(0, 139, 0);
+    cursor: pointer;
+}
+.area-travel:hover {
+    background: #ffffff;
+    color: rgb(0, 0, 0)!important;
+}
+.day-cell:hover{
+    background: #246cab;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+.d-week:hover{
+    background: #f3f3f3;
+    cursor: pointer;
+}
+#travel_calendar_month th{
+    padding: 0!important;
+}
+#travel_calendar_month td{
+    padding: 0!important;
+}
+#travel_calendar_month th p{
+    min-width: 80px;
+}
+td.day-cell {
+    height: 125px;
+}
+#form-area-sel .form-group{
+    max-width: fit-content;
+}
+
+#form_schedule input.form-control.read-clear[readonly] {
+    background-color: inherit;
+}
+
+#form_schedule textarea.form-control[readonly] {
+    background-color: inherit;
+}

@@ -2,83 +2,68 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reunion;
 use Illuminate\Http\Request;
 
 class ReunionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function backIndex(Request $request)
     {
-        //
+        $page = "objectives";
+        $bcrums = ["Agendas"];
+        $year = intval(isset($request->year)?$request->year:date('Y'));
+        $month = intval(isset($request->month)?$request->month:date('m'));
+        $cal_type = isset($request->cal_type)?$request->cal_type : 1;
+        // return $branches->toArray();
+
+        return view('intranet.reunions.index',[
+            "page"=>$page,
+            "bcrums" => $bcrums,
+            "year" => $year,
+            "month" => $month,
+            "cal_type" => $cal_type,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function viewCalendar(Request $request)
     {
-        //
+        $year = intval(isset($request->year)?$request->year:date('Y'));
+        $month = intval(isset($request->month)?$request->month:date('m'));
+        $cal_type = isset($request->cal_type)?$request->cal_type : 1;
+        $endMonth = $month + 1;
+        $endYear = $year;
+        if($endMonth > 12){
+            $endMonth = 1;
+            $endYear = $year+1;
+        }
+
+        $reunions = Reunion::where('estado','>',0);
+
+        if($cal_type == 1){
+            $reunions->where('fecha','>=',$year.'-'.$month.'-01')
+                    ->where('fecha','<',($endYear).'-'.$endMonth.'-01')
+                    ->orderBy('fecha','asc');
+        }else{
+            $reunions->where('fecha','>=',$year.'-01-01')
+                    ->where('fecha','<',($year+1).'-01-01')
+                    ->orderBy('fecha','asc');
+        }
+        $reunions = $reunions->get();
+
+        return view('intranet.reunions.calendar',[
+            "year" => $year,
+            "month" => $month,
+            "reunions" => $reunions
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function showReunionPopup(Request $request)
     {
-        //
+        # code...
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function storeReunion(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        # code...
     }
 }
