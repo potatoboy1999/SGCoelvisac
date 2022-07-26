@@ -77,7 +77,7 @@
             </div>
         </div>
         <div id="calendar-card" class="card mb-4">
-            <div class="card-header"><span>Viajes</span></div>
+            <div class="card-header"><span>Reuniones</span></div>
             <div class="card-body">
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden">Cargando...</span>
@@ -94,7 +94,9 @@
 <script src="{{asset("js/intranet/reunion.js")}}"></script>
 <script>
     var calendar_route = "{{route('results.calendar')}}";
-    var pop_reunion_route = "{{route('results.popup.reunion')}}";
+    var result_create = "{{route('results.create')}}";
+    var result_modify = "{{route('results.modify')}}";
+    
     $(function(){
         getCalendar();
     });

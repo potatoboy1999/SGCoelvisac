@@ -109,8 +109,11 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         // -- reunion calendar
         Route::get('/', [ReunionController::class, "backIndex"])->name('results.index');
         Route::get('/calendar', [ReunionController::class, "viewCalendar"])->name('results.calendar');
-        Route::get('/calendar/popup/reunion', [ReunionController::class, "showReunionPopup"])->name('results.popup.reunion');
-        Route::post('/new/reunion', [ReunionController::class, "storeReunion"])->name('results.new');
+        // Route::get('/calendar/popup/reunion', [ReunionController::class, "showReunionPopup"])->name('results.popup.reunion');
+        Route::get('/reunion/new/', [ReunionController::class, "createReunion"])    ->name('results.create');
+        Route::get('/reunion/modify/', [ReunionController::class, "createModify"])  ->name('results.modify');
+        Route::post('/reunion/new/', [ReunionController::class, "storeReunion"])    ->name('results.store');
+        Route::post('/reunion/update/', [ReunionController::class, "updateReunion"])->name('results.update');
     });
 
 });

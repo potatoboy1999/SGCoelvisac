@@ -10,7 +10,7 @@ class ReunionController extends Controller
     public function backIndex(Request $request)
     {
         $page = "objectives";
-        $bcrums = ["Agendas"];
+        $bcrums = ["Reunión"];
         $year = intval(isset($request->year)?$request->year:date('Y'));
         $month = intval(isset($request->month)?$request->month:date('m'));
         $cal_type = isset($request->cal_type)?$request->cal_type : 1;
@@ -57,9 +57,16 @@ class ReunionController extends Controller
         ]);
     }
 
-    public function showReunionPopup(Request $request)
+    public function createReunion(Request $request)
     {
-        # code...
+        $page   = "objectives";
+        $bcrums = ["Reunión"];
+        $date   = $request->date;
+        return view('intranet.reunions.create_modify',[
+            "page"=>$page,
+            "bcrums" => $bcrums,
+            "date" => $date
+        ]);
     }
 
     public function storeReunion(Request $request)
