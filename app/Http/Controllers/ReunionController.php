@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
 use App\Models\Reunion;
 use Illuminate\Http\Request;
 
@@ -62,15 +63,28 @@ class ReunionController extends Controller
         $page   = "objectives";
         $bcrums = ["Reunión"];
         $date   = $request->date;
+        $areas = Area::where('estado',1)
+                    ->where('vis_matriz',1)
+                    ->select('id','nombre')
+                    ->orderBy('nombre','asc')
+                    ->get();
         return view('intranet.reunions.create_modify',[
             "page"=>$page,
             "bcrums" => $bcrums,
-            "date" => $date
+            "date" => $date,
+            'areas' => $areas,
+            'areas_arr' => $areas->toArray()
         ]);
+    }
+
+    public function createModify(Request $request)
+    {
+        # code...
     }
 
     public function storeReunion(Request $request)
     {
-        # code...
+        $req = $request->all();
+        return $req;
     }
 }

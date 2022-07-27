@@ -39,8 +39,8 @@ $(document).on('click','.day-clickable',function(ev){
 
     if(!schedule_pressed){
         // load modal
-        var start = $(this).data('date');
-        prepareNewSchModal(null, start);
+        var date = $(this).data('date');
+        prepareNewSchModal(null, date);
     }
 
 });
@@ -48,8 +48,8 @@ $(document).on('click','.day-clickable',function(ev){
 $(document).on('click','.area-reunion', function(ev){
     ev.preventDefault();
     var id = $(this).data('travelid');
-    var start = $(this).data('date');
-    prepareNewSchModal(id, start);
+    var date = $(this).data('date');
+    prepareNewSchModal(id, date);
 });
 
 $(document).on('click',".add-act", function(ev){
@@ -107,36 +107,14 @@ $(document).on('submit', "#form_schedule", function(ev){
     });
 });
 
-function prepareNewSchModal(id, start){
+function prepareNewSchModal(id, date){
     var action = 1; // NEW
+    var url = result_create;
     if(id != null){
         action = 2; // SHOW
+        url = result_modify;
     }
-    $.ajax({
-        url: pop_schedule_route,
-        method: 'GET',
-        data: {
-            start_date: start,
-            id: id,
-            action: action, // SHOW or NEW
-        },
-        success: function(res){
-            //load modal
-            $("#newReunionModal .modal-content").html(res);
-
-            //load scripts
-            $("#sch_date_end").datepicker({
-                dateFormat: "dd/mm/yy",
-                beforeShow: function(){
-                    var date = $("#sch_date_start").val();
-                    $("#sch_date_end").datepicker('option', 'minDate', date);
-                }
-            });
-
-            //show modal
-            $("#newReunionModal").modal('show');
-        }
-    });
+    location.href = url+"?date="+encodeURI(date);
 }
 
 function formatDate(d){

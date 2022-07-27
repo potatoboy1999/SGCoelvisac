@@ -39,3 +39,31 @@ td.day-cell {
 #form_schedule textarea.form-control[readonly] {
     background-color: inherit;
 }
+.area_docs{
+    box-shadow: 0px 2px 5px 0px #ccc;
+}
+
+.presenter-name {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 0.1rem 0.75rem;
+    border-radius: 0.25rem;
+    background: #d8dbe0;
+    cursor: pointer;
+    margin: 2px;
+}
+.presenter-name:hover {
+    text-decoration: line-through;
+    background-color: #a8a9ab;
+}
+.rm_area {
+    color: white;
+    text-decoration: none;
+    background: #e55353;
+    padding: 0.1rem 1rem;
+    border-radius: 0 0.25rem 0 0.25rem;
+}
+.rm_area:hover {
+    color: white!important;
+    background-color: #c53434;
+}
