@@ -98,3 +98,8 @@ UPDATE t_sgcv_opciones SET num_nivel = 4 WHERE num_nivel = 3;
 
 INSERT INTO t_sgcv_opciones VALUES (null, 'Resultados', '',              '',            null, 1, 3, NULL, 1, 1, '2022-07-24 12:00:00', '2022-07-24 12:00:00');
 INSERT INTO t_sgcv_opciones VALUES (null, 'Calendario', 'results.index', 'cil-calendar',null, 2, 3, 12,   2, 1, '2022-07-24 12:00:00', '2022-07-24 12:00:00');
+
+ALTER TABLE t_sgcv_reuniones CHANGE modified_at updated_at DATETIME;
+ALTER TABLE t_sgcv_reu_document CHANGE modified_at updated_at DATETIME;
+ALTER TABLE t_sgcv_reu_presentadores CHANGE modified_at updated_at DATETIME;
+ALTER TABLE t_sgcv_reu_temas CHANGE modified_at updated_at DATETIME;

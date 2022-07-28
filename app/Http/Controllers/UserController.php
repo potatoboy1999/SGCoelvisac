@@ -26,6 +26,22 @@ class UserController extends Controller
         ]);
     }
 
+    public function getNames(Request $request){
+        $users = User::where('estado', 1);
+        if(isset($request->term)){
+            $users->where('nombre','like','%'.$request->term.'%');
+        }
+        $users = $users->get();
+        $users_arr = [];
+        foreach ($users as $k => $user) {
+            $u['label'] = $user->nombre;
+            $u['value'] = $user->nombre;
+            $u['userid'] = $user->id;
+            $users_arr[] = $u;
+        }
+        return $users_arr;
+    }
+
     public function deactivate(Request $request)
     {
         $user = User::where('id',$request->id)->first();

@@ -14,7 +14,7 @@ class ReunionDocument extends Model
 
     protected $fillable = [
         'area_id',
-        'reu_temas_id',
+        'reu_tema_id',
         'documento_id',
         'estado',
     ];

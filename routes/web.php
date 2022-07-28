@@ -93,6 +93,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::GET('/save_popup',[UserController::class, 'popupSaveShow'])->name('user.popup');
         Route::POST('/save',[UserController::class, 'popupSaveNew'])->name('user.popup.save.new');
         Route::POST('/update',[UserController::class, 'popupSaveUpdate'])->name('user.popup.save.update');
+        Route::get('/names',[UserController::class, 'getNames'])->name('user.name_list');
     });
 
     Route::group(["prefix"=>"profiles"], function(){

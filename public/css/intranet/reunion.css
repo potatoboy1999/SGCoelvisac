@@ -67,3 +67,11 @@ td.day-cell {
     color: white!important;
     background-color: #c53434;
 }
+.extra-inputs a{
+    line-height: 1;
+    margin-right: 4px;
+}
+.extra-inputs input{
+    display: inline-block;
+    width: calc(100% - 31px);
+}

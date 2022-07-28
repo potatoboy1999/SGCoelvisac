@@ -17,9 +17,20 @@
 @endsection
 
 @section('content')
+<div class="modal fade" id="alertModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Alert
+                <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
 <div class="body flex-grow-1 px-3">
     <div class="container-lg">
-        <form id="new_results_form" action="{{route('results.store')}}" method="POST">
+        <form id="new_results_form" action="{{route('results.store')}}" method="POST" enctype="multipart/form-data" autocomplete="off" onkeydown="return event.key != 'Enter';">
             @csrf
             <div class="card mb-4">
                 <div class="card-header">
@@ -70,7 +81,7 @@
                             <div class="col-sm-4 border-right">
                                 <div class="mb-2">
                                     <label for="theme1" class="form-label">Nombre de Tema</label>
-                                    <input type="text" class="form-control" name="theme[]" required>
+                                    <input type="text" class="form-control" name="theme[theme1]" required>
                                 </div>
                                 <div>
                                     <a class="btn btn-secondary text-white newAreaBtn" href="#" target="theme1">+ Nueva Área</a>
@@ -87,7 +98,7 @@
                                         </select>
                                         <hr>
                                         <label class="form-label">Archivos:</label>
-                                        <input type="file" class="form-control" name="files[theme1][area1][]">
+                                        <input type="file" class="form-control not-filled mb-2" name="files[theme1][area1][]">
                                     </div>
                                 </div>
                             </div>
@@ -106,6 +117,9 @@
 @section('script')
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
+<script>
+    let usernames_route = "{{route('user.name_list')}}";
+</script>
 <script src="{{asset("js/intranet/reunion_create.js")}}"></script>
 <script>
     areas = JSON.parse('{!! json_encode($areas_arr) !!}');

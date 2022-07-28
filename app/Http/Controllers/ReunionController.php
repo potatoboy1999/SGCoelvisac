@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
+use App\Models\Document;
 use App\Models\Reunion;
+use App\Models\ReunionDocument;
+use App\Models\ReunionPresenter;
+use App\Models\ReunionTheme;
+use DateTime;
 use Illuminate\Http\Request;
 
 class ReunionController extends Controller
@@ -84,7 +89,106 @@ class ReunionController extends Controller
 
     public function storeReunion(Request $request)
     {
-        $req = $request->all();
-        return $req;
+        // foreach ($request->files as $x => $themes) {
+        //     foreach ($themes as $y => $area_files) {
+        //         foreach ($area_files as $z => $files) {
+        //             foreach($files as $k => $file){
+        //                 print("FILE: X: ".$x." |Y: ".$y." |Z: ".$z." |K: ".$k." |NAME: ".$file->getClientOriginalName()."<br>");
+        //             }
+        //         }
+        //     }
+        // }
+        // return;
+        // return $request->files;
+        // return $request->all();
+        $alerts = [];
+
+        $reunion = new Reunion;
+        $reunion->titulo = $request->title;
+        $reunion->descripcion = $request->description;
+        $reunion->fecha = date_format(date_create_from_format('d/m/Y',$request->date),'Y-m-d');
+        $reunion->estado = 1;
+        $reunion->save();
+
+        // add users presenters
+        foreach ($request->users as $k => $user) {
+            $presenter = new ReunionPresenter;
+            $presenter->usuario_id = $user;
+            $presenter->reunion_id = $reunion->id;
+            $presenter->estado = 1;
+            $presenter->save();
+        }
+
+        $sizeMax = 8388608; // 8MB
+        $destinationPath = 'uploads';
+        $i = 0; // themes loop index
+        foreach ($request->theme as $key => $theme_name) {
+            $theme = new ReunionTheme;
+            $theme->titulo = $theme_name;
+            $theme->reunion_id = $reunion->id;
+            $theme->estado = 1;
+            $theme->save();
+
+            // print("TEMA: ".$theme_name." | KEY: ".$key."<br>");
+            for ($x = 0; $x < sizeof($request->area[$key]); $x++) { 
+                $area_id = $request->area[$key][$x];
+                // print("AREA: ".$area_id."<br>");
+                foreach ($request->files as $themes) {
+                    foreach ($themes as $theme_key => $area_files) {
+                        if($theme_key == $key){
+                            $cnter = 0;
+                            foreach ($area_files as $files) {
+                                if($cnter == $x){
+                                    foreach($files as $k => $file){
+                                        if($file->isValid()){
+                                            // print("FILE: NAME: ".$file->getClientOriginalName()."<br>");
+
+                                            $ogName = $file->getClientOriginalName();
+                                            $ogExtension = $file->getClientOriginalExtension();
+                                            $size = $file->getSize();
+                                            $mime = $file->getMimeType();
+
+                                            if($size <= $sizeMax){
+                                                //Move Uploaded File
+                                                $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
+                                                $newName = "file".$now->format("Ymd-His-u")."02.".$ogExtension;
+                                                $file->move($destinationPath, $newName);
+                                
+                                                $tempDoc = new Document;
+                                                $tempDoc->nombre = substr($ogName, 0, 150);
+                                                $tempDoc->file = $newName;
+                                                $tempDoc->estado = 1;
+                                                $tempDoc->save();
+                                
+                                                $reuDoc = new ReunionDocument;
+                                                $reuDoc->area_id = $area_id;
+                                                $reuDoc->reu_tema_id = $theme->id;
+                                                $reuDoc->documento_id = $tempDoc->id;
+                                                $reuDoc->estado = 1;
+                                                $reuDoc->save();
+
+                                            }else{
+                                                $alerts[] = "<br>Problemas con uno o varios archivos adjuntos";
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+                                $cnter++;
+                            }
+                            break;
+                        }
+                    }
+                }
+                // print("<br><br>");
+            }
+            // print('<br>');
+            $i++;
+        }
+
+        return redirect()->route('results.index')->with([
+            'item_status' => true, 
+            'item_msg' => 'Nuevo item creado'
+        ]);
     }
 }
