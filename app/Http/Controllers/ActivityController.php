@@ -7,6 +7,7 @@ use App\Models\ActivityDocuments;
 use App\Models\Area;
 use App\Models\Document;
 use App\Models\Role;
+use DateTime;
 use Illuminate\Http\Request;
 
 class ActivityController extends Controller
@@ -76,7 +77,8 @@ class ActivityController extends Controller
             if($size <= $sizeMax){
                 if(in_array($mime, $valMimes)){
                     //Move Uploaded File
-                    $newName = "policy".date("Ymd-His-U").".".$ogExtension;
+                    $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
+                    $newName = "policy".$now->format("Ymd-His-u").".".$ogExtension;
                     $polFile->move($destinationPath, $newName);
     
                     $polDoc = new Document();
@@ -150,7 +152,8 @@ class ActivityController extends Controller
             if($size <= $sizeMax){
                 if(in_array($mime, $valMimes)){
                     //Move Uploaded File
-                    $newName = "adjacent".date("Ymd-His-U").".".$ogExtension;
+                    $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
+                    $newName = "adjacent".$now->format("Ymd-His-u").".".$ogExtension;
                     $adjFile->move($destinationPath, $newName);
     
                     $adjDoc = new Document();

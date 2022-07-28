@@ -9,6 +9,7 @@ use App\Models\Document;
 use App\Models\Objective;
 use App\Models\Role;
 use App\Models\Theme;
+use DateTime;
 use Illuminate\Http\Request;
 
 class ObjectiveController extends Controller
@@ -330,7 +331,8 @@ class ObjectiveController extends Controller
 
             if($size <= $sizeMax && in_array($mime, $valMimes)){
                 //Move Uploaded File
-                $newName = "file".date("Ymd-His-U")."02.".$ogExtension;
+                $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));                
+                $newName = "file".$now->format("Ymd-His-u")."02.".$ogExtension;
                 $adjFile->move($destinationPath, $newName);
 
                 $adjDoc = new Document();

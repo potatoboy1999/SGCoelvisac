@@ -13,6 +13,7 @@ use App\Models\TravelActivity;
 use App\Models\TravelSchedule;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -525,7 +526,8 @@ class TravelScheduleController extends Controller
             ]);
 
             $path = public_path('pdf/');
-            $name = 'report-'.time();
+            $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
+            $name = 'report-'.$now->format("Ymd-His-u");
             $fileName =  $name.'.pdf';
             $pdf->save($path . '/' . $fileName);
 
