@@ -10,6 +10,7 @@ use App\Models\ReunionPresenter;
 use App\Models\ReunionTheme;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReunionController extends Controller
 {
@@ -84,23 +85,41 @@ class ReunionController extends Controller
 
     public function createModify(Request $request)
     {
-        # code...
+        $page   = "objectives";
+        $bcrums = ["Reuniones"];
+        $date   = $request->date;
+        $areas = Area::where('estado',1)
+                    ->where('vis_matriz',1)
+                    ->select('id','nombre')
+                    ->orderBy('nombre','asc')
+                    ->get();
+        $reunion = Reunion::find($request->id);
+        return view('intranet.reunions.create_modify',[
+            "page"=>$page,
+            "bcrums" => $bcrums,
+            "date" => $date,
+            'areas' => $areas,
+            'areas_arr' => $areas->toArray(),
+            'reunion' => $reunion
+        ]);
     }
 
     public function storeReunion(Request $request)
     {
-        // foreach ($request->files as $x => $themes) {
-        //     foreach ($themes as $y => $area_files) {
-        //         foreach ($area_files as $z => $files) {
-        //             foreach($files as $k => $file){
-        //                 print("FILE: X: ".$x." |Y: ".$y." |Z: ".$z." |K: ".$k." |NAME: ".$file->getClientOriginalName()."<br>");
-        //             }
-        //         }
-        //     }
-        // }
-        // return;
-        // return $request->files;
-        // return $request->all();
+        /*
+        foreach ($request->files as $x => $themes) {
+            foreach ($themes as $y => $area_files) {
+                foreach ($area_files as $z => $files) {
+                    foreach($files as $k => $file){
+                        print("FILE: X: ".$x." |Y: ".$y." |Z: ".$z." |K: ".$k." |NAME: ".$file->getClientOriginalName()."<br>");
+                    }
+                }
+            }
+        }
+        return;
+        return $request->files;
+        return $request->all();
+        */
         $alerts = [];
 
         $reunion = new Reunion;
@@ -189,6 +208,32 @@ class ReunionController extends Controller
         return redirect()->route('results.index')->with([
             'item_status' => true, 
             'item_msg' => 'Nuevo item creado'
+        ]);
+    }
+
+    public function viewReunions(Request $request)
+    {
+        $page = "objectives";
+        $bcrums = ["Reuniones"];
+        $user = Auth::user();
+        $reunions = Reunion::where('t_sgcv_reuniones.estado', 1);
+        if($user->position->area_id != 1){
+            // only see reunions current user created or is involved in
+            $reunions->where(function($q) use ($user){
+                $q->where('t_sgcv_reuniones.usuario_id', $user->id);
+                $q->orWhere('t_sgcv_reu_presentadores.usuario_id', $user->id);
+            });
+        }
+        $reunions->join('t_sgcv_reu_presentadores','t_sgcv_reu_presentadores.reunion_id','t_sgcv_reuniones.id');
+        $reunions->select('t_sgcv_reuniones.id','t_sgcv_reuniones.titulo','t_sgcv_reuniones.fecha');
+        $reunions->groupBy('t_sgcv_reuniones.id','t_sgcv_reuniones.titulo','t_sgcv_reuniones.fecha');
+        $reunions->orderBy('t_sgcv_reuniones.fecha', 'desc');
+        $reunions = $reunions->get();
+
+        return view('intranet.reunions.list',[
+            "page"=>$page,
+            "bcrums" => $bcrums,
+            "reunions"=>$reunions
         ]);
     }
 }

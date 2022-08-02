@@ -115,6 +115,8 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/reunion/modify/', [ReunionController::class, "createModify"])  ->name('results.modify');
         Route::post('/reunion/new/', [ReunionController::class, "storeReunion"])    ->name('results.store');
         Route::post('/reunion/update/', [ReunionController::class, "updateReunion"])->name('results.update');
+        // -- reports schedules
+        Route::get('/reunions', [ReunionController::class, "viewReunions"])->name('results.reunions');
     });
 
 });

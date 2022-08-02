@@ -13,11 +13,17 @@ class Reunion extends Model
     public $timestamps = true;
 
     protected $fillable = [
+        'usuario_id',
         'titulo',
         'descripcion',
         'fecha',
         'estado',
     ];
+
+    public function userCreator()
+    {
+        return $this->belongsTo(User::class,"usuario_id","id");
+    }
 
     public function reunionThemes(){
         return $this->hasMany(ReunionTheme::class,"reunion_id","id");
