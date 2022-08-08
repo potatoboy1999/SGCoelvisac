@@ -19,7 +19,7 @@ class ReunionPresenter extends Model
     ];
 
     public function user(){
-        return $this->belongsTo(Users::class,"usuario_id","id");
+        return $this->belongsTo(User::class,"usuario_id","id");
     }
 
     public function reunion(){

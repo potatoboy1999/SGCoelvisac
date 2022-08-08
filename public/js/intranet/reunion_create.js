@@ -1,3 +1,7 @@
+$(function(){
+    checkThemes();
+});
+
 $("#presenters").autocomplete({
     minLength: 0,
     source: usernames_route,
@@ -21,7 +25,15 @@ $(document).on('click','.presenter-name', function(ev){
 $(document).on('click', '.rm_area', function(ev){
     ev.preventDefault();
     var area = $(this).attr('area');
-    $(".area_docs[area-count='"+area+"']").remove();
+    $parent = $(this).parent().parent().parent();
+    $removable = $parent.find(".area_docs[area-count='"+area+"']");
+    // add removable docs
+    $removable.find(".dlt-old-file").each(function(e){
+        var doc_id = $(this).attr("docid");
+        $("#docs-deleted").append("<input type='hidden' name='docs_deleted[]' value='"+doc_id+"'>");
+    });
+
+    $removable.remove();
 });
 
 $(document).on('click','.newAreaBtn',function(ev){
@@ -98,6 +110,21 @@ $("#addTheme").on('click', function (ev) {
         '</div>';
     $("#themes_div").append(html);
     $("#themes_div").attr('counter',counter);
+
+    checkThemes();
+});
+
+$(document).on('click','.rm_theme', function(ev) {
+    ev.preventDefault();
+    var theme_id = $(this).attr("theme");
+    var theme = $(".theme_elem[theme_code='"+theme_id+"']");
+    var id = theme.attr("themeid");
+    if(id != undefined){
+        $("#themes-deleted").append("<input type='hidden' name='themes_deleted[]' value='"+id+"'>");
+    }
+    theme.remove();
+
+    checkThemes();
 });
 
 $(document).on('change', "input.not-filled", function(ev){
@@ -127,12 +154,48 @@ $(document).on('click', '.rm_doc', function(ev){
     $(this).parent().remove();
 })
 
+$(".dlt-old-file").on('click', function(ev){
+    ev.preventDefault();
+    var doc_id = $(this).attr('docid');
+    var old_file = $(this).parent();
+    var old_files = $(this).parent().parent();
+    old_file.remove();
+    if(old_files.find(".old-file").length == 0){
+        old_files.remove();
+    };
+    $("#docs-deleted").append("<input type='hidden' name='docs_deleted[]' value='"+doc_id+"'>");
+});
+
 $("button[form='new_results_form']").on('click', function(ev){
     ev.preventDefault();
+
+    // check at least one presenter
     if($(".presenter-name").length == 0){
         $("#alertModal .modal-body").html('<p class="text-danger">Agrege al menos un presentador</p>');
         $("#alertModal").modal('show');
-    }else{
-        $("#new_results_form").submit();
+        return;
     }
+
+    // check at least one area per theme
+    var area_val = true;
+    $(".area_docs_list").each(function(area){
+        if($(this).children().length == 0){
+            area_val = false;
+        }
+    });
+    if(!area_val){
+        $("#alertModal .modal-body").html('<p class="text-danger">Cada tema debe tener al menos una área</p>');
+        $("#alertModal").modal('show');
+        return;
+    }
+    $("#new_results_form").submit();
 });
+
+function checkThemes(){
+    var count = $(".theme_elem").length;
+    if(count == 1){
+        $(".theme_elem .rm_theme").hide();
+    }else{
+        $(".theme_elem .rm_theme").show();
+    }
+}

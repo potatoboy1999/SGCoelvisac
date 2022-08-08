@@ -23,6 +23,6 @@ class ReunionTheme extends Model
     }
 
     public function documents(){
-        return $this->belongsToMany(Document::class,"t_sgcv_reu_document","reu_tema_id","documento_id");
+        return $this->belongsToMany(Document::class,"t_sgcv_reu_document","reu_tema_id","documento_id")->withPivot('area_id','estado','created_at');
     }
 }
