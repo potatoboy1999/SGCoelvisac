@@ -50,7 +50,7 @@ $(document).on('click','.newAreaBtn',function(ev){
             '</div>'+
             '<div class="p-3">'+
                 '<label class="form-label" for="area_name">Área:</label> '+
-                '<select class="form-select area_select" name="area['+target+'][]" id="area_name'+counter+'">';
+                '<select class="form-select area_select" name="area['+target+'][area'+counter+']" id="area_name'+counter+'">';
         // ADD AREAS OPTION
         areas.forEach(function(area){
             html += '<option value="'+area.id+'">'+area.nombre+'</option>';
@@ -92,7 +92,7 @@ $("#addTheme").on('click', function (ev) {
                         '<div class="area_docs_list" counter="1">'+
                             '<div class="area_docs border rounded p-3 mb-2" area-count="1">'+
                                 '<label class="form-label" for="area_name">Área:</label> '+
-                                '<select class="form-select area_select" name="area[theme'+counter+'][]" id="area_name1">';
+                                '<select class="form-select area_select" name="area[theme'+counter+'][area1]" id="area_name1">';
                         // ADD AREAS OPTION
                         areas.forEach(function(area){
                             html += '<option value="'+area.id+'">'+area.nombre+'</option>';
@@ -188,7 +188,25 @@ $("button[form='new_results_form']").on('click', function(ev){
         $("#alertModal").modal('show');
         return;
     }
-    $("#new_results_form").submit();
+
+    // check all areas have at least one old or new file added per area
+    var docs_valid = true;
+    $(".area_docs").each(function(i){
+        var old_files = $(this).find(".old-file").length;
+        var imp_files = $(this).find("input[type=file]:not(.not-filled)").length;
+        // console.log("Old Files Found: "+old_files+" | Imported Files Found:"+imp_files);
+        if(old_files == 0 && imp_files == 0){
+            docs_valid = false;
+        }
+    });
+    if(!docs_valid){
+        $("#alertModal .modal-body").html('<p class="text-danger">Cada área debe tener al menos un documento</p>');
+        $("#alertModal").modal('show');
+        return;
+    }
+
+    //$("#new_results_form").submit();
+    $("#hidden-form-submit").trigger('click');
 });
 
 function checkThemes(){

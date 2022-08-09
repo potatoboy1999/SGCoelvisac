@@ -223,6 +223,8 @@ class ReunionController extends Controller
     }
 
     public function updateReunion(Request $request){
+        // return $request->all();
+
         $reunion = Reunion::find($request->reunion_id);
         $reunion->titulo = $request->title;
         $reunion->descripcion = $request->description;
@@ -255,6 +257,7 @@ class ReunionController extends Controller
                     $docs_id[] = $doc->id;
                 }
                 if(sizeof($docs_id) > 0){
+                    ReunionDocument::whereIn('documento_id', $docs_id)->update(['estado' => 0]);
                     Document::whereIn('id',$docs_id)->update(['estado' => 0]);
                 }
             }
@@ -262,6 +265,7 @@ class ReunionController extends Controller
 
         // Remove deleted documents
         if(isset($request->docs_deleted)){
+            ReunionDocument::whereIn('documento_id', $request->docs_deleted)->update(['estado' => 0]);
             Document::whereIn('id',$request->docs_deleted)->update(['estado' => 0]);
         }
 
@@ -293,18 +297,21 @@ class ReunionController extends Controller
                 $theme->reunion_id = $reunion->id;
                 $theme->estado = 1;
                 $theme->save();
+            }else{
+                $theme = ReunionTheme::find($request->theme_ids[$i]);
             }
 
             // print("TEMA: ".$theme_name." | KEY: ".$key."<br>");
-            for ($x = 0; $x < sizeof($request->area[$key]); $x++) { 
-                $area_id = $request->area[$key][$x];
+            $x = 0;
+            foreach ($request->area[$key] as $area_key => $area_id) {
+                // $area_id = $request->area[$key][$x];
                 // print("AREA: ".$area_id."<br>");
                 foreach ($request->files as $themes) {
                     foreach ($themes as $theme_key => $area_files) {
                         if($theme_key == $key){
                             $cnter = 0;
-                            foreach ($area_files as $files) {
-                                if($cnter == $x){
+                            foreach ($area_files as $a_key => $files) {
+                                if($a_key == $area_key){
                                     foreach($files as $k => $file){
                                         if($file->isValid()){
                                             // print("FILE: NAME: ".$file->getClientOriginalName()."<br>");
@@ -347,6 +354,7 @@ class ReunionController extends Controller
                     }
                 }
                 // print("<br><br>");
+                $x++;
             }
             // print('<br>');
             $i++;

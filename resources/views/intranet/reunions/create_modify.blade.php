@@ -162,7 +162,7 @@
                                                         }
                                                     @endphp
                                                     <input class="form-control area_select" type="text" id="area_name{{$a_counter}}" value="{{$area_name}}" readonly>
-                                                    <input type="hidden" name="area[theme{{$t_counter}}][]" value="{{$area_id}}">
+                                                    <input type="hidden" name="area[theme{{$t_counter}}][area{{$a_counter}}]" value="{{$area_id}}">
                                                     <hr>
                                                     <div class="old-files mb-3">
                                                         <label class="form-label">Archivos:</label>
@@ -232,6 +232,7 @@
             @endif
             <div class="mb-4">
                 <button form="new_results_form" class="btn btn-success text-white">{{isset($reunion)?'Guardar Cambios':'Crear Reunión'}}</button>
+                <input type="submit" id="hidden-form-submit" style="display: none;" />
             </div>
         </form>
     </div>
