@@ -113,6 +113,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         // Route::get('/calendar/popup/reunion', [ReunionController::class, "showReunionPopup"])->name('results.popup.reunion');
         Route::get('/reunion/new/', [ReunionController::class, "createReunion"])    ->name('results.create');
         Route::get('/reunion/modify/', [ReunionController::class, "createModify"])  ->name('results.modify');
+        Route::get('/reunion/popup', [ReunionController::class, "showPopup"])       ->name('results.reunion.popup');
         Route::post('/reunion/new/', [ReunionController::class, "storeReunion"])    ->name('results.store');
         Route::post('/reunion/update/', [ReunionController::class, "updateReunion"])->name('results.update');
         // -- reports schedules

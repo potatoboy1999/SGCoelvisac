@@ -83,7 +83,7 @@
                                         });
                                     @endphp
                                     @foreach ($reus as $reu)
-                                        <p class="m-0 p-1 rounded area-travel mb-1 text-white " data-date="{{$w_day['date']}}" data-travelid="{{$reu->id}}">
+                                        <p class="m-0 p-1 rounded area-reunion mb-1 text-white " data-date="{{$w_day['date']}}" data-reuid="{{$reu->id}}">
                                             {{$reu->titulo}}
                                         </p>
                                     @endforeach

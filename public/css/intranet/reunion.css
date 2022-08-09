@@ -1,9 +1,9 @@
-.area-travel{
+.area-reunion{
     margin-right: 0.25rem !important;
     background: rgb(0, 139, 0);
     cursor: pointer;
 }
-.area-travel:hover {
+.area-reunion:hover {
     background: #ffffff;
     color: rgb(0, 0, 0)!important;
 }

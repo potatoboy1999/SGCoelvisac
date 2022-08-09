@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-<div class="modal fade" id="newReunionModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
+<div class="modal fade" id="reunionModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
         </div>
@@ -96,6 +96,7 @@
     var calendar_route = "{{route('results.calendar')}}";
     var result_create = "{{route('results.create')}}";
     var result_modify = "{{route('results.modify')}}";
+    var show_popup = "{{route('results.reunion.popup')}}";
     
     $(function(){
         getCalendar();

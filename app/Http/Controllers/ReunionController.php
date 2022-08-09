@@ -380,4 +380,29 @@ class ReunionController extends Controller
             "reunions"=>$reunions
         ]);
     }
+
+    public function showPopup(Request $request)
+    {
+        $areas = Area::where('estado',1)
+        ->where('vis_matriz',1)
+        ->select('id','nombre')
+        ->orderBy('nombre','asc')
+        ->get();
+        
+        $reunion = Reunion::where('id', $request->id);
+        $reunion->with(['reunionThemes' => function($qTheme){
+            $qTheme->where('estado', 1);
+            $qTheme->with(['documents' => function($qDoc){
+                $qDoc->where('t_sgcv_documentos.estado', 1);
+                $qDoc->orderBy('t_sgcv_reu_document.area_id', 'asc');
+                $qDoc->orderBy('t_sgcv_reu_document.created_at', 'asc');
+            }]);
+        }]);
+        $reunion = $reunion->first();
+
+        return view('intranet.reunions.reunion_popup',[
+            'reunion' => $reunion,
+            'areas' => $areas
+        ]);
+    }
 }
