@@ -114,6 +114,50 @@ $(document).on('click', '.btn-download', function(ev){
     window.location.href = route+"?id="+id;
 });
 
+$('.btn-show').on('click', function(ev){
+    ev.preventDefault();
+    var id = $(this).data('id');
+    prepareModal(id);
+});
+
+$('.btn-remove').on('click', function(ev){
+    ev.preventDefault();
+    var id = $(this).data('id');
+
+    $("input[name='reunion_id']").val(id);
+
+    $("#deleteReunionModal .modal-area").hide();
+    $("#deleteReunionModal .modal-form").show();
+    $("#deleteReunionModal .btn-actions").show();
+    $("#deleteReunionModal").modal("show");
+});
+
+$("#form_delete").on('submit', function(ev){
+    ev.preventDefault();
+    $.ajax({
+        url: $(this).attr('action'),
+        method: "POST",
+        data: $(this).serialize(),
+        beforeSend: function(){
+            $("#deleteReunionModal .modal-area").hide();
+            $("#deleteReunionModal .modal-loading").show();
+            $("#deleteReunionModal .btn-actions").hide();
+        },
+        success: function(res){
+            $("#deleteReunionModal .modal-area").hide();
+            if(res.status == 'ok'){
+                $("#deleteReunionModal .modal-success").show();
+            }else{
+                $("#error_msg").html(res.msg);
+                $("#deleteReunionModal .modal-error").show();
+            }
+
+            // delete row
+            $(".row-reunion[reunionid='"+$("input[name='reunion_id']").val()+"']").remove();
+        }
+    });
+});
+
 function redirectToCreate(date){
     var action = 1; // NEW
     var url = result_create;

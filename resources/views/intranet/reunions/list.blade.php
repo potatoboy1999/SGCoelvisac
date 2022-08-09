@@ -17,6 +17,39 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="deleteReunionModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">Eliminar Reunion</div>
+            <div class="modal-body">
+                <div class="modal-area modal-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+                <div class="modal-area modal-form">
+                    <form id="form_delete" action="{{route('results.reunion.delete')}}" method="POST">
+                        @csrf
+                        <p>¿Estás seguro que quieres eliminar esta reunión?</p>
+                        <input type="hidden" name="reunion_id" value="">
+                    </form>
+                </div>
+                <div class="modal-area modal-success" style="display: none">
+                    <p>¡La reunión ha sido eliminada correctamente!</p>
+                </div>
+                <div class="modal-area modal-error" style="display: none">
+                    <p class="text-danger" id="error_msg">Ha ocurrido un error al eliminar la reunión</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="align-end form-btns">
+                    <button class="btn btn-secondary text-white" type="button" data-coreui-dismiss="modal" aria-label="Close">Cerrar</button>
+                    <button class="btn btn-danger text-white btn-actions" form="form_delete">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="body flex-grow-1 px-3">
     <div class="container-lg">
         <div class="card mb-4">
@@ -47,12 +80,17 @@
                                     <td class="d-date align-middle">{{date('d/m/Y', strtotime($reunion->fecha))}}</td>
                                     <td class="d-title align-middle">{{$reunion->titulo}}</td>
                                     <td class="d-actions align-middle text-center">
+                                        <a href="#" class="text-white btn btn-success btn-sm btn-show" data-id="{{$reunion->id}}">
+                                            <svg class="icon">
+                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-info"></use>
+                                            </svg>
+                                        </a>
                                         <a href="{{route('results.modify')}}?id={{$reunion->id}}" class="text-white btn btn-info btn-sm btn-edit">
                                             <svg class="icon">
                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
                                             </svg>
                                         </a>
-                                        <a href="#" class="text-white btn btn-danger btn-sm btn-remove" reunionid="{{$reunion->id}}">
+                                        <a href="#" class="text-white btn btn-danger btn-sm btn-remove" data-id="{{$reunion->id}}">
                                             <svg class="icon">
                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                             </svg>
@@ -94,12 +132,17 @@
                                     <td class="d-date align-middle">{{date('d/m/Y', strtotime($reunion->fecha))}}</td>
                                     <td class="d-title align-middle">{{$reunion->titulo}}</td>
                                     <td class="d-actions align-middle text-center">
+                                        <a href="#" class="text-white btn btn-success btn-sm btn-show" data-id="{{$reunion->id}}">
+                                            <svg class="icon">
+                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-info"></use>
+                                            </svg>
+                                        </a>
                                         <a href="{{route('results.modify')}}?id={{$reunion->id}}" class="text-white btn btn-info btn-sm btn-edit">
                                             <svg class="icon">
                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
                                             </svg>
                                         </a>
-                                        <a href="#" class="text-white btn btn-danger btn-sm btn-remove" reunionid="{{$reunion->id}}">
+                                        <a href="#" class="text-white btn btn-danger btn-sm btn-remove" data-id="{{$reunion->id}}">
                                             <svg class="icon">
                                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                             </svg>
@@ -109,7 +152,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>                
+                    </div>
                 @else
                     <div class="rounded bordered p-3 bg-light center mb-3">
                         <p class="m-0 text-center">No hay reuniones pasadas</p>
@@ -125,4 +168,7 @@
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
 <script src="{{asset("js/intranet/reunion.js")}}"></script>
+<script>
+    var show_popup = "{{route('results.reunion.popup')}}";
+</script>
 @endsection

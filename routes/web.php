@@ -116,6 +116,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/reunion/popup', [ReunionController::class, "showPopup"])       ->name('results.reunion.popup');
         Route::post('/reunion/new/', [ReunionController::class, "storeReunion"])    ->name('results.store');
         Route::post('/reunion/update/', [ReunionController::class, "updateReunion"])->name('results.update');
+        Route::post('/reunion/delete/', [ReunionController::class, "deleteReunion"])->name('results.reunion.delete');
         // -- reports schedules
         Route::get('/reunions', [ReunionController::class, "viewReunions"])->name('results.reunions');
     });

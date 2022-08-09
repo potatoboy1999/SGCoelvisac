@@ -83,6 +83,17 @@ class ReunionController extends Controller
         ]);
     }
 
+    public function deleteReunion(Request $request)
+    {
+        $reunion = Reunion::find($request->reunion_id);
+        if($reunion){
+            $reunion->estado = 0;
+            $reunion->save();
+            return ['status'=>'ok'];
+        }
+        return ['status'=>'error', 'msg' => 'No se encontro la reunión en la base de datos'];
+    }
+
     public function createModify(Request $request)
     {
         $page   = "objectives";
