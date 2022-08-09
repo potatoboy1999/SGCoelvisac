@@ -21,7 +21,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                Alert
+                Alerta
                 <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body"></div>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="title">Descripción:</label>
-                                <textarea class="form-control" name="description" id="description" rows="3" required>{{isset($reunion)?$reunion->descripcion:''}}</textarea>
+                                <textarea class="form-control" name="description" id="description" rows="3" maxlength="500" required>{{isset($reunion)?$reunion->descripcion:''}}</textarea>
                             </div>
                         </div>
                         <div class="col-md-6">

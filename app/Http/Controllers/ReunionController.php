@@ -116,20 +116,6 @@ class ReunionController extends Controller
 
     public function storeReunion(Request $request)
     {
-        /*
-        foreach ($request->files as $x => $themes) {
-            foreach ($themes as $y => $area_files) {
-                foreach ($area_files as $z => $files) {
-                    foreach($files as $k => $file){
-                        print("FILE: X: ".$x." |Y: ".$y." |Z: ".$z." |K: ".$k." |NAME: ".$file->getClientOriginalName()."<br>");
-                    }
-                }
-            }
-        }
-        return;
-        return $request->files;
-        return $request->all();
-        */
         $alerts = [];
 
         $reunion = new Reunion;
@@ -160,15 +146,16 @@ class ReunionController extends Controller
             $theme->save();
 
             // print("TEMA: ".$theme_name." | KEY: ".$key."<br>");
-            for ($x = 0; $x < sizeof($request->area[$key]); $x++) { 
-                $area_id = $request->area[$key][$x];
+            $x = 0;
+            foreach ($request->area[$key] as $area_key => $area_id) {
+                // $area_id = $request->area[$key][$x];
                 // print("AREA: ".$area_id."<br>");
                 foreach ($request->files as $themes) {
                     foreach ($themes as $theme_key => $area_files) {
                         if($theme_key == $key){
                             $cnter = 0;
-                            foreach ($area_files as $files) {
-                                if($cnter == $x){
+                            foreach ($area_files as $a_key => $files) {
+                                if($a_key == $area_key){
                                     foreach($files as $k => $file){
                                         if($file->isValid()){
                                             // print("FILE: NAME: ".$file->getClientOriginalName()."<br>");
@@ -211,6 +198,7 @@ class ReunionController extends Controller
                     }
                 }
                 // print("<br><br>");
+                $x++;
             }
             // print('<br>');
             $i++;

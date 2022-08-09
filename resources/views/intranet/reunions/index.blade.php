@@ -58,7 +58,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="form-group w-100 d-inline-block my-1">
+                        {{-- <div class="form-group w-100 d-inline-block my-1">
                             <label>Tipo:</label>
                             <div class="input-group d-inline-flex" style="width: calc(100% - 41px);">
                                 <select class="form-select" name="cal_type" id="sel_month">
@@ -71,7 +71,7 @@
                                     </svg>
                                 </button>
                             </div>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
             </div>
