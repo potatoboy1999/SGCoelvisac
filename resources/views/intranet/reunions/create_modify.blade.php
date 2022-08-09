@@ -214,7 +214,7 @@
                                 <div class="area_docs_list" counter="2">
                                     <div class="area_docs border rounded p-3 mb-2" area-count="1">
                                         <label class="form-label" for="area_name">Área:</label>
-                                        <select class="form-select area_select" name="area[theme1][]" id="area_name1">
+                                        <select class="form-select area_select" name="area[theme1][area1]" id="area_name1">
                                             @foreach ($areas as $area)
                                                 <option value="{{$area->id}}">{{$area->nombre}}</option>
                                             @endforeach
