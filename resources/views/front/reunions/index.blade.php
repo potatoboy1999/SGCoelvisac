@@ -19,7 +19,7 @@
 <div class="row">
     <div class="marco col-md-12 col-xs-12">
         <div class="box">
-            <h2 class="titulo"><i class="fas fa-cog"></i>Calendario de Viajes</h2>
+            <h2 class="titulo"><i class="fas fa-cog"></i>Calendario de Reuniones</h2>
         </div>
     </div>
     <div class="marco">
