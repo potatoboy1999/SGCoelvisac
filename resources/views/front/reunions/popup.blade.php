@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h5 class="modal-title" id="editThemeModalLabel">Reunión</h5>
-    <button class="btn-close" type="button" data-{{$source == "front"?"bs":"coreui"}}-dismiss="modal" aria-label="Close"></button>
+    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
     <div class="row">
@@ -102,6 +102,6 @@
 </div>
 <div class="modal-footer">
     <div class="text-end">
-        <button type="button" class="btn btn-secondary" data-{{$source == "front"?"bs":"coreui"}}-dismiss="modal" aria-label="Close">Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cerrar</button>
     </div>
 </div>

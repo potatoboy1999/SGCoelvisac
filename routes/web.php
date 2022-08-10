@@ -135,6 +135,11 @@ Route::get("/schedules", [TravelScheduleController::class,'frontIndex'])->name('
 Route::get("/schedules/calendar", [TravelScheduleController::class,'viewCalendar'])->name('front.schedules.calendar');
 Route::get('/schedules/popup', [TravelScheduleController::class, "showSchedulePopup"])->name("front.schedules.popup");
 
+// REUNIONS
+Route::get("/reunions", [ReunionController::class,'frontIndex'])->name('front.reunions');
+Route::get("/reunions/calendar", [ReunionController::class,'viewCalendar'])->name('front.reunions.calendar');
+Route::get('/reunions/popup', [ReunionController::class, "showPopup"])->name("front.reunions.popup");
+
 // EXTRAS
 Route::get("/document/download", [DocumentController::class,"download"])->name('doc.download');
 Route::get("/test_mail", [DashboardController::class,"testMail"])->name('test.mail');

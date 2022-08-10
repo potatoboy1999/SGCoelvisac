@@ -32,6 +32,22 @@ class ReunionController extends Controller
         ]);
     }
 
+    public function frontIndex(Request $request)
+    {
+        $page = 'result_reunion';
+        $m_areas = Area::where('vis_matriz', 1)
+                    ->where('estado',1)
+                    ->get();
+        $year = intval(isset($request->year)?$request->year:date('Y'));
+        $month = intval(isset($request->month)?$request->month:date('m'));
+        return view('front.reunions.index',[
+            "page" => $page,
+            "m_areas" => $m_areas,
+            "year" => $year,
+            "month" => $month,
+        ]);
+    }
+
     public function viewCalendar(Request $request)
     {
         $year = intval(isset($request->year)?$request->year:date('Y'));
@@ -413,7 +429,8 @@ class ReunionController extends Controller
 
         return view('intranet.reunions.reunion_popup',[
             'reunion' => $reunion,
-            'areas' => $areas
+            'areas' => $areas,
+            'source' => isset($request->source)?$request->source:'back'
         ]);
     }
 }

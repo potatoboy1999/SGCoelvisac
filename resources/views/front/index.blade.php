@@ -261,7 +261,7 @@
                     </div>
                     <div class="col-2">
                         <div class="box">
-                            <a href="javascript:;">
+                            <a href="{{route('front.reunions')}}">
                                 <i class="fas fa-bezier-curve"></i>
                                 Reunión de Resultado mensual
                             </a>
