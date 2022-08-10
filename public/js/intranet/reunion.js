@@ -159,12 +159,7 @@ $("#form_delete").on('submit', function(ev){
 });
 
 function redirectToCreate(date){
-    var action = 1; // NEW
     var url = result_create;
-    if(id != null){
-        action = 2; // SHOW
-        url = result_modify;
-    }
     location.href = url+"?date="+encodeURI(date);
 }
 function prepareModal(id){
