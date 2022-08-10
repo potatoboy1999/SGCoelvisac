@@ -22,6 +22,14 @@ $(".search-calendar").on('click',function(ev){
     getCalendar();
 })
 
+$(document).on('click', '.btn-download', function(ev){
+    ev.preventDefault();
+    var route = $(this).attr("href");
+    var id = $(this).attr("docid");
+    route = route+"?id="+id;
+    window.location.href = route+"?id="+id;
+});
+
 $(document).on('click','.area-reunion', function(ev){
     ev.preventDefault();
     var id = $(this).data('reuid');
