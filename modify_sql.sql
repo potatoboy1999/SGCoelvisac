@@ -92,7 +92,6 @@ CREATE TABLE `t_sgcv_report_files` (
     FOREIGN KEY (`documento_id`)
     REFERENCES `t_sgcv_documentos` (`id`));
 
--- Everything on top of this on Live Server
 ALTER TABLE t_sgcv_agenda_viajes ADD INDEX `fk_t_sgcv_agenda_viajes_T_t_sgcv_usuarios1_idx` (`val_uno_por`);
 ALTER TABLE t_sgcv_agenda_viajes ADD INDEX `fk_t_sgcv_agenda_viajes_T_t_sgcv_usuarios2_idx` (`val_dos_por`);
 ALTER TABLE t_sgcv_agenda_viajes ADD CONSTRAINT `fk_t_sgcv_agenda_viajes_T_t_sgcv_usuarios1` FOREIGN KEY (`val_uno_por`) REFERENCES t_sgcv_usuarios(`id`);
@@ -112,3 +111,5 @@ ALTER TABLE t_sgcv_reu_temas CHANGE modified_at updated_at DATETIME;
 ALTER TABLE t_sgcv_reuniones ADD COLUMN usuario_id BIGINT NOT NULL AFTER id;
 ALTER TABLE t_sgcv_reuniones ADD INDEX `fk_t_sgcv_reuniones_T_t_sgcv_usuarios1_idx` (`usuario_id`);
 ALTER TABLE t_sgcv_reuniones ADD CONSTRAINT `fk_t_sgcv_reuniones_T_t_sgcv_usuarios1` FOREIGN KEY (`usuario_id`) REFERENCES t_sgcv_usuarios(`id`);
+
+-- Everything on top of this on Live Server
