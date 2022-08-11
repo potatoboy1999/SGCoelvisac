@@ -17,7 +17,7 @@
 
 @section('content')
 <div class="modal fade" id="newScheduleModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
         </div>
     </div>

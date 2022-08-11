@@ -4,6 +4,15 @@
     
 @section('style')
     <link rel="stylesheet" href="{{asset('css/front/reunion.css')}}">
+    <style>
+        .bg-dark {
+            --bs-bg-opacity: 1;
+            background-color: #414565 !important;
+        }
+        .bg-modal-header{
+            background-color: #bfbfbf !important;
+        }
+    </style>
 @endsection
 
 @section('content')

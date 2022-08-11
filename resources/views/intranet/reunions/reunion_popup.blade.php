@@ -1,4 +1,4 @@
-<div class="modal-header">
+<div class="modal-header bg-modal-header">
     <h5 class="modal-title" id="editThemeModalLabel">Reunión</h5>
     <button class="btn-close" type="button" data-{{$source == "front"?"bs":"coreui"}}-dismiss="modal" aria-label="Close"></button>
 </div>

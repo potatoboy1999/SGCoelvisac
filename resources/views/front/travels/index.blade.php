@@ -21,7 +21,7 @@
 @section('content')
 <!-- Travel Schedule Modal -->
 <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
       </div>
     </div>
