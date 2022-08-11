@@ -59,7 +59,7 @@
     <div class="container-lg">
         <div class="card mb-4">
             <div class="card-body">
-                <button class="btn btn-success text-white">+ Nueva Sede</button>
+                <button id="newBranch" class="btn btn-success text-white">+ Nueva Sede</button>
             </div>
         </div>
         <div class="card mb-4">
@@ -82,7 +82,7 @@
                                 <td class="d-name align-middle">{{$branch->nombre}}</td>
                                 <td class="branch{{$branch->id}}"></td>
                                 <td class="d-actions align-middle text-center">
-                                    <a href="#" class="text-white btn btn-info btn-sm btn-edit">
+                                    <a href="#" class="text-white btn btn-info btn-sm btn-edit" data-id="{{$branch->id}}">
                                         <svg class="icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-pencil"></use>
                                         </svg>

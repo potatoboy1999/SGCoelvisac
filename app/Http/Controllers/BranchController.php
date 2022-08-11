@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 
 class BranchController extends Controller
@@ -35,7 +36,7 @@ class BranchController extends Controller
      */
     public function create()
     {
-        //
+        return view('intranet.branches.branches_popup');
     }
 
     /**
@@ -46,18 +47,12 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $branch = new Branch();
+        $branch->nombre = $request->nombre;
+        $branch->color = $request->color;
+        $branch->estado = 1;
+        $branch->save();
+        return ['status'=>'ok'];
     }
 
     /**
@@ -66,9 +61,20 @@ class BranchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $branch = Branch::find($request->id);
+        if($branch){
+            return view('intranet.branches.branches_popup',[
+                'branch' => $branch
+            ]);
+        }
+        return response()->json(
+            [
+                'status'=>'error',
+                'message'=>'No branch found'
+            ], 500
+        );
     }
 
     /**
@@ -78,9 +84,16 @@ class BranchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $branch = Branch::find($request->id);
+        if($branch){
+            $branch->nombre = $request->nombre;
+            $branch->color = $request->color;
+            $branch->save();
+            return ['status'=>'ok'];
+        }
+        return ['status'=>'error', 'message'=>'No branch found'];
     }
 
     /**
@@ -89,8 +102,13 @@ class BranchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $branch = Branch::find($request->reunion_id);
+        if($branch){
+            $branch->estado = 0;
+            $branch->save();
+        }
+        return back();
     }
 }

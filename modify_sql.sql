@@ -119,3 +119,5 @@ ALTER TABLE t_sgcv_sedes ADD COLUMN color VARCHAR(10) NOT NULL AFTER direccion;
 UPDATE t_sgcv_sedes set COLOR = '#008b00' WHERE id = 1;
 UPDATE t_sgcv_sedes set COLOR = '#00868b' WHERE id = 2;
 UPDATE t_sgcv_sedes set COLOR = '#74008b' WHERE id = 3;
+
+ALTER TABLE t_sgcv_sedes CHANGE modified_at updated_at DATETIME;

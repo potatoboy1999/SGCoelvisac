@@ -124,11 +124,11 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
 
     Route::group(['prefix' => 'branches'], function(){
         Route::get('/', [BranchController::class, "index"])->name('branches.index');
-        Route::get('/new', [BranchController::class, "showNew"])->name('branches.new');
-        Route::get('/modify', [BranchController::class, "showEdit"])->name('branches.edit');
-        Route::post('/update', [BranchController::class, "saveUpdate"])->name('branches.save.update');
-        Route::post('/store', [BranchController::class, "saveNew"])->name('branches.save.new');
-        Route::post('/delete', [BranchController::class, "delete"])->name('branches.delete');
+        Route::get('/new', [BranchController::class, "create"])->name('branches.new');
+        Route::get('/modify', [BranchController::class, "edit"])->name('branches.edit');
+        Route::post('/update', [BranchController::class, "update"])->name('branches.save.update');
+        Route::post('/store', [BranchController::class, "store"])->name('branches.save.new');
+        Route::post('/delete', [BranchController::class, "destroy"])->name('branches.delete');
     });
 
 });
