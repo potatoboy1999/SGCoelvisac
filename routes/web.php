@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ObjectiveController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReunionController;
 use App\Http\Controllers\RoleController;
@@ -129,6 +131,24 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::post('/update', [BranchController::class, "update"])->name('branches.save.update');
         Route::post('/store', [BranchController::class, "store"])->name('branches.save.new');
         Route::post('/delete', [BranchController::class, "destroy"])->name('branches.delete');
+    });
+
+    Route::group(['prefix' => 'areas'], function(){
+        Route::get('/', [AreaController::class, "index"])->name('areas.index');
+        Route::get('/new', [AreaController::class, "create"])->name('areas.new');
+        Route::get('/modify', [AreaController::class, "edit"])->name('areas.edit');
+        Route::post('/update', [AreaController::class, "update"])->name('areas.save.update');
+        Route::post('/store', [AreaController::class, "store"])->name('areas.save.new');
+        Route::post('/delete', [AreaController::class, "destroy"])->name('areas.delete');
+    });
+
+    Route::group(['prefix' => 'positions'], function(){
+        Route::get('/', [PositionController::class, "index"])->name('position.index');
+        Route::get('/new', [PositionController::class, "create"])->name('position.new');
+        Route::get('/modify', [PositionController::class, "edit"])->name('position.edit');
+        Route::post('/update', [PositionController::class, "update"])->name('position.save.update');
+        Route::post('/store', [PositionController::class, "store"])->name('position.save.new');
+        Route::post('/delete', [PositionController::class, "destroy"])->name('position.delete');
     });
 
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
 use Illuminate\Http\Request;
 
 class AreaController extends Controller
@@ -13,7 +14,19 @@ class AreaController extends Controller
      */
     public function index()
     {
-        //
+        $page = "areas";
+        $bcrums = ["Áreas"];
+        $areas = Area::where('estado', 1)
+                    ->where('vis_matriz', 1)
+                    ->orderby('nombre','asc')
+                    ->get();
+        // return $branches->toArray();
+
+        return view('intranet.areas.index',[
+            "page"      => $page,
+            "bcrums"    => $bcrums,
+            "areas"     => $areas,
+        ]);
     }
 
     /**

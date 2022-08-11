@@ -121,3 +121,5 @@ UPDATE t_sgcv_sedes set COLOR = '#00868b' WHERE id = 2;
 UPDATE t_sgcv_sedes set COLOR = '#74008b' WHERE id = 3;
 
 ALTER TABLE t_sgcv_sedes CHANGE modified_at updated_at DATETIME;
+
+INSERT INTO t_sgcv_opciones VALUES (null, 'Áreas', 'areas.index','cil-group', null, 5, 4, 8, 2, 1, '2022-08-10 12:00:00', '2022-08-10 12:00:00');

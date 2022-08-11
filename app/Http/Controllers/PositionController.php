@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Position;
 use Illuminate\Http\Request;
 
 class PositionController extends Controller
@@ -11,9 +12,21 @@ class PositionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $page = "positions";
+        $bcrums = ["Áreas","Posiciones"];
+        $positions = Position::where('estado', 1)
+                    ->where('area_id', $request->area_id)
+                    ->orderby('nombre','asc')
+                    ->get();
+        // return $branches->toArray();
+
+        return view('intranet.positions.index',[
+            "page"      => $page,
+            "bcrums"    => $bcrums,
+            "positions"     => $positions,
+        ]);
     }
 
     /**
