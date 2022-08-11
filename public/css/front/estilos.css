@@ -155,7 +155,8 @@ body{
     line-height: 70px;
     margin: 0px auto;
     background: rgb(1,92,157);
-    background: linear-gradient(120deg, rgba(1,92,157,1) 0%, rgba(2,48,85,1) 68%);
+    /* background: linear-gradient(120deg, rgba(1,92,157,1) 0%, rgba(2,48,85,1) 68%); */
+    background: linear-gradient(120deg, rgb(88,104,225,1) 0%, rgb(32,44,145,1) 68%);
     margin-bottom: 15px;
 }
 .home-contenido .opciones .box a:hover {
@@ -163,7 +164,8 @@ body{
 }
 .home-contenido .opciones .box a:hover i {
     background: rgb(2,48,85);
-    background: linear-gradient(120deg, rgba(2,48,85,1) 0%, rgba(2,48,85,1) 68%);
+    /* background: linear-gradient(120deg, rgba(2,48,85,1) 0%, rgba(2,48,85,1) 68%); */
+    background: linear-gradient(120deg, rgb(24,34,118,1) 0%, rgb(23,34,126,1) 68%);
 }
 
 /*Slider*/
