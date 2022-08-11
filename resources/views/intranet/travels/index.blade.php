@@ -6,15 +6,12 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{{asset('css/intranet/travel.css')}}">
     <style>
-        .branch1{
-            background: rgb(0, 139, 0);
-        }
-        .branch2{
-            background: rgb(0, 134, 139);
-        }
-        .branch3{
-            background: rgb(116, 0, 139);
-        }
+        @foreach ($branches as $branch)
+            .branch{{$branch->id}}{
+                background: {{$branch->color}};
+            }
+        @endforeach
+        /* {} */
     </style>
 @endsection
 

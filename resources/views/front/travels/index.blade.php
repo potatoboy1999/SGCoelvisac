@@ -9,15 +9,12 @@
             padding: 0.1rem;
             border-radius: 5px;
         }
-        .branch1{
-            background: rgb(0, 139, 0);
-        }
-        .branch2{
-            background: rgb(0, 134, 139);
-        }
-        .branch3{
-            background: rgb(116, 0, 139);
-        }
+        @foreach ($branches as $branch)
+            .branch{{$branch->id}}{
+                background: {{$branch->color}};
+            }
+        @endforeach
+        /* {} */
     </style>
 @endsection
 
@@ -95,9 +92,9 @@
         <div class="box">
             <h3 class="titulo">Leyenda</h3>
             <div class="cuerpo text-start">
-                <p><span class="d-inline-block text-block branch1" style="width: 20px;">&nbsp;</span> Sede Villacurí</p>
-                <p><span class="d-inline-block text-block branch2" style="width: 20px;">&nbsp;</span> Sede Andahuasi</p>
-                <p><span class="d-inline-block text-block branch3" style="width: 20px;">&nbsp;</span> Sede Olmos</p>
+                @foreach ($branches as $branch)
+                    <p><span class="d-inline-block text-block branch{{$branch->id}}" style="width: 20px;">&nbsp;</span> Sede {{$branch->nombre}}</p>
+                @endforeach
             </div>
         </div>
     </div>

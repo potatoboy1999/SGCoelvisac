@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
@@ -86,7 +87,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/reports/pdf/download',[TravelScheduleController::class,"exportReportPdf"])->name('agenda.reports.pdf');
     });
 
-    Route::group(["prefix"=>"usuario"], function(){
+    Route::group(["prefix"=>"users"], function(){
         Route::GET('/',[UserController::class, 'index'])->name('user.index');
         Route::POST('/deactivate',[UserController::class, 'deactivate'])->name('user.deactivate');
         Route::POST('/activate',[UserController::class, 'activate'])->name('user.activate');
@@ -119,6 +120,15 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::post('/reunion/delete/', [ReunionController::class, "deleteReunion"])->name('results.reunion.delete');
         // -- reports schedules
         Route::get('/reunions', [ReunionController::class, "viewReunions"])->name('results.reunions');
+    });
+
+    Route::group(['prefix' => 'branches'], function(){
+        Route::get('/', [BranchController::class, "index"])->name('branches.index');
+        Route::get('/new', [BranchController::class, "showNew"])->name('branches.new');
+        Route::get('/modify', [BranchController::class, "showEdit"])->name('branches.edit');
+        Route::post('/update', [BranchController::class, "saveUpdate"])->name('branches.save.update');
+        Route::post('/store', [BranchController::class, "saveNew"])->name('branches.save.new');
+        Route::post('/delete', [BranchController::class, "delete"])->name('branches.delete');
     });
 
 });

@@ -26,13 +26,15 @@ class TravelScheduleController extends Controller
         $bcrums = ["Agendas"];
         $year = intval(isset($request->year)?$request->year:date('Y'));
         $month = intval(isset($request->month)?$request->month:date('m'));
+        $branches = Branch::where('estado', 1)->get();
         // return $branches->toArray();
 
         return view('intranet.travels.index',[
-            "page"=>$page,
-            "bcrums" => $bcrums,
-            "year" => $year,
-            "month" => $month,
+            "page"      => $page,
+            "bcrums"    => $bcrums,
+            "year"      => $year,
+            "month"     => $month,
+            "branches"  => $branches,
         ]);
     }
 
@@ -509,11 +511,13 @@ class TravelScheduleController extends Controller
                     ->get();
         $year = intval(isset($request->year)?$request->year:date('Y'));
         $month = intval(isset($request->month)?$request->month:date('m'));
+        $branches = Branch::where('estado', 1)->get();
         return view('front.travels.index',[
             "page" => $page,
             "m_areas" => $m_areas,
             "year" => $year,
             "month" => $month,
+            'branches' => $branches,
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use Illuminate\Http\Request;
 
 class BranchController extends Controller
@@ -13,7 +14,18 @@ class BranchController extends Controller
      */
     public function index()
     {
-        //
+        $page = "branches";
+        $bcrums = ["Sedes"];
+        $branches = Branch::where('estado', 1)
+                    ->orderby('nombre','asc')
+                    ->get();
+        // return $branches->toArray();
+
+        return view('intranet.branches.index',[
+            "page"      => $page,
+            "bcrums"    => $bcrums,
+            "branches"  => $branches,
+        ]);
     }
 
     /**

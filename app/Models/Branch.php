@@ -17,6 +17,7 @@ class Branch extends Model
         'telefono',
         'direccion',
         'estado',
+        'color',
     ];
 
     public function travel_schedules(){
