@@ -295,11 +295,13 @@ body{
 .accordion-button span {
     padding: 10px;
     display: block !important;
-    color: #0062a8;
+    /* color: #0062a8; */
+    color: #2a37a4;
     width: 100% !important;
 }
 .accordion-button i {
-    color: #0062a8;
+    /* color: #0062a8; */
+    color: #2a37a4;
     font-size: 1.3em;
     position: absolute;
     top: 10px;
@@ -314,13 +316,14 @@ body{
     background-color: transparent !important;
 }
 /*.accordion-button:focus span {
-    background-color: #0062a8;
+    background-color: #2a37a4;
     color: #ffffff;
     border-radius: 5px;
     display: block !important;
 }*/
 .accordion-button:not(.collapsed) {
-    color: #0062a8;
+    /* color: #0062a8; */
+    color: #2a37a4;
     background-color: none !important;
 }
 .accordion-body {
@@ -363,10 +366,12 @@ body{
     font-size: 1.15em !important;
 }
 .interna h2 span {
-    color: #0062a8;
+    /* color: #0062a8; */
+    color: #2a37a4;
 }
 .interna h2 i {
-    color: #0062a8;
+    /* color: #0062a8; */
+    color: #2a37a4;
     margin-right: 5px;
 }
 

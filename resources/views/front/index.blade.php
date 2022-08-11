@@ -217,7 +217,7 @@
 <body class="home">
     <nav class="navbar navbar-default navbar-static-top header">
         <div class="fondo container-fluid">
-            <img class="logo" src="{{asset("img/logo.png")}}" alt="">
+            <img class="logo" height="80" src="{{asset("img/logo.png")}}" alt="">
 
             {{-- <form class="d-flex" role="search">
               <input class="form-control" type="search" placeholder="Buscar" aria-label="Search">
