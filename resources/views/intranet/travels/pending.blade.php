@@ -14,7 +14,7 @@
 
 @section('content')
 <div class="modal fade" id="scheduleModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header"><h5>Agendas Pendientes</h5></div>
             <div class="modal-body"></div>
