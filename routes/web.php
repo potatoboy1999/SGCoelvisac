@@ -33,6 +33,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
 
     Route::group(["prefix"=>"matriz"], function(){
         Route::get('/', [ObjectiveController::class,"index"])->name("objectives");
+        Route::get('/pdf', [ObjectiveController::class,"viewPDF"])->name("objectives.pdf");
         Route::post('new_item', [ObjectiveController::class,"storeItem"])->name("new_item");
         Route::get("all_items", [ObjectiveController::class,"allItems"])->name("api_all_activities");
     });

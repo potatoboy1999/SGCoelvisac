@@ -16,14 +16,14 @@ td.t_role_row{
 td.t_theme_row{
     background-color: #cccccc!important;
 }
-td.t_red {
-    background-color: #ec1d1d;
+.t_red {
+    background-color: #ec1d1d!important;
 }
-td.t_green {
-    background-color: #12c212;
+.t_green {
+    background-color: #12c212!important;
 }
-td.t_yellow {
-    background-color: #f9e715;
+.t_yellow {
+    background-color: #f9e715!important;
 }
 #ui-datepicker-div{
     z-index: 10000!important;

@@ -27,6 +27,9 @@
         return $status;
     }
     function valActivity($activity, $filter){
+        if($activity->estado == 0){
+            return false;
+        }
         if($filter['active']){
             $labels = ['red','yellow','green'];
             $progStatus = progressStatus($activity);

@@ -112,8 +112,6 @@ ALTER TABLE t_sgcv_reuniones ADD COLUMN usuario_id BIGINT NOT NULL AFTER id;
 ALTER TABLE t_sgcv_reuniones ADD INDEX `fk_t_sgcv_reuniones_T_t_sgcv_usuarios1_idx` (`usuario_id`);
 ALTER TABLE t_sgcv_reuniones ADD CONSTRAINT `fk_t_sgcv_reuniones_T_t_sgcv_usuarios1` FOREIGN KEY (`usuario_id`) REFERENCES t_sgcv_usuarios(`id`);
 
--- Everything on top of this on Live Server
-
 INSERT INTO t_sgcv_opciones VALUES (null, 'Sedes', 'branches.index','cil-building', null, 4, 4, 8, 2, 1, '2022-08-09 12:00:00', '2022-08-09 12:00:00');
 ALTER TABLE t_sgcv_sedes ADD COLUMN color VARCHAR(10) NOT NULL AFTER direccion;
 UPDATE t_sgcv_sedes set COLOR = '#008b00' WHERE id = 1;
@@ -123,3 +121,5 @@ UPDATE t_sgcv_sedes set COLOR = '#74008b' WHERE id = 3;
 ALTER TABLE t_sgcv_sedes CHANGE modified_at updated_at DATETIME;
 
 INSERT INTO t_sgcv_opciones VALUES (null, 'Áreas', 'areas.index','cil-group', null, 5, 4, 8, 2, 1, '2022-08-10 12:00:00', '2022-08-10 12:00:00');
+
+-- Everything on top of this on Live Server

@@ -27,6 +27,9 @@
         return $status;
     }
     function valActivity($activity, $filter){
+        if($activity->estado == 0){
+            return false;
+        }
         if($filter['active']){
             $labels = ['red','yellow','green'];
             $progStatus = progressStatus($activity);
@@ -79,6 +82,7 @@
     
 @section('style')
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <link rel="stylesheet" href="{{asset('css/intranet/objectives.css')}}">
 @endsection
 
@@ -509,6 +513,11 @@
                         </a>
                     </div>
                     @endif
+                    <div class="p-1">
+                        <a href="{{route('objectives.pdf')}}" class="btn btn-danger text-white view-pdf" toggle-visible="false">
+                            <i class="fa-regular fa-file-pdf"></i> <span> PDF</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -570,7 +579,7 @@
                                                                 <th class="text-center align-middle t-head-act-name" width="180">Actividades Principales</th>
                                                                 <th class="text-center align-middle t-head-date-start" width="100" style="display: none;">Fecha Inicio</th>
                                                                 <th class="text-center align-middle t-head-date-end" width="100" style="display: none;">Fecha Fin</th>
-                                                                <th class="text-center align-middle t-head-policies" width="80"><!--Procedimiento/<br>-->Politica</th>
+                                                                <th class="text-center align-middle t-head-policies" width="80">Procedimiento/<br>Politica</th>
                                                                 <th class="text-center align-middle t-head-adjacents" width="120">Documento<br>Adjunto</th>
                                                                 <th class="text-center align-middle t-head-status" width="50">Estado</th>
                                                                 <th class="text-center align-middle t-head-comments" width="100"></th>
@@ -667,6 +676,23 @@
             <?php $i++; ?>
             @endif
         @endforeach
+        <div class="card">
+            <div class="card-header">Leyenda</div>
+            <div class="card-body">
+                <p>
+                    <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
+                    <strong>Verde:</strong> Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
+                </p>
+                <p>
+                    <span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span>
+                    <strong>Amarillo:</strong> Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                </p>
+                <p>
+                    <span class="d-inline-block text-block t_red" style="width: 20px;">&nbsp;</span>
+                    <strong>Rojo:</strong> Cuando no se haya cumplido la accion y se ha vencido el plazo.
+                </p>
+            </div>
+        </div>
         @endif
         <!-- End Activities Matrix -->
     </div>
@@ -677,6 +703,7 @@
 @section('script')
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 <script src="{{asset("js/intranet/objectives.js")}}"></script>
 <script>
     @if (session()->get('item_status'))

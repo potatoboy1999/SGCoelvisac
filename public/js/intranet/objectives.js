@@ -166,6 +166,13 @@ $(".toggle-comments").on("click",function(ev){
     }
 });
 
+$('.view-pdf').on('click', function(ev){
+    ev.preventDefault();
+    var url = $(this).attr('href');
+    var query = location.search;
+    window.open(url+query, '_blank');
+});
+
 $(".toggle-dates").on("click",function(ev){
     ev.preventDefault();
     if($(this).attr("toggle-visible") == "false"){
