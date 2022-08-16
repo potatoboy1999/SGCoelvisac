@@ -122,10 +122,10 @@ ALTER TABLE t_sgcv_sedes CHANGE modified_at updated_at DATETIME;
 
 INSERT INTO t_sgcv_opciones VALUES (null, 'Áreas', 'areas.index','cil-group', null, 5, 4, 8, 2, 1, '2022-08-10 12:00:00', '2022-08-10 12:00:00');
 
--- Everything on top of this on Live Server
-
 INSERT INTO t_sgcv_opciones VALUES (null, 'Seguimiento', 'agenda.tracking','cil-av-timer', null, 5, 2, 5, 2, 1, '2022-08-15 12:00:00', '2022-08-15 12:00:00');
 ALTER TABLE t_sgcv_reporte_actividades ADD COLUMN es_cerrado TINYINT NOT NULL DEFAULT 0 AFTER fecha_fin;
 ALTER TABLE t_sgcv_reporte_actividades ADD COLUMN cerrado_por BIGINT NULL AFTER es_cerrado;
 ALTER TABLE t_sgcv_reporte_actividades ADD INDEX `fk_t_sgcv_reporte_actividades_T_t_sgcv_usuarios1_idx` (`cerrado_por`);
 ALTER TABLE t_sgcv_reporte_actividades ADD CONSTRAINT `fk_t_sgcv_reporte_actividades_T_t_sgcv_usuarios1` FOREIGN KEY (`cerrado_por`) REFERENCES t_sgcv_usuarios(`id`);
+
+-- Everything on top of this on Live Server
