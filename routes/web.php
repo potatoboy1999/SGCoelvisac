@@ -14,6 +14,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\TravelScheduleController;
 use App\Http\Controllers\UserController;
+use App\Models\TravelSchedule;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -88,6 +89,12 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::post('/reports/activity/save',[TravelScheduleController::class, "saveActivity"])->name("agenda.reports.activity.save");
         Route::post('/reports/activity/delete',[TravelScheduleController::class, "deleteActivity"])->name("agenda.reports.activity.delete");
         Route::get('/reports/pdf/download',[TravelScheduleController::class,"exportReportPdf"])->name('agenda.reports.pdf');
+        // -- reports tracking
+        Route::get('/tracking', [TravelScheduleController::class, "viewTrackingList"])->name('agenda.tracking');
+        Route::get('/tracking/popup', [TravelScheduleController::class, "showTrackActivity"])->name('agenda.tracking.popup');
+        Route::post('/tracking/update', [TravelScheduleController::class, "updateTrackActivity"])->name('agenda.tracking.update');
+        Route::post('/tracking/close', [TravelScheduleController::class, "closeTrackActivity"])->name('agenda.tracking.close');
+        Route::post('/tracking/pdf', [TravelScheduleController::class, "reportPdf"])->name('agenda.tracking.pdf');
     });
 
     Route::group(["prefix"=>"users"], function(){

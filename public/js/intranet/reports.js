@@ -35,7 +35,7 @@ $(".new_activity").on('click', function(ev){
             //load scripts
             $("#act_date_start").datepicker({
                 dateFormat: "dd/mm/yy",
-                onselect: function(date){
+                onSelect: function(date){
                     $("#act_date_end").datepicker('option', 'minDate', date);
                 }
             });
@@ -156,7 +156,7 @@ $(".activity-table").on('click', '.btn-edit', function(ev){
             //load scripts
             $("#act_date_start").datepicker({
                 dateFormat: "dd/mm/yy",
-                onselect: function(date){
+                onSelect: function(date){
                     $("#act_date_end").datepicker('option', 'minDate', date);
                 }
             });

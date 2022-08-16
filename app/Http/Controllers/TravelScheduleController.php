@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\TravelAlert;
 use App\Mail\TravelValidationAlert;
+use App\Models\Activity;
 use App\Models\Area;
 use App\Models\Branch;
 use App\Models\Document;
@@ -16,6 +17,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use DateTime;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -561,6 +563,100 @@ class TravelScheduleController extends Controller
             return ['status'=>'ok'];
         }
         return back()->with(['error'=>'No se encontró la agenda']);
+    }
+
+    public function viewTrackingList(Request $request)
+    {
+        $page = 'tracking';
+        $bcrums = ['Seguimiento'];
+        $day_limit = date('Y-m-d', strtotime("+3 days"));
+        // $activities = ReportActivity::whereNotNull('id');
+        $activities = ReportActivity::where('t_sgcv_reporte_actividades.estado','>','0')
+                                    ->where('t_sgcv_reporte_actividades.fecha_fin','<=',$day_limit)
+                                    ->where('t_sgcv_reporte_actividades.es_cerrado', 0) // only check activities that hasn't been marked as closed
+                                    ->where('t_sgcv_agenda_viajes.finalizado', 1) // only check activities where the report has been finished
+                                    ->where('t_sgcv_agenda_viajes.estado','>','0')
+                                    ->join('t_sgcv_agenda_viajes','t_sgcv_reporte_actividades.agenda_viaje_id','t_sgcv_agenda_viajes.id')
+                                    ->select('t_sgcv_reporte_actividades.*');
+        $activities->with('travelSchedule');
+        $activities = $activities->orderBy('t_sgcv_reporte_actividades.fecha_fin','desc')->get();
+        $branches = Branch::where('estado', 1)->get();
+        
+        return view('intranet.travels.tracking',[
+            'page' => $page,
+            'bcrums' => $bcrums,
+            'activities' => $activities,
+            'branches' => $branches
+        ]);
+    }
+
+    public function showTrackActivity(Request $request)
+    {
+        $activity = ReportActivity::find($request->id);
+        if($activity){
+            return view('intranet.travels.modal_tracking',[
+                'activity' => $activity
+            ]);
+        }
+        return ['status'=>'error', 'msg'=>'No activity found'];
+    }
+
+    public function updateTrackActivity(Request $request)
+    {
+        $activity = ReportActivity::find($request->id);
+        if($activity){
+            $activity->fecha_comienzo = date_format(date_create_from_format('d/m/Y',$request->from_date),'Y-m-d');
+            $activity->fecha_fin = date_format(date_create_from_format('d/m/Y',$request->to_date),'Y-m-d');
+            $activity->estado = $request->status;
+            $activity->save();
+            return back()->with(['status'=>'ok', 'msg'=>'Activity updated!']);
+        }
+        return back()->with(['status'=>'error', 'msg'=>'No activity found']);
+    }
+
+    public function closeTrackActivity(Request $request)
+    {
+        $activity = ReportActivity::find($request->id);
+        if($activity){
+            $activity->es_cerrado = 1;
+            $activity->cerrado_por = Auth::user()->id;
+            $activity->save();
+
+            return ['status'=>'ok', 'msg'=>'Activity Closed!'];
+        }
+        return ['status'=>'error', 'msg'=>'No activity found'];
+    }
+
+    public function reportPdf(Request $request)
+    {
+        $activities = ReportActivity::where('t_sgcv_reporte_actividades.estado','>','0')
+                                    ->where('t_sgcv_reporte_actividades.es_cerrado', 1) // only check activities that were marked as closed
+                                    ->where('t_sgcv_agenda_viajes.finalizado', 1) // only check activities where the report has been finished
+                                    ->where('t_sgcv_agenda_viajes.estado','>','0')
+                                    ->join('t_sgcv_agenda_viajes','t_sgcv_reporte_actividades.agenda_viaje_id','t_sgcv_agenda_viajes.id');
+        if($request->status != 'ALL'){
+            $activities->where('t_sgcv_reporte_actividades.estado', $request->status);
+        }
+        if($request->branch != 'ALL'){
+            $activities->where('t_sgcv_agenda_viajes.sede_id', $request->branch);
+        }
+        $searchFrom = date_format(date_create_from_format('d/m/Y',$request->search_from),'Y-m-d');
+        $searchTo = date_format(date_create_from_format('d/m/Y',$request->search_to),'Y-m-d');
+
+        $activities->where('t_sgcv_reporte_actividades.fecha_fin','>=', $searchFrom);
+        $activities->where('t_sgcv_reporte_actividades.fecha_fin','<=', $searchTo);
+
+        $activities->with('travelSchedule');
+
+        $activities = $activities->select('t_sgcv_reporte_actividades.*')
+                                ->orderBy('t_sgcv_reporte_actividades.fecha_fin','desc')
+                                ->get();
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('pdf.tracking_report', [
+            'activities' => $activities
+        ]);
+        return $pdf->stream();
     }
 }
 

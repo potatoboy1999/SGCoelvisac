@@ -18,10 +18,19 @@ class ReportActivity extends Model
         'acuerdo',
         'fecha_comienzo',
         'fecha_fin',
+        'es_cerrado',
+        'cerrado_por',
         'agenda_viaje_id',
         'actividades_viaje_id',
         'estado',
     ];
+
+    /* estado
+    ==============
+        0 = Deleted
+        1 = Not Finished
+        2 = Finished
+    */
 
     public function travelSchedule(){
         return $this->belongsTo(TravelSchedule::class,"agenda_viaje_id","id");
@@ -29,5 +38,9 @@ class ReportActivity extends Model
 
     public function travelActivity(){
         return $this->belongsTo(TravelActivity::class,"actividades_viaje_id","id");
+    }
+
+    public function closedByUser(){
+        return $this->belongsTo(User::class,"cerrado_por","id");
     }
 }
