@@ -129,3 +129,39 @@ ALTER TABLE t_sgcv_reporte_actividades ADD INDEX `fk_t_sgcv_reporte_actividades_
 ALTER TABLE t_sgcv_reporte_actividades ADD CONSTRAINT `fk_t_sgcv_reporte_actividades_T_t_sgcv_usuarios1` FOREIGN KEY (`cerrado_por`) REFERENCES t_sgcv_usuarios(`id`);
 
 -- Everything on top of this on Live Server
+DELETE FROM t_sgcv_reu_document;
+DELETE FROM t_sgcv_reu_presentadores;
+DELETE FROM t_sgcv_reu_temas;
+DELETE FROM t_sgcv_reuniones;
+
+ALTER TABLE t_sgcv_reu_document DROP FOREIGN KEY `fk_reu_document_reu_temas1`;
+ALTER TABLE t_sgcv_reu_document DROP KEY `fk_reu_document_reu_temas1_idx`;
+ALTER TABLE t_sgcv_reu_document DROP COLUMN `reu_tema_id`;
+ALTER TABLE t_sgcv_reuniones DROP COLUMN `titulo`;
+ALTER TABLE t_sgcv_reuniones DROP COLUMN `descripcion`;
+
+DROP TABLE t_sgcv_reu_presentadores;
+DROP TABLE t_sgcv_reu_temas;
+
+ALTER TABLE t_sgcv_reu_document ADD COLUMN reunion_id BIGINT NOT NULL AFTER id;
+ALTER TABLE t_sgcv_reu_document ADD INDEX `fk_t_sgcv_reu_document_T_t_sgcv_reuniones1_idx` (`reunion_id`);
+ALTER TABLE t_sgcv_reu_document ADD CONSTRAINT `fk_t_sgcv_reu_document_T_t_sgcv_reuniones1` FOREIGN KEY (`reunion_id`) REFERENCES t_sgcv_reuniones(`id`);
+
+UPDATE t_sgcv_areas SET nombre = 'Administración' where id = 4;
+
+CREATE TABLE t_sgcv_reu_consolidado(
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `reunion_id` bigint(20) NOT NULL,
+  `documento_id` bigint(20) NOT NULL,
+  `estado` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_reu_consolidado_documents1_idx` (`documento_id`),
+  KEY `fk_t_sgcv_reu_consolidado_T_t_sgcv_reuniones1_idx` (`reunion_id`),
+  CONSTRAINT `fk_reu_consolidado_documents1` FOREIGN KEY (`documento_id`) REFERENCES `t_sgcv_documentos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_t_sgcv_reu_consolidado_T_t_sgcv_reuniones1` FOREIGN KEY (`reunion_id`) REFERENCES `t_sgcv_reuniones` (`id`)
+);
+
+UPDATE t_sgcv_opciones SET estado = 0 WHERE id = 14;
+UPDATE t_sgcv_opciones SET opcion = 'Presentaciones', url_img = 'cil-airplay' WHERE id = 13;

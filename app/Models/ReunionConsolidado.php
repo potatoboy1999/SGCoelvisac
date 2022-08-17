@@ -5,24 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ReunionPresenter extends Model
+class ReunionConsolidado extends Model
 {
     use HasFactory;
 
-    protected $table = "t_sgcv_reu_presentadores";
+    protected $table = "t_sgcv_reu_consolidado";
     public $timestamps = true;
 
     protected $fillable = [
-        'usuario_id',
         'reunion_id',
+        'documento_id',
         'estado',
     ];
 
-    public function user(){
-        return $this->belongsTo(User::class,"usuario_id","id");
-    }
-
     public function reunion(){
         return $this->belongsTo(Reunion::class,"reunion_id","id");
+    }
+
+    public function document(){
+        return $this->belongsTo(Document::class,"documento_id","id");
     }
 }

@@ -120,16 +120,19 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
     Route::group(["prefix"=>"results"], function(){
         // -- reunion calendar
         Route::get('/', [ReunionController::class, "backIndex"])->name('results.index');
-        Route::get('/calendar', [ReunionController::class, "viewCalendar"])->name('results.calendar');
+        Route::get('/reunion', [ReunionController::class, "viewReunion"])->name('results.reunion');
         // Route::get('/calendar/popup/reunion', [ReunionController::class, "showReunionPopup"])->name('results.popup.reunion');
-        Route::get('/reunion/new/', [ReunionController::class, "createReunion"])    ->name('results.create');
-        Route::get('/reunion/modify/', [ReunionController::class, "createModify"])  ->name('results.modify');
-        Route::get('/reunion/popup', [ReunionController::class, "showPopup"])       ->name('results.reunion.popup');
+        // Route::get('/reunion/new/', [ReunionController::class, "createReunion"])    ->name('results.create');
+        // Route::get('/reunion/modify/', [ReunionController::class, "createModify"])  ->name('results.modify');
+        // Route::get('/reunion/popup', [ReunionController::class, "showPopup"])       ->name('results.reunion.popup');
         Route::post('/reunion/new/', [ReunionController::class, "storeReunion"])    ->name('results.store');
         Route::post('/reunion/update/', [ReunionController::class, "updateReunion"])->name('results.update');
         Route::post('/reunion/delete/', [ReunionController::class, "deleteReunion"])->name('results.reunion.delete');
         // -- reports schedules
-        Route::get('/reunions', [ReunionController::class, "viewReunions"])->name('results.reunions');
+        // Route::get('/reunions', [ReunionController::class, "viewReunions"])->name('results.reunions');
+        // -- add document
+        Route::post('/reunion/doc/new', [ReunionController::class, "storeDocument"])->name('results.doc.store');
+        Route::post('/reunion/doc/delete', [ReunionController::class, "deleteDocument"])->name('results.doc.delete');
     });
 
     Route::group(['prefix' => 'branches'], function(){
@@ -175,8 +178,8 @@ Route::get('/schedules/popup', [TravelScheduleController::class, "showSchedulePo
 
 // REUNIONS
 Route::get("/reunions", [ReunionController::class,'frontIndex'])->name('front.reunions');
-Route::get("/reunions/calendar", [ReunionController::class,'viewCalendar'])->name('front.reunions.calendar');
-Route::get('/reunions/popup', [ReunionController::class, "showPopup"])->name("front.reunions.popup");
+Route::get("/reunions/details", [ReunionController::class,'viewFrontReunion'])->name('front.reunion.details');
+// Route::get('/reunions/popup', [ReunionController::class, "showPopup"])->name("front.reunions.popup");
 
 // EXTRAS
 Route::get("/document/download", [DocumentController::class,"download"])->name('doc.download');

@@ -58,26 +58,12 @@
                                 </button>
                             </div>
                         </div>
-                        {{-- <div class="form-group w-100 d-inline-block my-1">
-                            <label>Tipo:</label>
-                            <div class="input-group d-inline-flex" style="width: calc(100% - 41px);">
-                                <select class="form-select" name="cal_type" id="sel_month">
-                                    <option value="01" {{$cal_type == 1?'selected':''}}>Mensual</option>
-                                    <option value="02" {{$cal_type == 2?'selected':''}}>Anual</option>
-                                </select>
-                                <button id="search-month" class="btn btn-secondary search-calendar" type="submit">
-                                    <svg class="icon">
-                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-zoom"></use>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div> --}}
                     </form>
                 </div>
             </div>
         </div>
-        <div id="calendar-card" class="card mb-4">
-            <div class="card-header"><span>Reuniones</span></div>
+        <div id="reunion-card" class="card mb-4">
+            <div class="card-header"><span>Áreas</span></div>
             <div class="card-body">
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden">Cargando...</span>
@@ -93,32 +79,14 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
 <script src="{{asset("js/intranet/reunion.js")}}"></script>
 <script>
-    var calendar_route = "{{route('results.calendar')}}";
-    var result_create = "{{route('results.create')}}";
-    var result_modify = "{{route('results.modify')}}";
-    var show_popup = "{{route('results.reunion.popup')}}";
+    const reunion_route = "{{route('results.reunion')}}";
+    const delete_route = "{{route('results.doc.delete')}}";
+    const asset_route = "{{asset('icons/sprites/free.svg')}}";
+    const download_route = "{{route('doc.download')}}";
     
     $(function(){
-        getCalendar();
+        getReunion();
     });
-
-    function newActivity(name, type){
-        var html = '<div class="mb-2 act-ta">'+
-                        '<div style="display: flex;">'+
-                            '<div style="flex: 0 40px;">'+
-                                '<a class="btn btn-danger btn-sm btn-del-act" type="'+type+'">'+
-                                    '<svg class="icon">'+
-                                        '<use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-minus"></use>'+
-                                    '</svg>'+
-                                '</a>'+
-                            '</div>'+
-                            '<div style="flex: 1;">'+
-                                '<textarea name="'+name+'[]" rows="2" class="form-control" required></textarea>'+
-                            '</div>'+
-                        '</div>'+
-                    '</div>';
-        return html;
-    }
 
 </script>
 @endsection

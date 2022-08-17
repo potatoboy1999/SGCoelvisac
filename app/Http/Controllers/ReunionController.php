@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use App\Models\Document;
 use App\Models\Reunion;
+use App\Models\ReunionConsolidado;
 use App\Models\ReunionDocument;
 use App\Models\ReunionPresenter;
 use App\Models\ReunionTheme;
@@ -20,7 +21,6 @@ class ReunionController extends Controller
         $bcrums = ["Reunión"];
         $year = intval(isset($request->year)?$request->year:date('Y'));
         $month = intval(isset($request->month)?$request->month:date('m'));
-        $cal_type = isset($request->cal_type)?$request->cal_type : 1;
         // return $branches->toArray();
 
         return view('intranet.reunions.index',[
@@ -28,7 +28,6 @@ class ReunionController extends Controller
             "bcrums" => $bcrums,
             "year" => $year,
             "month" => $month,
-            "cal_type" => $cal_type,
         ]);
     }
 
@@ -48,35 +47,61 @@ class ReunionController extends Controller
         ]);
     }
 
-    public function viewCalendar(Request $request)
+    public function viewReunion(Request $request)
     {
         $year = intval(isset($request->year)?$request->year:date('Y'));
         $month = intval(isset($request->month)?$request->month:date('m'));
-        $cal_type = isset($request->cal_type)?$request->cal_type : 1;
-        $endMonth = $month + 1;
-        $endYear = $year;
-        if($endMonth > 12){
-            $endMonth = 1;
-            $endYear = $year+1;
-        }
 
-        $reunions = Reunion::where('estado','>',0);
+        $areas = Area::where('estado',1)->where('vis_matriz', 1)->get();
 
-        if($cal_type == 1){
-            $reunions->where('fecha','>=',$year.'-'.$month.'-01')
-                    ->where('fecha','<',($endYear).'-'.$endMonth.'-01')
-                    ->orderBy('fecha','asc');
-        }else{
-            $reunions->where('fecha','>=',$year.'-01-01')
-                    ->where('fecha','<',($year+1).'-01-01')
-                    ->orderBy('fecha','asc');
-        }
-        $reunions = $reunions->get();
+        $reunion = Reunion::where('estado','>',0)
+                        ->where('fecha',$year.'-'.$month.'-28');
+        $reunion->with(['documents'=>function($docQ){
+            $docQ->where('t_sgcv_reu_document.estado', 1);
+            $docQ->where('t_sgcv_documentos.estado', 1);
+        }]);
 
-        return view('intranet.reunions.calendar',[
+        $reunion->with(['consolidado_documents'=>function($docQ){
+            $docQ->where('t_sgcv_reu_consolidado.estado', 1);
+            $docQ->where('t_sgcv_documentos.estado', 1);
+        }]);
+        
+        $reunion = $reunion->first();
+
+        return view('intranet.reunions.details',[
             "year" => $year,
             "month" => $month,
-            "reunions" => $reunions
+            "reunion" => $reunion,
+            'areas' => $areas,
+        ]);
+    }
+
+    public function viewFrontReunion(Request $request)
+    {
+        $year = intval(isset($request->year)?$request->year:date('Y'));
+        $month = intval(isset($request->month)?$request->month:date('m'));
+
+        $areas = Area::where('estado',1)->where('vis_matriz', 1)->get();
+
+        $reunion = Reunion::where('estado','>',0)
+                        ->where('fecha',$year.'-'.$month.'-28');
+        $reunion->with(['documents'=>function($docQ){
+            $docQ->where('t_sgcv_reu_document.estado', 1);
+            $docQ->where('t_sgcv_documentos.estado', 1);
+        }]);
+
+        $reunion->with(['consolidado_documents'=>function($docQ){
+            $docQ->where('t_sgcv_reu_consolidado.estado', 1);
+            $docQ->where('t_sgcv_documentos.estado', 1);
+        }]);
+        
+        $reunion = $reunion->first();
+
+        return view('front.reunions.details',[
+            "year" => $year,
+            "month" => $month,
+            "reunion" => $reunion,
+            'areas' => $areas,
         ]);
     }
 
@@ -149,28 +174,14 @@ class ReunionController extends Controller
         $reunion->usuario_id = Auth::user()->id;
         $reunion->titulo = $request->title;
         $reunion->descripcion = $request->description;
-        $reunion->fecha = date_format(date_create_from_format('d/m/Y',$request->date),'Y-m-d');
+        $reunion->fecha = date_format(date_create_from_format('d/m/Y',$request->date),'Y-m-28');
         $reunion->estado = 1;
         $reunion->save();
-
-        // add users presenters
-        foreach ($request->users as $k => $user) {
-            $presenter = new ReunionPresenter;
-            $presenter->usuario_id = $user;
-            $presenter->reunion_id = $reunion->id;
-            $presenter->estado = 1;
-            $presenter->save();
-        }
 
         $sizeMax = 8388608; // 8MB
         $destinationPath = 'uploads';
         $i = 0; // themes loop index
         foreach ($request->theme as $key => $theme_name) {
-            $theme = new ReunionTheme;
-            $theme->titulo = $theme_name;
-            $theme->reunion_id = $reunion->id;
-            $theme->estado = 1;
-            $theme->save();
 
             // print("TEMA: ".$theme_name." | KEY: ".$key."<br>");
             $x = 0;
@@ -206,7 +217,7 @@ class ReunionController extends Controller
                                 
                                                 $reuDoc = new ReunionDocument;
                                                 $reuDoc->area_id = $area_id;
-                                                $reuDoc->reu_tema_id = $theme->id;
+                                                $reuDoc->reunion_id = $reunion->id;
                                                 $reuDoc->documento_id = $tempDoc->id;
                                                 $reuDoc->estado = 1;
                                                 $reuDoc->save();
@@ -245,39 +256,6 @@ class ReunionController extends Controller
         $reunion->descripcion = $request->description;
         $reunion->save();
 
-        // renew presenters list
-        ReunionPresenter::where('reunion_id', $request->reunion_id)
-                        ->delete();
-
-        foreach ($request->users as $k => $user) {
-            $presenter = new ReunionPresenter;
-            $presenter->usuario_id = $user;
-            $presenter->reunion_id = $reunion->id;
-            $presenter->estado = 1;
-            $presenter->save();
-        }
-
-        // Remove deleted themes & documents
-        if(isset($request->themes_deleted)){
-            foreach ($request->themes_deleted as $theme){
-                // disable theme
-                $theme = ReunionTheme::find($theme);
-                $theme->estado = 0;
-                $theme->save();
-
-                // disable documents
-                $reu_docs = ReunionDocument::where('reu_tema_id', $theme)->get();
-                $docs_id = [];
-                foreach ($reu_docs as $doc) {
-                    $docs_id[] = $doc->id;
-                }
-                if(sizeof($docs_id) > 0){
-                    ReunionDocument::whereIn('documento_id', $docs_id)->update(['estado' => 0]);
-                    Document::whereIn('id',$docs_id)->update(['estado' => 0]);
-                }
-            }
-        }
-
         // Remove deleted documents
         if(isset($request->docs_deleted)){
             ReunionDocument::whereIn('documento_id', $request->docs_deleted)->update(['estado' => 0]);
@@ -285,36 +263,11 @@ class ReunionController extends Controller
         }
 
         // Edit existing themes
-        $j = 0;
-        foreach ($request->theme_ids as $k => $theme_id) {
-            $j = $k;
-            $theme = ReunionTheme::find($theme_id);
-            $z = 0;
-            $title = "";
-            foreach($request->theme as $theme_name){
-                if($j == $z){
-                    $title = $theme_name;
-                    break;
-                }
-                $z++;
-            }
-            $theme->titulo = $title;
-            $theme->save();
-        }
 
         $sizeMax = 8388608; // 8MB
         $destinationPath = 'uploads';
         $i = 0; // themes loop index
-        foreach ($request->theme as $key => $theme_name) {
-            if($i > $j){
-                $theme = new ReunionTheme;
-                $theme->titulo = $theme_name;
-                $theme->reunion_id = $reunion->id;
-                $theme->estado = 1;
-                $theme->save();
-            }else{
-                $theme = ReunionTheme::find($request->theme_ids[$i]);
-            }
+        foreach ($request->theme as $key => $theme_name) {            
 
             // print("TEMA: ".$theme_name." | KEY: ".$key."<br>");
             $x = 0;
@@ -350,7 +303,7 @@ class ReunionController extends Controller
                                 
                                                 $reuDoc = new ReunionDocument;
                                                 $reuDoc->area_id = $area_id;
-                                                $reuDoc->reu_tema_id = $theme->id;
+                                                $reuDoc->reunion_id = $reunion->id;
                                                 $reuDoc->documento_id = $tempDoc->id;
                                                 $reuDoc->estado = 1;
                                                 $reuDoc->save();
@@ -432,5 +385,95 @@ class ReunionController extends Controller
             'areas' => $areas,
             'source' => isset($request->source)?$request->source:'back'
         ]);
+    }
+
+    public function storeDocument(Request $request)
+    {
+        if($request->reunion == 0){
+            $reunion = new Reunion();
+            $reunion->usuario_id = Auth::user()->id;
+            $reunion->fecha = $request->date;
+            $reunion->estado = 1;
+            $reunion->save();
+        }else{
+            $reunion = Reunion::find($request->reunion);
+        }
+        if($reunion){
+            $alert = "";
+            $sizeMax = 8388608; // 8MB
+            $valMimes = ["application/pdf"]; // pdf
+            $destinationPath = 'uploads';
+
+            if($request->hasFile("file") && $request->file("file")->isValid()){
+                $file = $request->file;
+
+                $ogName = $file->getClientOriginalName();
+                $ogExtension = $file->getClientOriginalExtension();
+                $size = $file->getSize();
+                $mime = $file->getMimeType();
+
+                if($size <= $sizeMax){
+                    //Move Uploaded File
+                    $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
+                    $newName = "file".$now->format("Ymd-His-u")."02.".$ogExtension;
+                    $file->move($destinationPath, $newName);
+    
+                    $doc = new Document;
+                    $doc->nombre = substr($ogName, 0, 150);
+                    $doc->file = $newName;
+                    $doc->estado = 1;
+                    $doc->save();
+
+                    if($request->area != 0){
+                        $reuDoc = new ReunionDocument;
+                        $reuDoc->area_id = $request->area;
+                        $reuDoc->reunion_id = $reunion->id;
+                        $reuDoc->documento_id = $doc->id;
+                        $reuDoc->estado = 1;
+                        $reuDoc->save();
+                    }else{
+                        $reuDoc = new ReunionConsolidado;
+                        $reuDoc->reunion_id = $reunion->id;
+                        $reuDoc->documento_id = $doc->id;
+                        $reuDoc->estado = 1;
+                        $reuDoc->save();
+                    }
+                }else{
+                    return [
+                        'status'=> 'error',
+                        'code'=> 3, // file too big
+                        'alert' => 'Problemas con el archivo adjunto',
+                        'reunion'=> $reunion,
+                    ];
+                }
+            }else{
+                return [
+                    'status'=> 'error',
+                    'code'=> 2, // file not valid
+                    'alert' => 'Problemas con el archivo adjunto',
+                    'reunion'=> $reunion,
+                ];
+            }
+            return [
+                'status'=> 'ok',
+                'reunion'=> $reunion,
+                'document' => $doc
+            ];
+        }else{
+            return [
+                'status'=>'error',
+                'code'=> 1, // reunion not created or found
+                'msg'=> 'Reunion not found'
+            ];
+        }
+    }
+
+    public function deleteDocument(Request $request)
+    {
+        ReunionDocument::where('documento_id', $request->doc_id)->update(['estado' => 0]);
+        ReunionConsolidado::where('documento_id', $request->doc_id)->update(['estado' => 0]);
+        Document::where('id',$request->doc_id)->update(['estado' => 0]);
+
+        return ['status'=>'ok'];
     }
 }

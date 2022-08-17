@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-    <div class="marco" id="calendar-wrapper">
+    <div class="marco" id="reunion-wrapper">
         <div class="box">
             <div class="cuerpo">
                 <div class="spinner-border" role="status">
@@ -93,10 +93,10 @@
 
 <script src="{{asset("js/front/reunions/script.js")}}"></script>
 <script>
-    var calendar_route = "{{route('front.reunions.calendar')}}";
-    var show_popup = "{{route('front.reunions.popup')}}";
+    const reunion_route = "{{route('front.reunion.details')}}";
+    
     $(function(){
-        getCalendar();
+        getReunion();
     });
 
 </script>

@@ -14,8 +14,6 @@ class Reunion extends Model
 
     protected $fillable = [
         'usuario_id',
-        'titulo',
-        'descripcion',
         'fecha',
         'estado',
     ];
@@ -38,6 +36,10 @@ class Reunion extends Model
     }
 
     public function documents(){
-        return $this->belongsToMany(Documents::class,"t_sgcv_reu_document","reunion_id","documento_id");
+        return $this->belongsToMany(Document::class,"t_sgcv_reu_document","reunion_id","documento_id")->withPivot('area_id','estado','created_at');
+    }
+
+    public function consolidado_documents(){
+        return $this->belongsToMany(Document::class,"t_sgcv_reu_consolidado","reunion_id","documento_id")->withPivot('estado','created_at');
     }
 }

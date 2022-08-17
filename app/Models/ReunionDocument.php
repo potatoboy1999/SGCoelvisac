@@ -14,7 +14,7 @@ class ReunionDocument extends Model
 
     protected $fillable = [
         'area_id',
-        'reu_tema_id',
+        'reunion_id',
         'documento_id',
         'estado',
     ];
@@ -23,8 +23,8 @@ class ReunionDocument extends Model
         return $this->belongsTo(User::class,"area_id","id");
     }
 
-    public function theme(){
-        return $this->belongsTo(Theme::class,"reu_tema_id","id");
+    public function reunion(){
+        return $this->belongsTo(Reunion::class,"reunion_id","id");
     }
 
     public function document(){
