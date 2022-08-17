@@ -128,7 +128,6 @@ ALTER TABLE t_sgcv_reporte_actividades ADD COLUMN cerrado_por BIGINT NULL AFTER 
 ALTER TABLE t_sgcv_reporte_actividades ADD INDEX `fk_t_sgcv_reporte_actividades_T_t_sgcv_usuarios1_idx` (`cerrado_por`);
 ALTER TABLE t_sgcv_reporte_actividades ADD CONSTRAINT `fk_t_sgcv_reporte_actividades_T_t_sgcv_usuarios1` FOREIGN KEY (`cerrado_por`) REFERENCES t_sgcv_usuarios(`id`);
 
--- Everything on top of this on Live Server
 DELETE FROM t_sgcv_reu_document;
 DELETE FROM t_sgcv_reu_presentadores;
 DELETE FROM t_sgcv_reu_temas;
@@ -165,3 +164,5 @@ CREATE TABLE t_sgcv_reu_consolidado(
 
 UPDATE t_sgcv_opciones SET estado = 0 WHERE id = 14;
 UPDATE t_sgcv_opciones SET opcion = 'Presentaciones', url_img = 'cil-airplay' WHERE id = 13;
+
+-- Everything on top of this on Live Server

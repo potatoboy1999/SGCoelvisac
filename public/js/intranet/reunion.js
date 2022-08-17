@@ -64,7 +64,8 @@ $(document).on('click','.dlt-old-file', function(ev){
 
 $(document).on("change", ".add-file", function(ev){
     ev.preventDefault();
-    var areaid = $(this).attr("areaid");
+    var fileinput = $(this);
+    var areaid = fileinput.attr("areaid");
     var form = $("#newFileForm"+areaid);
     var data = new FormData(form[0]);
     $.ajax({
@@ -83,7 +84,7 @@ $(document).on("change", ".add-file", function(ev){
                             '</div>'+
                         '</div>';
             $(".old-files[areaid='"+areaid+"']").append(html);
-            $(this).val('');
+            fileinput.val('');
             $("#newFileForm"+areaid).hide();
         },
         success: function(res){
