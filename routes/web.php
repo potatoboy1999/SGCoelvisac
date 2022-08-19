@@ -94,6 +94,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/tracking/popup', [TravelScheduleController::class, "showTrackActivity"])->name('agenda.tracking.popup');
         Route::post('/tracking/update', [TravelScheduleController::class, "updateTrackActivity"])->name('agenda.tracking.update');
         Route::post('/tracking/close', [TravelScheduleController::class, "closeTrackActivity"])->name('agenda.tracking.close');
+        Route::get('/tracking/report_form', [TravelScheduleController::class, "getReportForm"])->name('agenda.tracking.form');
         Route::post('/tracking/pdf', [TravelScheduleController::class, "reportPdf"])->name('agenda.tracking.pdf');
     });
 

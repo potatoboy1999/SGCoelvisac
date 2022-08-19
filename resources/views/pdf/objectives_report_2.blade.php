@@ -174,16 +174,6 @@
         .card-header:first-child {
             border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
         }
-
-        .card-footer {
-            padding: 0.5rem 1rem;
-            color: unset;
-            background-color: rgba(0, 0, 21, 0.03);
-            border-top: 1px solid rgba(0, 0, 21, 0.125);
-        }
-        .card-footer:last-child {
-            border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
-        }
     </style>
 </head>
 <body>
@@ -213,7 +203,7 @@
                                 @endphp
                                 @foreach ($themes as $theme)
                                 @if (themeHasActivities($theme, $filter))
-                                    <div class="card theme-card {{($x != sizeOf($themes)-1?"mb-3":"")}}" theme-id="{{$theme->id}}">
+                                    <div class="card theme-card mb-3" theme-id="{{$theme->id}}">
                                         <div class="card-header bg-dark-2">
                                             <p class="m-0">Tema {{$x+1}}: {{$theme->nombre}}</p>
                                         </div>
@@ -265,6 +255,23 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header">Leyenda</div>
+                                        <div class="card-body">
+                                            <p>
+                                                <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
+                                                <strong>Verde:</strong> Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
+                                            </p>
+                                            <p>
+                                                <span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span>
+                                                <strong>Amarillo:</strong> Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                                            </p>
+                                            <p>
+                                                <span class="d-inline-block text-block t_red" style="width: 20px;">&nbsp;</span>
+                                                <strong>Rojo:</strong> Cuando no se haya cumplido la accion y se ha vencido el plazo.
+                                            </p>
                                         </div>
                                     </div>
                                 <?php $x++; ?>

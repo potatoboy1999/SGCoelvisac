@@ -38,13 +38,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <link rel="stylesheet" href="{{asset("css/intranet/reports.css")}}" />
     <style>
-        td.t_red {
+        .t_red {
             background-color: #ec1d1d;
         }
-        td.t_green {
+        .t_green {
             background-color: #12c212;
         }
-        td.t_yellow {
+        .t_yellow {
             background-color: #f9e715;
         }
     </style>
@@ -275,6 +275,23 @@
                     </div>
                     @endif
                 </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">Leyenda</div>
+            <div class="card-body">
+                <p>
+                    <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
+                    <strong>Verde:</strong> Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
+                </p>
+                <p>
+                    <span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span>
+                    <strong>Amarillo:</strong> Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                </p>
+                <p>
+                    <span class="d-inline-block text-block t_red" style="width: 20px;">&nbsp;</span>
+                    <strong>Rojo:</strong> Cuando no se haya cumplido la accion y se ha vencido el plazo.
+                </p>
             </div>
         </div>
         <div class="card">

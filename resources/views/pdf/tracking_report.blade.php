@@ -1,3 +1,33 @@
+@php
+    function progressStatus($activity){
+        $status = 0; // not done = RED
+        if($activity->estado == 2){
+            $status = 2; // done = GREEN
+        }else{
+            $today = time();
+            $d_start = strtotime($activity->fecha_comienzo);
+            $d_end = strtotime($activity->fecha_fin);
+            if($d_start <= $today && $today <= $d_end){
+                // calculate 25% of time remaining
+                $diff = ($d_end - $d_start)*0.25;
+                $d_limit = $d_start + $diff;
+
+                if($today < $d_limit){
+                    $status = 2; // if today is within 25% of start, status OK = GREEN
+                }
+                
+                if($d_limit <= $today){
+                    $status = 1; // if today is past 25%, status warning = YELLOW
+                }
+
+            }else if($d_end < $today){
+                $status = 0; // time expired, not done = RED
+            }
+        }
+        return $status;
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,13 +63,13 @@
         }
 
         /* --- Activities Report --- */
-        td.t_red {
+        .t_red {
             background-color: #ec1d1d;
         }
-        td.t_green {
+        .t_green {
             background-color: #12c212;
         }
-        td.t_yellow {
+        .t_yellow {
             background-color: #f9e715;
         }
 
@@ -59,6 +89,40 @@
             border: 1px solid #ccc;
             background-color: #e7e7e7;
             border-radius: 0.75rem;
+        }
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid rgba(0, 0, 21, 0.125);
+            border-radius: 0.25rem;
+        }
+        .card > .card-header + .list-group,
+        .card > .list-group + .card-footer {
+            border-top: 0;
+        }
+        .card-body {
+            flex: 1 1 auto;
+            padding: 0.25rem 1rem;
+            color: unset;
+        }
+        .card-header {
+            padding: 0.5rem 1rem;
+            margin-bottom: 0;
+            color: unset;
+            background-color: rgba(0, 0, 21, 0.03);
+            border-bottom: 1px solid rgba(0, 0, 21, 0.125);
+        }
+        .card-header:first-child {
+            border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+        }
+        .text-block{
+            padding: 0.1rem 0.25rem;
+            border-radius: 2px;
         }
 
     </style>
@@ -80,10 +144,13 @@
                             <th class="th-deal bg-dark text-white"><p>Acuerdo</p></th>
                             {{-- <th class="th-to bg-dark text-white"        width="12%"><p>Fecha Inicio</p></th> --}}
                             <th class="th-to bg-dark text-white"        width="12%"><p>Fecha Fin</p></th>
-                            <th class="th-to bg-dark text-white"        width="5%"><p>Estado</p></th>
+                            <th class="th-status bg-dark text-white"        width="5%"><p>Estado</p></th>
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $s = ['t_red','t_yellow','t_green'];
+                        @endphp
                         @foreach ($activities as $activity)
                         <tr class="rep-act" act-id="{{$activity->id}}">
                             <td class="t-branch align-middle"><p>{{$activity->travelSchedule->branch->nombre}}</p></td>
@@ -94,11 +161,28 @@
                             <td class="t-deal align-middle"><p>{{$activity->acuerdo}}</p></td>
                             {{-- <td class="t-to align-middle"><p>{{date("d-m-Y", strtotime($activity->fecha_comienzo))}}</p></td> --}}
                             <td class="t-to align-middle"><p>{{date("d-m-Y", strtotime($activity->fecha_fin))}}</p></td>
-                            <td class="t-deal align-middle {{$activity->estado=='1'?'text-danger':'text-success'}}"><p>{{$activity->estado=='1'?'NO TERMINADO':'TERMINADO'}}</p></td>
+                            <td class="t-status align-middle {{ $s[progressStatus($activity)] }}"></td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="card">
+                <div class="card-header">Leyenda</div>
+                <div class="card-body">
+                    <p>
+                        <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
+                        <strong>Verde:</strong> Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
+                    </p>
+                    <p>
+                        <span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span>
+                        <strong>Amarillo:</strong> Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                    </p>
+                    <p>
+                        <span class="d-inline-block text-block t_red" style="width: 20px;">&nbsp;</span>
+                        <strong>Rojo:</strong> Cuando no se haya cumplido la accion y se ha vencido el plazo.
+                    </p>
+                </div>
             </div>
         @else
         <div class="empty-alert">

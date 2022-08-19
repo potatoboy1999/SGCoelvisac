@@ -1,0 +1,13 @@
+.user-item {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 0.1rem 0.75rem;
+    border-radius: 0.25rem;
+    background: #d8dbe0;
+    cursor: pointer;
+    margin: 2px;
+}
+.user-item:hover {
+    text-decoration: line-through;
+    background-color: #a8a9ab;
+}

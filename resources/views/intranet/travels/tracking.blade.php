@@ -1,3 +1,33 @@
+@php
+    function progressStatus($activity){
+        $status = 0; // not done = RED
+        if($activity->estado == 2){
+            $status = 2; // done = GREEN
+        }else{
+            $today = time();
+            $d_start = strtotime($activity->fecha_comienzo);
+            $d_end = strtotime($activity->fecha_fin);
+            if($d_start <= $today && $today <= $d_end){
+                // calculate 25% of time remaining
+                $diff = ($d_end - $d_start)*0.25;
+                $d_limit = $d_start + $diff;
+
+                if($today < $d_limit){
+                    $status = 2; // if today is within 25% of start, status OK = GREEN
+                }
+                
+                if($d_limit <= $today){
+                    $status = 1; // if today is past 25%, status warning = YELLOW
+                }
+
+            }else if($d_end < $today){
+                $status = 0; // time expired, not done = RED
+            }
+        }
+        return $status;
+    }
+@endphp
+
 @extends('layouts.admin')
 
 @section('title', 'Seguimiento')
@@ -19,6 +49,18 @@
         }
         #ui-datepicker-div {
             z-index: 10000!important;
+        }
+        .t_red {
+            background-color: #ec1d1d!important;
+        }
+        .t_green {
+            background-color: #12c212!important;
+        }
+        .t_yellow {
+            background-color: #f9e715!important;
+        }
+        .ui-autocomplete{
+            z-index: 100000!important;
         }
     </style>
 @endsection
@@ -69,67 +111,6 @@
 <div class="modal fade" id="trackingReportModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5>Generar Reporte</h5>
-            </div>
-            <div class="modal-body">
-                <form action="{{route('agenda.tracking.pdf')}}" method="post" target="_blank" id="report_pdf">
-                    @csrf
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="mb-2">
-                                <label class="form-label">Estado:</label>
-                                <select class="form-select" name="status">
-                                    <option value="ALL">Todos</option>
-                                    <option value="1">No Terminado</option>
-                                    <option value="2">Terminado</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="mb-2">
-                                <label class="form-label">Sede:</label>
-                                <select class="form-select" name="branch">
-                                    <option value="ALL">Todos</option>
-                                    @foreach ($branches as $branch)
-                                        <option value="{{$branch->id}}">{{$branch->nombre}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-2">
-                                <label class="form-label" for="searchFrom">Buscar desde:</label>
-                                <div class="input-group">
-                                    <input id="search_from" class="form-control" type="text" name="search_from" value="{{date('d/m/Y', strtotime("-1 month"))}}" required>
-                                    <span class="input-group-text">
-                                        <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
-                                        </svg>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6">
-                            <div class="form-group mb-2">
-                                <label class="form-label" for="searchTo">Buscar hasta:</label>
-                                <div class="input-group">
-                                    <input id="search_to" class="form-control" type="text" name="search_to" value="{{date('d/m/Y', strtotime("now"))}}" required>
-                                    <span class="input-group-text">
-                                        <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
-                                        </svg>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary text-white" type="button" data-coreui-dismiss="modal" aria-label="Close">Cerrar</button>
-                <input id="search_report" class="btn btn-success text-white" type="submit" form="report_pdf" value="Buscar">
-            </div>
         </div>
     </div>
 </div>
@@ -157,11 +138,14 @@
                                 <th class="th-deal bg-dark text-white">Acuerdo</th>
                                 {{-- <th class="bg-dark text-white" width="100px">Desde</th> --}}
                                 <th class="th-to bg-dark text-white" width="120px">Fecha Fin</th>
-                                <th class="th-to bg-dark text-white" width="140px">Estado</th>
+                                <th class="th-status bg-dark text-white" width="140px">Estado</th>
                                 <th class="th-actions bg-dark text-white" width="100px"></th>
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $s = ['t_red','t_yellow','t_green'];
+                            @endphp
                             @foreach ($activities as $activity)
                             <tr class="act-row" data-actid="{{$activity->id}}">
                                 <td class="t-branch align-middle">{{$activity->travelSchedule->branch->nombre}}</td>
@@ -172,7 +156,7 @@
                                 <td class="t-deal align-middle">{{$activity->acuerdo}}</td>
                                 {{-- <td class="align-middle">{{date("d-m-Y", strtotime($activity->fecha_comienzo))}}</td> --}}
                                 <td class="t-to align-middle">{{date("d-m-Y", strtotime($activity->fecha_fin))}}</td>
-                                <td class="t-deal align-middle {{$activity->estado=='1'?'text-danger':'text-success'}}">{{$activity->estado=='1'?'NO TERMINADO':'TERMINADO'}}</td>
+                                <td class="t-status align-middle {{ $s[progressStatus($activity)] }}"></td>
                                 <td class="t-actions align-middle text-center">
                                     <button class="btn btn-sm btn-info edit-activity" data-actid="{{$activity->id}}">
                                         <svg class="icon">
@@ -190,6 +174,23 @@
                 </div>
             </div>
         </div>
+        <div class="card mb-4">
+            <div class="card-header">Leyenda</div>
+            <div class="card-body">
+                <p>
+                    <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
+                    <strong>Verde:</strong> Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
+                </p>
+                <p>
+                    <span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span>
+                    <strong>Amarillo:</strong> Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                </p>
+                <p>
+                    <span class="d-inline-block text-block t_red" style="width: 20px;">&nbsp;</span>
+                    <strong>Rojo:</strong> Cuando no se haya cumplido la accion y se ha vencido el plazo.
+                </p>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -200,8 +201,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 <script src="{{asset("js/intranet/tracking.js")}}"></script>
 <script>
-    var pop_activity_route = "{{route('agenda.tracking.popup')}}";
-    var update_route = "{{route('agenda.tracking.update')}}";
-    var close_route = "{{route('agenda.tracking.close')}}";
+    const report_form_route = "{{route('agenda.tracking.form')}}";
+    const pop_activity_route = "{{route('agenda.tracking.popup')}}"; 
+    const update_route = "{{route('agenda.tracking.update')}}"; 
+    const close_route = "{{route('agenda.tracking.close')}}";
+    const usernames_route = "{{route('user.name_list')}}";
 </script>
 @endsection
