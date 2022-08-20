@@ -122,10 +122,21 @@
     <script src="{{asset('js/front/jquery-3.2.1.min.js')}}"></script>
     <script src="{{asset('js/front/jsFunctions.js')}}"></script>
     <script>
+      $(document).ready(function() {
+        let navegador = navigator.userAgent;
+        if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/Windows Phone/i)) {
+          closeNav("menu", "contenido");
+        } else {
+          openNav("menu", "contenido");
+        }
+      });
+      $('#datepicker').datepicker('show');
+    </script>
+    {{-- <script>
         $(document).ready(function() {
           openNav("menu", "contenido");
         });
-    </script>
+    </script> --}}
 
     @yield('script')
 
