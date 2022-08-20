@@ -7,7 +7,7 @@
     <div class="row" style="height: calc(100% - 2rem);">
         <div class="col-12">
             <div class="h-100 w-100">
-                <iframe src="http://docs.google.com/gview?url={{asset('uploads/'.$document->file)}}&embedded=true" style="width:100%; height:1000px;" frameborder="0"></iframe>
+                <iframe src="http://docs.google.com/gview?url={{asset('uploads/'.$document->file)}}&embedded=true" style="width:100%; height:100%;" frameborder="0"></iframe>
                 {{-- <iframe src="http://docs.google.com/gview?url=http://54.83.34.49:8000/uploads/file20220817-141009-17785402.pdf&embedded=true" style="width:100%; height:100%;" frameborder="0"></iframe> --}}
             </div>
         </div>
