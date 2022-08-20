@@ -165,6 +165,6 @@ CREATE TABLE t_sgcv_reu_consolidado(
 UPDATE t_sgcv_opciones SET estado = 0 WHERE id = 14;
 UPDATE t_sgcv_opciones SET opcion = 'Presentaciones', url_img = 'cil-airplay' WHERE id = 13;
 
--- Everything on top of this on Live Server
-
 ALTER TABLE t_sgcv_reuniones ADD INDEX `fk_t_sgcv_reuniones_fecha_idx` (`fecha`);
+
+-- Everything on top of this on Live Server
