@@ -4,6 +4,7 @@
     
 @section('style')
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <link rel="stylesheet" href="{{asset('css/intranet/reunion.css')}}">
     <style>
         
@@ -14,6 +15,12 @@
 <div class="modal fade" id="reunionModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="documentModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
+    <div class="modal-dialog modal-xl" style="height: calc(100% - 5rem);">
+        <div class="modal-content" style="height: 100%;">
         </div>
     </div>
 </div>
@@ -62,7 +69,15 @@
                 </div>
             </div>
         </div>
-        <div id="reunion-card" class="card mb-4">
+        <div id="calendar-card" class="card mb-4">
+            <div class="card-header"><span>Calendario</span></div>
+            <div class="card-body">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        </div>
+        <div id="reunion-card" class="card mb-4" style="display: none;">
             <div class="card-header"><span>Áreas</span></div>
             <div class="card-body">
                 <div class="spinner-border" role="status">
@@ -77,15 +92,18 @@
 @section('script')
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 <script src="{{asset("js/intranet/reunion.js")}}"></script>
 <script>
+    const calendar_route = "{{route('results.calendar')}}";
     const reunion_route = "{{route('results.reunion')}}";
     const delete_route = "{{route('results.doc.delete')}}";
     const asset_route = "{{asset('icons/sprites/free.svg')}}";
     const download_route = "{{route('doc.download')}}";
+    const document_route = "{{route('results.doc')}}"
     
     $(function(){
-        getReunion();
+        getCalendar();
     });
 
 </script>

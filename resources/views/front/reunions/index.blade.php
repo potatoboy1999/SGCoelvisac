@@ -23,6 +23,13 @@
       </div>
     </div>
 </div>
+<!-- Document Modal -->
+<div class="modal fade" id="documentModal" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-xl" style="height: calc(100% - 5rem);">
+        <div class="modal-content" style="height: 100%;">
+        </div>
+    </div>
+</div>
 <!-- END Travel Schedule Modal -->
 
 <div class="row">
@@ -76,7 +83,16 @@
             </div>
         </div>
     </div>
-    <div class="marco" id="reunion-wrapper">
+    <div class="marco" id="calendar-wrapper">
+        <div class="box">
+            <div class="cuerpo">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="marco" id="reunion-wrapper" style="display: none;">
         <div class="box">
             <div class="cuerpo">
                 <div class="spinner-border" role="status">
@@ -90,13 +106,14 @@
 @endsection
 
 @section('script')
-
 <script src="{{asset("js/front/reunions/script.js")}}"></script>
 <script>
+    const calendar_route = "{{route('front.reunion.calendar')}}";
     const reunion_route = "{{route('front.reunion.details')}}";
+    const document_route = "{{route('front.reunion.document')}}";
     
     $(function(){
-        getReunion();
+        getCalendar();
     });
 
 </script>

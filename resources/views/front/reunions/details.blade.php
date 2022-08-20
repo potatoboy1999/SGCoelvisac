@@ -31,6 +31,16 @@
     @endphp 
 
     <div class="row">
+        <div class="col-12">
+            <p>
+                <a href="#" class="btn btn-secondary btn-sm search-calendar" id="backToCalendar">
+                    <svg class="icon">
+                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-left"></use>
+                    </svg> Atras
+                </a> 
+                Fecha: {{date('d/m/Y',strtotime($date))}}
+            </p>
+        </div>
     @foreach ($areas as $area)
         <div class="col-sm-4">
             <div class="box mb-2">
@@ -39,27 +49,16 @@
                     @if (isset($area_and_docs[$area->id]) && sizeof($area_and_docs[$area->id]['documents']) > 0)
                         <div class="old-files">
                         @foreach ($area_and_docs[$area->id]['documents'] as $document)
-                            <!-- NEW -->
                             <div class="old-file mb-1">
                                 <div class="file-section file-action">
-                                    <div class="action-buttons bg-success btn-download text-white" href="{{route('doc.download')}}" docid="{{$document['id']}}">
-                                        <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-to-bottom"></use>
-                                        </svg>
+                                    <div class="action-buttons bg-success btn-view text-white" href="{{route('doc.download')}}" docid="{{$document['id']}}">
+                                        <i class="fas fa-eye"></i>
                                     </div>
                                 </div>
                                 <div class="file-section file-name">
                                     <p class="filename m-0">{{$document['name']}}</p>
                                 </div>
                             </div>
-                            {{-- <div class="old-file border rounded mb-1 p-2">
-                                <a class="btn btn-sm btn-success btn-download" href="{{route('doc.download')}}" docid="{{$document['id']}}">
-                                    <svg class="icon">
-                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-to-bottom"></use>
-                                    </svg>
-                                </a>
-                                <span>{{$document['name']}}</span>
-                            </div> --}}
                         @endforeach
                         </div>
                     @else
@@ -76,27 +75,16 @@
                     @if ($reunion && sizeof($reunion->consolidado_documents) > 0)
                         <div class="old-files" areaid="0">
                         @foreach ($reunion->consolidado_documents as $document)
-                            <!--NEW-->
                             <div class="old-file mb-1">
                                 <div class="file-section file-action">
-                                    <div class="action-buttons bg-success btn-download text-white" href="{{route('doc.download')}}" docid="{{$document->id}}">
-                                        <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-to-bottom"></use>
-                                        </svg>
+                                    <div class="action-buttons bg-success btn-view text-white" href="{{route('doc.download')}}" docid="{{$document->id}}">
+                                        <i class="fas fa-eye"></i>
                                     </div>
                                 </div>
                                 <div class="file-section file-name">
                                     <p class="filename m-0">{{$document->nombre}}</p>
                                 </div>
                             </div>
-                            {{-- <div class="old-file border rounded mb-1 p-2">
-                                <a class="btn btn-sm btn-success btn-download" href="{{route('doc.download')}}" docid="{{$document->id}}">
-                                    <svg class="icon">
-                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-to-bottom"></use>
-                                    </svg>
-                                </a>
-                                <span>{{$document->nombre}}</span>
-                            </div> --}}
                         @endforeach
                         </div>
                     @else

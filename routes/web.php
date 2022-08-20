@@ -122,6 +122,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         // -- reunion calendar
         Route::get('/', [ReunionController::class, "backIndex"])->name('results.index');
         Route::get('/reunion', [ReunionController::class, "viewReunion"])->name('results.reunion');
+        Route::get('/calendar', [ReunionController::class, "viewCalendar"])->name('results.calendar');
         // Route::get('/calendar/popup/reunion', [ReunionController::class, "showReunionPopup"])->name('results.popup.reunion');
         // Route::get('/reunion/new/', [ReunionController::class, "createReunion"])    ->name('results.create');
         // Route::get('/reunion/modify/', [ReunionController::class, "createModify"])  ->name('results.modify');
@@ -132,6 +133,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         // -- reports schedules
         // Route::get('/reunions', [ReunionController::class, "viewReunions"])->name('results.reunions');
         // -- add document
+        Route::get('/reunion/doc', [ReunionController::class, "viewDocument"])->name('results.doc');
         Route::post('/reunion/doc/new', [ReunionController::class, "storeDocument"])->name('results.doc.store');
         Route::post('/reunion/doc/delete', [ReunionController::class, "deleteDocument"])->name('results.doc.delete');
     });
@@ -180,7 +182,8 @@ Route::get('/schedules/popup', [TravelScheduleController::class, "showSchedulePo
 // REUNIONS
 Route::get("/reunions", [ReunionController::class,'frontIndex'])->name('front.reunions');
 Route::get("/reunions/details", [ReunionController::class,'viewFrontReunion'])->name('front.reunion.details');
-// Route::get('/reunions/popup', [ReunionController::class, "showPopup"])->name("front.reunions.popup");
+Route::get("/reunions/calendar", [ReunionController::class,'viewFrontCalendar'])->name('front.reunion.calendar');
+Route::get("/reunions/document", [ReunionController::class,'viewDocument'])->name('front.reunion.document');
 
 // EXTRAS
 Route::get("/document/download", [DocumentController::class,"download"])->name('doc.download');

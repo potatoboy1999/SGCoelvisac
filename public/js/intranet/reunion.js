@@ -1,14 +1,13 @@
-function getReunion(){
-    var year = $("#form-area-sel input[name='year']").val();
-    var month = $("#form-area-sel select[name='month']").val();
+function getReunion(date){
     $.ajax({
         url: reunion_route,
         data: {
-            year: year,
-            month: month,
+            date: date
         },
         method:'GET',
         beforeSend: function(){
+            $("#calendar-card").hide();
+            $("#reunion-card").show();
             $("#reunion-card .card-body").html('<div class="spinner-border" role="status"><span class="visually-hidden">Cargando...</span></div>');
         },
         success:function(res){
@@ -17,10 +16,36 @@ function getReunion(){
     });
 }
 
-$(".search-calendar").on('click',function(ev){
+function getCalendar(){
+    var year = $("#form-area-sel input[name='year']").val();
+    var month = $("#form-area-sel select[name='month']").val();
+    $.ajax({
+        url: calendar_route,
+        data:{
+            year: year,
+            month: month,
+        },
+        method:'GET',
+        beforeSend: function(){
+            $("#reunion-card").hide();
+            $("#calendar-card").show();
+            $("#calendar-card .card-body").html('<div class="spinner-border" role="status"><span class="visually-hidden">Cargando...</span></div>');
+        },
+        success:function(res){
+            $("#calendar-card .card-body").html(res);
+        },
+    });
+}
+
+$(document).on('click',".search-calendar",function(ev){
     ev.preventDefault();
-    getReunion();
+    getCalendar();
 })
+
+$(document).on('click','.day-clickable',function(ev){
+    var date = $(this).data('date');
+    getReunion(date);
+});
 
 $(document).on('click', '.btn-download', function(ev){
     ev.preventDefault();
@@ -28,6 +53,26 @@ $(document).on('click', '.btn-download', function(ev){
     var id = $(this).attr("docid");
     route = route+"?id="+id;
     window.location.href = route;
+});
+
+$(document).on('click','.btn-view',function(ev){
+    ev.preventDefault();
+    var id = $(this).attr('docid');
+    console.log("id:"+id);
+    $.ajax({
+        url: document_route,
+        method: 'GET',
+        data:{
+            id: id
+        },
+        success: function(res){
+            $("#documentModal .modal-content").html(res)
+            $("#documentModal").modal('show');
+        },
+        error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError);
+        }
+    });
 });
 
 $(document).on('click','.dlt-old-file', function(ev){
@@ -60,6 +105,12 @@ $(document).on('click','.dlt-old-file', function(ev){
             getReunion();
         }
     });
+});
+
+$('.btn-show').on('click', function(ev){
+    ev.preventDefault();
+    var id = $(this).data('id');
+    prepareModal(id);
 });
 
 $(document).on("change", ".add-file", function(ev){
@@ -104,10 +155,8 @@ $(document).on("change", ".add-file", function(ev){
                                 '</div>'+
                             '</div>'+
                             '<div class="file-section file-action">'+
-                                '<div class="action-buttons bg-success btn-download" href="'+download_route+'" docid="'+res.document.id+'">'+
-                                    '<svg class="icon">'+
-                                        '<use xlink:href="'+asset_route+'#cil-arrow-thick-to-bottom"></use>'+
-                                    '</svg>'+
+                                '<div class="action-buttons bg-success btn-view" href="'+download_route+'" docid="'+res.document.id+'">'+
+                                    '<i class="fa-solid fa-eye"></i>'+
                                 '</div>'+
                             '</div>'+
                             '<div class="file-section file-name">'+

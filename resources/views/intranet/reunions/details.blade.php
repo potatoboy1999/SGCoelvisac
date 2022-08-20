@@ -31,6 +31,16 @@
     @endphp 
 
     <div class="row">
+        <div class="col-12">
+            <p>
+                <a href="#" class="btn btn-secondary search-calendar" id="backToCalendar">
+                    <svg class="icon">
+                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-left"></use>
+                    </svg> Atras
+                </a> 
+                Fecha: {{date('d/m/Y',strtotime($date))}}
+            </p>
+        </div>
     <?php 
         $allowed_areas = [1, 11];
         $is_allowed = in_array(Auth::user()->position->area_id, $allowed_areas);
@@ -55,32 +65,15 @@
                                 </div>
                                 @endif
                                 <div class="file-section file-action">
-                                    <div class="action-buttons bg-success btn-download" href="{{route('doc.download')}}" docid="{{$document['id']}}">
-                                        <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-to-bottom"></use>
-                                        </svg>
+                                    <div class="action-buttons bg-success btn-view" href="{{route('doc.download')}}" docid="{{$document['id']}}">
+                                        <i class="fa-solid fa-eye"></i>
                                     </div>
                                 </div>
                                 <div class="file-section file-name">
                                     <p class="filename m-0">{{$document['name']}}</p>
                                 </div>
                             </div>
-                            <!-- OLD -->
-                            {{-- <div class="old-file border rounded mb-1 p-2" docid="{{$document['id']}}">
-                                @if ($is_allowed)
-                                <a class="btn btn-sm btn-danger dlt-old-file" href="#" docid="{{$document['id']}}">
-                                    <svg class="icon">
-                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-x"></use>
-                                    </svg>
-                                </a>
-                                @endif
-                                <a class="btn btn-sm btn-success btn-download" href="{{route('doc.download')}}" docid="{{$document['id']}}">
-                                    <svg class="icon">
-                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-to-bottom"></use>
-                                    </svg>
-                                </a>
-                                <span>{{$document['name']}}</span>
-                            </div> --}}
+                            
                         @endforeach
                         </div>
                     @else
@@ -92,7 +85,7 @@
                     @if ($is_allowed)
                     <form id="newFileForm{{$area->id}}" action="{{route('results.doc.store')}}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="date" value="{{date('Y-m-d',strtotime($year."-".$month."-28"))}}">
+                        <input type="hidden" name="date" value="{{date('Y-m-d',strtotime($date))}}">
                         <input type="hidden" name="reunion" value="{{$reunion?$reunion->id:'0'}}">
                         <input type="hidden" name="area" value="{{$area->id}}">
                         <label class="form-label">Agregar archivos:</label>
@@ -110,7 +103,6 @@
                     @if ($reunion && sizeof($reunion->consolidado_documents) > 0)
                         <div class="old-files" areaid="0">
                         @foreach ($reunion->consolidado_documents as $document)
-                            <!--NEW-->
                             <div class="old-file mb-1" docid="{{$document['id']}}">
                                 @if ($is_allowed)
                                 <div class="file-section file-action">
@@ -122,32 +114,14 @@
                                 </div>
                                 @endif
                                 <div class="file-section file-action">
-                                    <div class="action-buttons bg-success btn-download" href="{{route('doc.download')}}" docid="{{$document->id}}">
-                                        <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-to-bottom"></use>
-                                        </svg>
+                                    <div class="action-buttons bg-success btn-view" href="{{route('doc.download')}}" docid="{{$document->id}}">
+                                        <i class="fa-solid fa-eye"></i>
                                     </div>
                                 </div>
                                 <div class="file-section file-name">
                                     <p class="filename m-0">{{$document->nombre}}</p>
                                 </div>
                             </div>
-                            <!--OLD-->
-                            {{-- <div class="old-file border rounded mb-1 p-2" docid="{{$document->id}}">
-                                @if ($is_allowed)
-                                <a class="btn btn-sm btn-danger dlt-old-file" href="#" docid="{{$document->id}}">
-                                    <svg class="icon">
-                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-x"></use>
-                                    </svg>
-                                </a>
-                                @endif
-                                <a class="btn btn-sm btn-success btn-download" href="{{route('doc.download')}}" docid="{{$document->id}}">
-                                    <svg class="icon">
-                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-thick-to-bottom"></use>
-                                    </svg>
-                                </a>
-                                <span>{{$document->nombre}}</span>
-                            </div> --}}
                         @endforeach
                         </div>
                     @else
@@ -159,7 +133,7 @@
                     @if ($is_allowed)
                     <form id="newFileForm0" action="{{route('results.doc.store')}}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="date" value="{{date('Y-m-d',strtotime($year."-".$month."-28"))}}">
+                        <input type="hidden" name="date" value="{{date('Y-m-d',strtotime($date))}}">
                         <input type="hidden" name="reunion" value="{{$reunion?$reunion->id:'0'}}">
                         <input type="hidden" name="area" value="0">
                         <label class="form-label">Agregar archivos:</label>

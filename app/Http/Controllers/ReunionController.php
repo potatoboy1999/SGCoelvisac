@@ -11,6 +11,7 @@ use App\Models\ReunionPresenter;
 use App\Models\ReunionTheme;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class ReunionController extends Controller
@@ -49,13 +50,12 @@ class ReunionController extends Controller
 
     public function viewReunion(Request $request)
     {
-        $year = intval(isset($request->year)?$request->year:date('Y'));
-        $month = intval(isset($request->month)?$request->month:date('m'));
+        $date = $request->date;
 
         $areas = Area::where('estado',1)->where('vis_matriz', 1)->get();
 
         $reunion = Reunion::where('estado','>',0)
-                        ->where('fecha',$year.'-'.$month.'-28');
+                        ->where('fecha','=',$date);
         $reunion->with(['documents'=>function($docQ){
             $docQ->where('t_sgcv_reu_document.estado', 1);
             $docQ->where('t_sgcv_documentos.estado', 1);
@@ -69,22 +69,99 @@ class ReunionController extends Controller
         $reunion = $reunion->first();
 
         return view('intranet.reunions.details',[
-            "year" => $year,
-            "month" => $month,
+            "date" => $date,
             "reunion" => $reunion,
             'areas' => $areas,
         ]);
     }
 
-    public function viewFrontReunion(Request $request)
+    public function viewDocument(Request $request)
     {
+        $document = Document::find($request->id);
+        $source = isset($request->source)?$request->source:'back';
+        if($document){
+            return view('intranet.reunions.document_viewer',[
+                'document' => $document,
+                'source' => $source,
+            ]);
+        }
+        return Response(['status'=>'error','msg'=>'Document Not Found'], 404);
+    }
+
+    public function viewCalendar(Request $request){
         $year = intval(isset($request->year)?$request->year:date('Y'));
         $month = intval(isset($request->month)?$request->month:date('m'));
+        $endMonth = $month + 1;
+        $endYear = $year;
+        if($endMonth > 12){
+            $endMonth = 1;
+            $endYear = $year+1;
+        }
+
+        $reunions = Reunion::where('estado','>',0)
+                    ->where('fecha','>=',$year.'-'.$month.'-01')
+                    ->where('fecha','<',($endYear).'-'.$endMonth.'-01');
+
+        $reunions->with(['documents'=>function($docQ){
+            $docQ->where('t_sgcv_reu_document.estado', 1);
+            $docQ->where('t_sgcv_documentos.estado', 1);
+        }]);
+
+        $reunions->with(['consolidado_documents'=>function($docQ){
+            $docQ->where('t_sgcv_reu_consolidado.estado', 1);
+            $docQ->where('t_sgcv_documentos.estado', 1);
+        }]);
+
+        $reunions = $reunions->orderBy('fecha','asc')->get();
+
+        return view('intranet.reunions.calendar',[
+            "year" => $year,
+            "month" => $month,
+            "reunions" => $reunions,
+        ]);
+    }
+
+    public function viewFrontCalendar(Request $request){
+        $year = intval(isset($request->year)?$request->year:date('Y'));
+        $month = intval(isset($request->month)?$request->month:date('m'));
+        $endMonth = $month + 1;
+        $endYear = $year;
+        if($endMonth > 12){
+            $endMonth = 1;
+            $endYear = $year+1;
+        }
+
+        $reunions = Reunion::where('estado','>',0)
+                    ->where('fecha','>=',$year.'-'.$month.'-01')
+                    ->where('fecha','<',($endYear).'-'.$endMonth.'-01');
+
+        $reunions->with(['documents'=>function($docQ){
+            $docQ->where('t_sgcv_reu_document.estado', 1);
+            $docQ->where('t_sgcv_documentos.estado', 1);
+        }]);
+
+        $reunions->with(['consolidado_documents'=>function($docQ){
+            $docQ->where('t_sgcv_reu_consolidado.estado', 1);
+            $docQ->where('t_sgcv_documentos.estado', 1);
+        }]);
+
+        $reunions = $reunions->orderBy('fecha','asc')->get();
+
+        return view('front.reunions.calendar',[
+            "year" => $year,
+            "month" => $month,
+            "reunions" => $reunions,
+        ]);
+    }
+
+    public function viewFrontReunion(Request $request)
+    {
+        $date = $request->date;
 
         $areas = Area::where('estado',1)->where('vis_matriz', 1)->get();
 
         $reunion = Reunion::where('estado','>',0)
-                        ->where('fecha',$year.'-'.$month.'-28');
+                        ->where('fecha','=',$date);
         $reunion->with(['documents'=>function($docQ){
             $docQ->where('t_sgcv_reu_document.estado', 1);
             $docQ->where('t_sgcv_documentos.estado', 1);
@@ -94,12 +171,11 @@ class ReunionController extends Controller
             $docQ->where('t_sgcv_reu_consolidado.estado', 1);
             $docQ->where('t_sgcv_documentos.estado', 1);
         }]);
-        
+
         $reunion = $reunion->first();
 
         return view('front.reunions.details',[
-            "year" => $year,
-            "month" => $month,
+            "date" => $date,
             "reunion" => $reunion,
             'areas' => $areas,
         ]);
@@ -174,7 +250,7 @@ class ReunionController extends Controller
         $reunion->usuario_id = Auth::user()->id;
         $reunion->titulo = $request->title;
         $reunion->descripcion = $request->description;
-        $reunion->fecha = date_format(date_create_from_format('d/m/Y',$request->date),'Y-m-28');
+        $reunion->fecha = date_format(date_create_from_format('d/m/Y',$request->date),'Y-m-d');
         $reunion->estado = 1;
         $reunion->save();
 
