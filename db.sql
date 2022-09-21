@@ -100,6 +100,37 @@ LOCK TABLES `personal_access_tokens` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `t_sgcv_act_docs`
+--
+
+DROP TABLE IF EXISTS `t_sgcv_act_docs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_sgcv_act_docs` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `actividad_id` bigint(20) NOT NULL,
+  `documento_id` bigint(20) NOT NULL,
+  `estado` tinyint(4) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_t_sgcv_act_docs_T_SGCV_Actividades1_idx` (`actividad_id`),
+  KEY `fk_t_sgcv_act_docs_T_SGCV_Documentos1_idx` (`documento_id`),
+  CONSTRAINT `fk_t_sgcv_act_docs_T_SGCV_Actividades1` FOREIGN KEY (`actividad_id`) REFERENCES `t_sgcv_actividades` (`id`),
+  CONSTRAINT `fk_t_sgcv_act_docs_T_SGCV_Documentos1` FOREIGN KEY (`documento_id`) REFERENCES `t_sgcv_documentos` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `t_sgcv_act_docs`
+--
+
+LOCK TABLES `t_sgcv_act_docs` WRITE;
+/*!40000 ALTER TABLE `t_sgcv_act_docs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_sgcv_act_docs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `t_sgcv_actividades`
 --
 
@@ -114,16 +145,14 @@ CREATE TABLE `t_sgcv_actividades` (
   `fecha_fin` date NOT NULL,
   `proced_politicas` varchar(250) DEFAULT NULL,
   `doc_politicas_id` bigint(20) DEFAULT NULL,
-  `doc_adjunto_id` bigint(20) DEFAULT NULL,
+  `cumplido` tinyint(1) DEFAULT 0,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_activities_objectives1_idx` (`objetivo_id`),
-  KEY `fk_activities_documents1_idx` (`doc_adjunto_id`),
   KEY `fk_T_SGCV_Actividades_T_SGCV_Documentos1_idx` (`doc_politicas_id`),
   CONSTRAINT `fk_T_SGCV_Actividades_T_SGCV_Documentos1` FOREIGN KEY (`doc_politicas_id`) REFERENCES `t_sgcv_documentos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_activities_documents1` FOREIGN KEY (`doc_adjunto_id`) REFERENCES `t_sgcv_documentos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_activities_objectives1` FOREIGN KEY (`objetivo_id`) REFERENCES `t_sgcv_objetivos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -151,7 +180,7 @@ CREATE TABLE `t_sgcv_actividades_viajes` (
   `agenda_viaje_id` bigint(20) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
-  `modified_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_travel_activities_travel_schedule1_idx` (`agenda_viaje_id`),
   CONSTRAINT `fk_travel_activities_travel_schedule1` FOREIGN KEY (`agenda_viaje_id`) REFERENCES `t_sgcv_agenda_viajes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -185,12 +214,19 @@ CREATE TABLE `t_sgcv_agenda_viajes` (
   `viaticos` tinyint(4) NOT NULL DEFAULT 0,
   `validacion_uno` tinyint(4) NOT NULL DEFAULT 0,
   `validacion_dos` tinyint(4) NOT NULL DEFAULT 0,
+  `val_uno_por` bigint(20) DEFAULT NULL,
+  `val_dos_por` bigint(20) DEFAULT NULL,
+  `finalizado` tinyint(4) NOT NULL DEFAULT 0,
   `estado` tinyint(4) NOT NULL DEFAULT 1 COMMENT '0 = eliminado\n1 = enviado a gerente de area\n2 = aprovado por el gerente de area\n3 = rechazado por el gerente de area\n4 = enviado a area de gestion\n5 = aprovado a area de gestion\n6 = rechazado a area de gestion',
   `created_at` datetime DEFAULT NULL,
-  `modified_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_travel_schedule_users1_idx` (`usuario_id`),
   KEY `fk_travel_schedule_branch1_idx` (`sede_id`),
+  KEY `fk_t_sgcv_agenda_viajes_T_t_sgcv_usuarios1_idx` (`val_uno_por`),
+  KEY `fk_t_sgcv_agenda_viajes_T_t_sgcv_usuarios2_idx` (`val_dos_por`),
+  CONSTRAINT `fk_t_sgcv_agenda_viajes_T_t_sgcv_usuarios1` FOREIGN KEY (`val_uno_por`) REFERENCES `t_sgcv_usuarios` (`id`),
+  CONSTRAINT `fk_t_sgcv_agenda_viajes_T_t_sgcv_usuarios2` FOREIGN KEY (`val_dos_por`) REFERENCES `t_sgcv_usuarios` (`id`),
   CONSTRAINT `fk_travel_schedule_branch1` FOREIGN KEY (`sede_id`) REFERENCES `t_sgcv_sedes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_travel_schedule_users1` FOREIGN KEY (`usuario_id`) REFERENCES `t_sgcv_usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -229,7 +265,7 @@ CREATE TABLE `t_sgcv_areas` (
 
 LOCK TABLES `t_sgcv_areas` WRITE;
 /*!40000 ALTER TABLE `t_sgcv_areas` DISABLE KEYS */;
-INSERT INTO `t_sgcv_areas` VALUES (1,'Admin',0,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(2,'IT',0,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(3,'Gerencia',0,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(4,'Administracion',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(5,'Finanzas',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(6,'Comercial',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(7,'Operaciones',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(8,'DDNN',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(9,'Legal',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(10,'Gestión Humana',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(11,'Gestión',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00');
+INSERT INTO `t_sgcv_areas` VALUES (1,'Admin',0,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(2,'IT',0,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(3,'Gerencia',0,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(4,'Administración',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(5,'Finanzas',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(6,'Comercial',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(7,'Operaciones',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(8,'DDNN',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(9,'Legal',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(10,'Gestión Humana',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00'),(11,'Gestión',1,1,'2022-06-14 12:00:00','2022-06-14 12:00:00');
 /*!40000 ALTER TABLE `t_sgcv_areas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -493,7 +529,7 @@ CREATE TABLE `t_sgcv_opcion_perfil` (
   KEY `fk_T_SGCV_Opcion_Perfil_T_SGCV_Perfil1_idx` (`perfil_id`),
   CONSTRAINT `fk_T_SGCV_Opcion_Perfil_T_SGCV_Opcion1` FOREIGN KEY (`opcion_id`) REFERENCES `t_sgcv_opciones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_T_SGCV_Opcion_Perfil_T_SGCV_Perfil1` FOREIGN KEY (`perfil_id`) REFERENCES `t_sgcv_perfiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=183 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -502,7 +538,7 @@ CREATE TABLE `t_sgcv_opcion_perfil` (
 
 LOCK TABLES `t_sgcv_opcion_perfil` WRITE;
 /*!40000 ALTER TABLE `t_sgcv_opcion_perfil` DISABLE KEYS */;
-INSERT INTO `t_sgcv_opcion_perfil` VALUES (1,1,1,1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(2,1,2,1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(3,1,3,1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(4,1,4,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(5,1,5,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(6,1,6,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(7,1,7,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(8,1,8,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(9,1,9,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(10,3,1,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(11,3,4,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(12,3,5,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(13,3,6,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(14,3,7,1,'2022-05-28 12:00:00','2022-05-28 12:00:00');
+INSERT INTO `t_sgcv_opcion_perfil` VALUES (68,4,5,1,'2022-06-28 01:59:28','2022-06-28 01:59:28'),(69,4,6,1,'2022-06-28 01:59:28','2022-06-28 01:59:28'),(70,4,10,1,'2022-06-28 01:59:28','2022-06-28 01:59:28'),(71,4,7,1,'2022-06-28 01:59:28','2022-06-28 01:59:28'),(147,1,1,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(148,1,4,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(149,1,5,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(150,1,6,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(151,1,10,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(152,1,7,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(153,1,17,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(154,1,12,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(155,1,13,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(156,1,14,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(157,1,8,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(158,1,9,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(159,1,11,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(160,1,15,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(161,1,16,1,'2022-08-16 00:26:14','2022-08-16 00:26:14'),(162,2,1,1,'2022-08-17 03:34:13','2022-08-17 03:34:13'),(163,2,4,1,'2022-08-17 03:34:13','2022-08-17 03:34:13'),(164,2,5,1,'2022-08-17 03:34:13','2022-08-17 03:34:13'),(165,2,6,1,'2022-08-17 03:34:13','2022-08-17 03:34:13'),(166,2,12,1,'2022-08-17 03:34:13','2022-08-17 03:34:13'),(167,2,13,1,'2022-08-17 03:34:13','2022-08-17 03:34:13'),(168,3,1,1,'2022-08-17 03:34:18','2022-08-17 03:34:18'),(169,3,4,1,'2022-08-17 03:34:18','2022-08-17 03:34:18'),(170,3,5,1,'2022-08-17 03:34:18','2022-08-17 03:34:18'),(171,3,6,1,'2022-08-17 03:34:18','2022-08-17 03:34:18'),(172,3,7,1,'2022-08-17 03:34:18','2022-08-17 03:34:18'),(173,3,12,1,'2022-08-17 03:34:18','2022-08-17 03:34:18'),(174,3,13,1,'2022-08-17 03:34:18','2022-08-17 03:34:18'),(175,5,1,1,'2022-08-17 03:34:25','2022-08-17 03:34:25'),(176,5,4,1,'2022-08-17 03:34:25','2022-08-17 03:34:25'),(177,5,5,1,'2022-08-17 03:34:25','2022-08-17 03:34:25'),(178,5,6,1,'2022-08-17 03:34:25','2022-08-17 03:34:25'),(179,5,10,1,'2022-08-17 03:34:25','2022-08-17 03:34:25'),(180,5,7,1,'2022-08-17 03:34:25','2022-08-17 03:34:25'),(181,5,12,1,'2022-08-17 03:34:25','2022-08-17 03:34:25'),(182,5,13,1,'2022-08-17 03:34:25','2022-08-17 03:34:25');
 /*!40000 ALTER TABLE `t_sgcv_opcion_perfil` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -529,7 +565,7 @@ CREATE TABLE `t_sgcv_opciones` (
   PRIMARY KEY (`id`),
   KEY `fk_T_SGCV_Opcion_T_SGCV_Opcion1_idx` (`opcion_padre_id`),
   CONSTRAINT `fk_T_SGCV_Opcion_T_SGCV_Opcion1` FOREIGN KEY (`opcion_padre_id`) REFERENCES `t_sgcv_opciones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -538,7 +574,7 @@ CREATE TABLE `t_sgcv_opciones` (
 
 LOCK TABLES `t_sgcv_opciones` WRITE;
 /*!40000 ALTER TABLE `t_sgcv_opciones` DISABLE KEYS */;
-INSERT INTO `t_sgcv_opciones` VALUES (1,'Agenda Estrategica','','',NULL,1,1,NULL,1,1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(2,'Roles','','cil-clipboard',NULL,2,1,1,2,1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(3,'Temas','','cil-apps',NULL,3,1,1,2,1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(4,'Objetivos','objectives','cil-task',NULL,4,1,1,2,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(5,'Viajes','','',NULL,1,2,NULL,1,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(6,'Agendas','','cil-calendar',NULL,2,2,5,2,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(7,'Informes','','cil-calendar-check',NULL,3,2,5,2,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(8,'Accesos','',NULL,NULL,1,3,NULL,1,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(9,'Usuarios','','cil-user',NULL,2,3,8,2,1,'2022-05-28 12:00:00','2022-05-28 12:00:00');
+INSERT INTO `t_sgcv_opciones` VALUES (1,'Agenda Estrategica','','',NULL,1,1,NULL,1,1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(2,'Roles','','cil-clipboard',NULL,2,1,1,2,0,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(3,'Temas','','cil-apps',NULL,3,1,1,2,0,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(4,'Matriz','objectives','cil-apps',NULL,4,1,1,2,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(5,'Viajes','','',NULL,1,2,NULL,1,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(6,'Calendario','agenda.index','cil-calendar',NULL,2,2,5,2,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(7,'Informes','agenda.reports','cil-calendar-check',NULL,4,2,5,2,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(8,'Accesos','',NULL,NULL,1,4,NULL,1,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(9,'Usuarios','user.index','cil-user',NULL,2,4,8,2,1,'2022-05-28 12:00:00','2022-05-28 12:00:00'),(10,'Agendas','agenda.pending','cil-book',NULL,3,2,5,2,1,'2022-06-25 12:00:00','2022-06-25 12:00:00'),(11,'Perfiles','user.profiles','cil-user',NULL,3,4,8,2,1,'2022-06-27 12:00:00','2022-06-27 12:00:00'),(12,'Resultados','','',NULL,1,3,NULL,1,1,'2022-07-24 12:00:00','2022-07-24 12:00:00'),(13,'Presentaciones','results.index','cil-airplay',NULL,2,3,12,2,1,'2022-07-24 12:00:00','2022-07-24 12:00:00'),(14,'Reuniones','results.reunions','cil-speech',NULL,3,3,12,2,0,'2022-08-01 12:00:00','2022-08-01 12:00:00'),(15,'Sedes','branches.index','cil-building',NULL,4,4,8,2,1,'2022-08-09 12:00:00','2022-08-09 12:00:00'),(16,'Áreas','areas.index','cil-group',NULL,5,4,8,2,1,'2022-08-10 12:00:00','2022-08-10 12:00:00'),(17,'Seguimiento','agenda.tracking','cil-av-timer',NULL,5,2,5,2,1,'2022-08-15 12:00:00','2022-08-15 12:00:00');
 /*!40000 ALTER TABLE `t_sgcv_opciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -556,7 +592,7 @@ CREATE TABLE `t_sgcv_perfiles` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -565,7 +601,7 @@ CREATE TABLE `t_sgcv_perfiles` (
 
 LOCK TABLES `t_sgcv_perfiles` WRITE;
 /*!40000 ALTER TABLE `t_sgcv_perfiles` DISABLE KEYS */;
-INSERT INTO `t_sgcv_perfiles` VALUES (1,'Admin',1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(2,'Consulta',1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(3,'Registro',1,'2022-05-25 12:00:00','2022-05-25 12:00:00');
+INSERT INTO `t_sgcv_perfiles` VALUES (1,'Admin',1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(2,'Consulta',1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(3,'Registro',1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(4,'Gestor Calendario',0,'2022-06-28 01:59:28','2022-06-29 22:16:01'),(5,'Gerente',1,'2022-07-07 23:51:18','2022-07-07 23:51:18');
 /*!40000 ALTER TABLE `t_sgcv_perfiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -580,13 +616,14 @@ CREATE TABLE `t_sgcv_posiciones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `area_id` bigint(20) NOT NULL,
+  `es_gerente` tinyint(4) DEFAULT 0,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_position_area1_idx` (`area_id`),
   CONSTRAINT `fk_position_area1` FOREIGN KEY (`area_id`) REFERENCES `t_sgcv_areas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -595,8 +632,39 @@ CREATE TABLE `t_sgcv_posiciones` (
 
 LOCK TABLES `t_sgcv_posiciones` WRITE;
 /*!40000 ALTER TABLE `t_sgcv_posiciones` DISABLE KEYS */;
-INSERT INTO `t_sgcv_posiciones` VALUES (1,'Admin',1,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(2,'IT',1,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(3,'Gerente',1,1,'2022-05-23 12:00:00','2022-05-23 12:00:00');
+INSERT INTO `t_sgcv_posiciones` VALUES (1,'Admin',1,0,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(2,'IT',1,0,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(3,'Gerente de Prueba',1,1,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(4,'Gerente de Gestion',11,1,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(5,'Secretario de Gestion',11,0,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(6,'Secretario de Administracion',4,0,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(7,'Gerente de Administracion',4,1,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(8,'Secretario de Finanzas',5,0,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(9,'Gerente de Finanzas',5,1,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(10,'Secretario de Comercial',6,0,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(11,'Gerente de Comercial',6,1,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(12,'Secretario de Operaciones',7,0,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(13,'Gerente de Operaciones',7,1,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(14,'Secretario de DDNN',8,0,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(15,'Gerente de DDNN',8,1,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(16,'Secretario de Legal',9,0,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(17,'Gerente de Legal',9,1,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(18,'Secretario de Gestión Humana',10,0,1,'2022-07-06 12:00:00','2022-07-06 12:00:00'),(19,'Gerente de Gestión Humana',10,1,1,'2022-07-06 12:00:00','2022-07-06 12:00:00');
 /*!40000 ALTER TABLE `t_sgcv_posiciones` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `t_sgcv_report_files`
+--
+
+DROP TABLE IF EXISTS `t_sgcv_report_files`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_sgcv_report_files` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `agenda_viaje_id` bigint(20) NOT NULL,
+  `documento_id` bigint(20) NOT NULL,
+  `estado` tinyint(4) DEFAULT 1,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_t_sgcv_report_files_T_SGCV_Agenda_Viajes1_idx` (`agenda_viaje_id`),
+  KEY `fk_t_sgcv_report_files_T_SGCV_Documentos1_idx` (`documento_id`),
+  CONSTRAINT `fk_t_sgcv_report_files_T_SGCV_Agenda_Viajes1` FOREIGN KEY (`agenda_viaje_id`) REFERENCES `t_sgcv_agenda_viajes` (`id`),
+  CONSTRAINT `fk_t_sgcv_report_files_T_SGCV_Documentos1` FOREIGN KEY (`documento_id`) REFERENCES `t_sgcv_documentos` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `t_sgcv_report_files`
+--
+
+LOCK TABLES `t_sgcv_report_files` WRITE;
+/*!40000 ALTER TABLE `t_sgcv_report_files` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_sgcv_report_files` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -613,16 +681,20 @@ CREATE TABLE `t_sgcv_reporte_actividades` (
   `acuerdo` varchar(500) DEFAULT NULL,
   `fecha_comienzo` datetime NOT NULL,
   `fecha_fin` datetime NOT NULL,
+  `es_cerrado` tinyint(4) NOT NULL DEFAULT 0,
+  `cerrado_por` bigint(20) DEFAULT NULL,
   `agenda_viaje_id` bigint(20) NOT NULL,
   `actividades_viaje_id` bigint(20) DEFAULT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
-  `modified_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_inform_activities_travel_schedule1_idx` (`agenda_viaje_id`),
   KEY `fk_inform_activities_travel_activities1_idx` (`actividades_viaje_id`),
+  KEY `fk_t_sgcv_reporte_actividades_T_t_sgcv_usuarios1_idx` (`cerrado_por`),
   CONSTRAINT `fk_inform_activities_travel_activities1` FOREIGN KEY (`actividades_viaje_id`) REFERENCES `t_sgcv_actividades_viajes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_inform_activities_travel_schedule1` FOREIGN KEY (`agenda_viaje_id`) REFERENCES `t_sgcv_agenda_viajes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_inform_activities_travel_schedule1` FOREIGN KEY (`agenda_viaje_id`) REFERENCES `t_sgcv_agenda_viajes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_t_sgcv_reporte_actividades_T_t_sgcv_usuarios1` FOREIGN KEY (`cerrado_por`) REFERENCES `t_sgcv_usuarios` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -636,6 +708,37 @@ LOCK TABLES `t_sgcv_reporte_actividades` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `t_sgcv_reu_consolidado`
+--
+
+DROP TABLE IF EXISTS `t_sgcv_reu_consolidado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_sgcv_reu_consolidado` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `reunion_id` bigint(20) NOT NULL,
+  `documento_id` bigint(20) NOT NULL,
+  `estado` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_reu_consolidado_documents1_idx` (`documento_id`),
+  KEY `fk_t_sgcv_reu_consolidado_T_t_sgcv_reuniones1_idx` (`reunion_id`),
+  CONSTRAINT `fk_reu_consolidado_documents1` FOREIGN KEY (`documento_id`) REFERENCES `t_sgcv_documentos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_t_sgcv_reu_consolidado_T_t_sgcv_reuniones1` FOREIGN KEY (`reunion_id`) REFERENCES `t_sgcv_reuniones` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `t_sgcv_reu_consolidado`
+--
+
+LOCK TABLES `t_sgcv_reu_consolidado` WRITE;
+/*!40000 ALTER TABLE `t_sgcv_reu_consolidado` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_sgcv_reu_consolidado` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `t_sgcv_reu_document`
 --
 
@@ -644,19 +747,19 @@ DROP TABLE IF EXISTS `t_sgcv_reu_document`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_sgcv_reu_document` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `reunion_id` bigint(20) NOT NULL,
   `area_id` bigint(20) NOT NULL,
-  `reu_tema_id` bigint(20) NOT NULL,
   `documento_id` bigint(20) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
-  `modified_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_reunion_areas_areas1_idx` (`area_id`),
   KEY `fk_reunion_document_documents1_idx` (`documento_id`),
-  KEY `fk_reu_document_reu_temas1_idx` (`reu_tema_id`),
-  CONSTRAINT `fk_reu_document_reu_temas1` FOREIGN KEY (`reu_tema_id`) REFERENCES `t_sgcv_reu_temas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_t_sgcv_reu_document_T_t_sgcv_reuniones1_idx` (`reunion_id`),
   CONSTRAINT `fk_reunion_areas_areas1` FOREIGN KEY (`area_id`) REFERENCES `t_sgcv_areas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_reunion_document_documents1` FOREIGN KEY (`documento_id`) REFERENCES `t_sgcv_documentos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_reunion_document_documents1` FOREIGN KEY (`documento_id`) REFERENCES `t_sgcv_documentos` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_t_sgcv_reu_document_T_t_sgcv_reuniones1` FOREIGN KEY (`reunion_id`) REFERENCES `t_sgcv_reuniones` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -682,7 +785,7 @@ CREATE TABLE `t_sgcv_reu_presentadores` (
   `reunion_id` bigint(20) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
-  `modified_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_reunion_presenters_users1_idx` (`usuario_id`),
   KEY `fk_reunion_presenters_reunions1_idx` (`reunion_id`),
@@ -713,7 +816,7 @@ CREATE TABLE `t_sgcv_reu_temas` (
   `reunion_id` bigint(20) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
-  `modified_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_reunion_themes_reunions1_idx` (`reunion_id`),
   CONSTRAINT `fk_reunion_themes_reunions1` FOREIGN KEY (`reunion_id`) REFERENCES `t_sgcv_reuniones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -738,13 +841,15 @@ DROP TABLE IF EXISTS `t_sgcv_reuniones`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_sgcv_reuniones` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `titulo` varchar(100) NOT NULL,
-  `descripcion` varchar(500) NOT NULL,
+  `usuario_id` bigint(20) NOT NULL,
   `fecha` datetime NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
-  `modified_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_t_sgcv_reuniones_T_t_sgcv_usuarios1_idx` (`usuario_id`),
+  KEY `fk_t_sgcv_reuniones_fecha_idx` (`fecha`),
+  CONSTRAINT `fk_t_sgcv_reuniones_T_t_sgcv_usuarios1` FOREIGN KEY (`usuario_id`) REFERENCES `t_sgcv_usuarios` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -799,11 +904,12 @@ CREATE TABLE `t_sgcv_sedes` (
   `nombre` varchar(80) NOT NULL,
   `telefono` varchar(12) DEFAULT NULL,
   `direccion` varchar(200) DEFAULT NULL,
+  `color` varchar(10) NOT NULL,
   `estado` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
-  `modified_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -812,6 +918,7 @@ CREATE TABLE `t_sgcv_sedes` (
 
 LOCK TABLES `t_sgcv_sedes` WRITE;
 /*!40000 ALTER TABLE `t_sgcv_sedes` DISABLE KEYS */;
+INSERT INTO `t_sgcv_sedes` VALUES (1,'Villacurí',NULL,NULL,'#008b00',1,'2022-06-21 12:00:00','2022-06-21 12:00:00'),(2,'Olmos',NULL,NULL,'#00868b',1,'2022-06-21 12:00:00','2022-08-10 23:23:44'),(3,'Andahuasi',NULL,NULL,'#74008b',1,'2022-06-21 12:00:00','2022-06-21 12:00:00'),(4,'Valera',NULL,NULL,'#4ab507',0,'2022-08-10 23:25:14','2022-08-10 23:35:46');
 /*!40000 ALTER TABLE `t_sgcv_sedes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -863,7 +970,7 @@ CREATE TABLE `t_sgcv_usuario_perfil` (
   KEY `fk_T_SGCV_Usuario_Perfil_T_SGCV_Usuarios1_idx` (`usuario_id`),
   CONSTRAINT `fk_T_SGCV_Usuario_Perfil_T_SGCV_Perfil1` FOREIGN KEY (`perfil_id`) REFERENCES `t_sgcv_perfiles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_T_SGCV_Usuario_Perfil_T_SGCV_Usuarios1` FOREIGN KEY (`usuario_id`) REFERENCES `t_sgcv_usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -872,7 +979,7 @@ CREATE TABLE `t_sgcv_usuario_perfil` (
 
 LOCK TABLES `t_sgcv_usuario_perfil` WRITE;
 /*!40000 ALTER TABLE `t_sgcv_usuario_perfil` DISABLE KEYS */;
-INSERT INTO `t_sgcv_usuario_perfil` VALUES (1,1,1,1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(2,2,2,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(3,3,3,1,'2022-05-23 12:00:00','2022-05-23 12:00:00');
+INSERT INTO `t_sgcv_usuario_perfil` VALUES (1,1,1,1,'2022-05-25 12:00:00','2022-05-25 12:00:00'),(11,3,5,1,'2022-07-07 00:22:38','2022-07-07 00:22:38'),(14,5,3,1,'2022-07-15 18:54:26','2022-07-15 18:54:26'),(15,5,4,1,'2022-07-15 18:54:29','2022-07-15 18:54:29'),(17,2,2,1,'2022-07-20 23:10:37','2022-07-20 23:10:37'),(18,5,6,1,'2022-07-21 00:08:57','2022-07-21 00:08:57');
 /*!40000 ALTER TABLE `t_sgcv_usuario_perfil` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -898,7 +1005,7 @@ CREATE TABLE `t_sgcv_usuarios` (
   UNIQUE KEY `email_UNIQUE` (`email`),
   KEY `fk_users_position1_idx` (`posicion_id`),
   CONSTRAINT `fk_users_position1` FOREIGN KEY (`posicion_id`) REFERENCES `t_sgcv_posiciones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -907,7 +1014,7 @@ CREATE TABLE `t_sgcv_usuarios` (
 
 LOCK TABLES `t_sgcv_usuarios` WRITE;
 /*!40000 ALTER TABLE `t_sgcv_usuarios` DISABLE KEYS */;
-INSERT INTO `t_sgcv_usuarios` VALUES (1,'Admin','admin@admin.com','$2a$12$pbR.YNvu7iEbww4afv1LCO6iKofycxu3/RIJXJfqEU1YO1nQdju7q',1,NULL,NULL,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(2,'Alejandro','alejandro@mail.com','$2a$12$Vt9JHANe0HFVOe7j4KhQxOnJ1/injllG6RbVy2DDscDbGXvbdp1fm',2,NULL,NULL,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(3,'Gerente','gerencia@mail.com','$2a$12$OTG7JVaMkw4n08hd4a5ybuCkcjTil/EoDosrAjNZQ1ksFRGbAMZ9y',3,NULL,NULL,1,'2022-05-23 12:00:00','2022-05-23 12:00:00');
+INSERT INTO `t_sgcv_usuarios` VALUES (1,'Admin','admin@admin.com','$2a$12$pbR.YNvu7iEbww4afv1LCO6iKofycxu3/RIJXJfqEU1YO1nQdju7q',1,NULL,NULL,1,'2022-05-23 12:00:00','2022-05-23 12:00:00'),(2,'Alejandro','alejandro@mail.com','$2y$10$pp5oCm/fkfoznO79QKBnW.hmqLAas.XRI4r9fTOOwXBgFOAb3igX6',2,NULL,NULL,1,'2022-05-23 12:00:00','2022-07-20 23:09:40'),(3,'Raul - Gerente','raul@hmail.com','$2a$12$OTG7JVaMkw4n08hd4a5ybuCkcjTil/EoDosrAjNZQ1ksFRGbAMZ9y',3,NULL,NULL,1,'2022-05-23 12:00:00','2022-07-06 20:00:29'),(4,'Sergio - Gerencia','sergio@mail.com','$2y$10$GqCYBpAjmHZGbVdHR6e4UODbgpL1Ut9h//lr9zVa9OVcw995lKjam',4,NULL,NULL,1,'2022-07-06 20:55:48','2022-07-06 20:55:48'),(5,'Kevin','kevin@mail.com','$2y$10$.nHB..Ad9sKRGAQGz/d.puQHkbVaLLAJ7MouBgNDvYmuwi243BCsu',8,NULL,NULL,1,'2022-07-07 00:22:38','2022-07-07 00:22:38'),(6,'Matias','matias@mail.com','$2y$10$ggpqUjIYFs6aIwE.E8iYr.yN8s.y9jQMr9OSGL5yzcdJeH7evQqbi',9,NULL,NULL,1,'2022-07-07 00:23:38','2022-07-21 00:08:57');
 /*!40000 ALTER TABLE `t_sgcv_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -920,4 +1027,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-14 23:14:10
+-- Dump completed on 2022-09-08 17:40:52

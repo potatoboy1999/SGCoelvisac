@@ -89,6 +89,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::post('/reports/activity/save',[TravelScheduleController::class, "saveActivity"])->name("agenda.reports.activity.save");
         Route::post('/reports/activity/delete',[TravelScheduleController::class, "deleteActivity"])->name("agenda.reports.activity.delete");
         Route::get('/reports/pdf/download',[TravelScheduleController::class,"exportReportPdf"])->name('agenda.reports.pdf');
+        Route::get('/schedule/pdf/download',[TravelScheduleController::class,"exportSchedulePdf"])->name('agenda.schedule.pdf');
         // -- reports tracking
         Route::get('/tracking', [TravelScheduleController::class, "viewTrackingList"])->name('agenda.tracking');
         Route::get('/tracking/popup', [TravelScheduleController::class, "showTrackActivity"])->name('agenda.tracking.popup');

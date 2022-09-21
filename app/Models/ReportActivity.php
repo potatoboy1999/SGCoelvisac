@@ -28,8 +28,10 @@ class ReportActivity extends Model
     /* estado
     ==============
         0 = Deleted
-        1 = Not Finished
-        2 = Finished
+        1 = Not started
+        2 = Working on it
+        3 = Finished
+        4 = Not Finished
     */
 
     public function travelSchedule(){

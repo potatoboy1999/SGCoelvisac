@@ -441,27 +441,32 @@ class TravelScheduleController extends Controller
             $report->save();
 
             // get status color
-            $s = ['t_red', 't_yellow', 't_green'];
+            $s = ['t_red','t_gray','t_blue','t_yellow','t_green'];
             $status = 0; // not done = RED
-            if ($report->estado == 2) {
-                $status = 2; // done = GREEN
-            } else {
+            if($report->estado == 1){
+                $status = 1; // not started = GRAY
+            }elseif($report->estado == 3){
+                $status = 4; // done = GREEN
+            }elseif($report->estado == 4){
+                $status = 0; // not done = RED
+            }else{
                 $today = time();
                 $d_start = strtotime($report->fecha_comienzo);
                 $d_end = strtotime($report->fecha_fin);
-                if ($d_start <= $today && $today <= $d_end) {
+                if($d_start <= $today && $today <= $d_end){
                     // calculate 25% of time remaining
-                    $diff = ($d_end - $d_start) * 0.25;
+                    $diff = ($d_end - $d_start)*0.25;
                     $d_limit = $d_start + $diff;
 
-                    if ($today < $d_limit) {
-                        $status = 2; // if today is within 25% of start, status OK = GREEN
+                    if($today < $d_limit){
+                        $status = 2; // if today is within 25% of start, status OK = BLUE
+                    }
+                    
+                    if($d_limit <= $today){
+                        $status = 3; // if today is past 25%, status warning = YELLOW
                     }
 
-                    if ($d_limit <= $today) {
-                        $status = 1; // if today is past 25%, status warning = YELLOW
-                    }
-                } else if ($d_end < $today) {
+                }else if($d_end < $today){
                     $status = 0; // time expired, not done = RED
                 }
             }
@@ -554,6 +559,37 @@ class TravelScheduleController extends Controller
         return back()->with(['error' => 'No se encontró la agenda']);
     }
 
+    public function exportSchedulePdf(Request $request)
+    {
+        $schedule = TravelSchedule::find($request->id);
+        if ($schedule) {
+            $pdf = Pdf::loadView('pdf.schedule_report', [
+                "schedule" => $schedule
+            ]);
+
+            $path = public_path('pdf/');
+            $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
+            $name = 'report-' . $now->format("Ymd-His-u");
+            $fileName =  $name . '.pdf';
+            $pdf->save($path . '/' . $fileName);
+
+            $document = new Document();
+            $document->nombre = $fileName;
+            $document->file = $fileName;
+            $document->estado = 1;
+            $document->save();
+
+            $reportFile = new ReportFile();
+            $reportFile->agenda_viaje_id = $schedule->id;
+            $reportFile->documento_id = $document->id;
+            $reportFile->estado = 1;
+            $reportFile->save();
+
+            return $pdf->download('schedule' . time() . '.pdf');
+        }
+        return back()->with(['error' => 'No se encontró la agenda']);
+    }
+
     public function finalizeReport(Request $request)
     {
         $schedule = TravelSchedule::find($request->id);
@@ -572,19 +608,56 @@ class TravelScheduleController extends Controller
         $day_limit = date('Y-m-d', strtotime("+3 days"));
         // $activities = ReportActivity::whereNotNull('id');
         $activities = ReportActivity::where('t_sgcv_reporte_actividades.estado', '>', '0')
-            ->where('t_sgcv_reporte_actividades.fecha_fin', '<=', $day_limit)
+            // ->where('t_sgcv_reporte_actividades.fecha_fin', '<=', $day_limit)
             ->where('t_sgcv_reporte_actividades.es_cerrado', 0) // only check activities that hasn't been marked as closed
             ->where('t_sgcv_agenda_viajes.finalizado', 1) // only check activities where the report has been finished
             ->where('t_sgcv_agenda_viajes.estado', '>', '0')
-            ->join('t_sgcv_agenda_viajes', 't_sgcv_reporte_actividades.agenda_viaje_id', 't_sgcv_agenda_viajes.id')
-            ->select('t_sgcv_reporte_actividades.*');
+            ->join('t_sgcv_agenda_viajes', 't_sgcv_reporte_actividades.agenda_viaje_id', 't_sgcv_agenda_viajes.id');
+        
+        if(isset($request->search) && $request->search == "Y"){
+            $activities->join('t_sgcv_usuarios', 't_sgcv_agenda_viajes.usuario_id', 't_sgcv_usuarios.id')
+                        ->join('t_sgcv_posiciones', 't_sgcv_usuarios.posicion_id', 't_sgcv_posiciones.id');
+
+            if(isset($request->branches)){
+                // search all selected branches
+                $activities->whereIn('t_sgcv_agenda_viajes.sede_id', $request->branches);
+            }
+
+            if(isset($request->areas)){
+                // search all selected areas
+                $activities->whereIn('t_sgcv_posiciones.area_id', $request->areas);
+            }
+
+            // search within time window
+            $searchFrom = date_format(date_create_from_format('d/m/Y', $request->search_from), 'Y-m-d');
+            $searchTo = date_format(date_create_from_format('d/m/Y', $request->search_to), 'Y-m-d');
+
+            $activities->where('t_sgcv_reporte_actividades.fecha_fin', '>=', $searchFrom);
+            $activities->where('t_sgcv_reporte_actividades.fecha_fin', '<=', $searchTo);
+        }
+
         $activities->with('travelSchedule');
-        $activities = $activities->orderBy('t_sgcv_reporte_actividades.fecha_fin', 'desc')->get();
+        
+        $activities = $activities->select('t_sgcv_reporte_actividades.*')
+            ->orderBy('t_sgcv_reporte_actividades.fecha_fin', 'desc')
+            ->get();        
+
+        $branches = Branch::where('estado', 1)->get();
+        $areas = Area::where('estado',1)->where('vis_matriz', 1)->get();
 
         return view('intranet.travels.tracking', [
             'page' => $page,
             'bcrums' => $bcrums,
             'activities' => $activities,
+            'branches' => $branches,
+            'areas' => $areas,
+            "filter" => [
+                "active" => (isset($request->search) && $request->search == "Y")?true:false,
+                "branches" => isset($request->branches)?$request->branches:[],
+                "areas" => isset($request->areas)?$request->areas:[],
+                "date_from" => isset($request->search_from)?$request->search_from:'',
+                "date_to" => isset($request->search_to)?$request->search_to:'',
+            ]
         ]);
     }
 
@@ -643,7 +716,7 @@ class TravelScheduleController extends Controller
             ->where('t_sgcv_agenda_viajes.estado', '>', '0')
             ->join('t_sgcv_agenda_viajes', 't_sgcv_reporte_actividades.agenda_viaje_id', 't_sgcv_agenda_viajes.id')
             ->join('t_sgcv_usuarios', 't_sgcv_agenda_viajes.usuario_id', 't_sgcv_usuarios.id')
-            ->join('t_sgcv_posiciones', 't_sgcv_usuarios.posicion_id', 't_sgcv_posiciones.id');       
+            ->join('t_sgcv_posiciones', 't_sgcv_usuarios.posicion_id', 't_sgcv_posiciones.id');
 
         // search all selected status
         if ($request->status != 'ALL') {

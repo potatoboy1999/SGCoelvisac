@@ -286,8 +286,8 @@ class ActivityController extends Controller
                         }
                         if(isset($request->search_from)){
                             $roles->where('t_sgcv_actividades.fecha_comienzo','>=',''.date_format(date_create_from_format('d/m/Y',$request->search_from),'Y-m-d').'');
-                            
                         }
+                        
                         if(isset($request->search_to)){
                             $roles->where('t_sgcv_actividades.fecha_fin','<=',''.date_format(date_create_from_format('d/m/Y',$request->search_to),'Y-m-d').'');
                         }

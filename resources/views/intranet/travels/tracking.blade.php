@@ -1,8 +1,13 @@
 @php
     function progressStatus($activity){
+        // ['t_red','t_gray','t_blue','t_yellow','t_green'];
         $status = 0; // not done = RED
-        if($activity->estado == 2){
-            $status = 2; // done = GREEN
+        if($activity->estado == 1){
+            $status = 1; // not started = GRAY
+        }elseif($activity->estado == 3){
+            $status = 4; // done = GREEN
+        }elseif($activity->estado == 4){
+            $status = 0; // not done = RED
         }else{
             $today = time();
             $d_start = strtotime($activity->fecha_comienzo);
@@ -13,11 +18,11 @@
                 $d_limit = $d_start + $diff;
 
                 if($today < $d_limit){
-                    $status = 2; // if today is within 25% of start, status OK = GREEN
+                    $status = 2; // if today is within 25% of start, status OK = BLUE
                 }
                 
                 if($d_limit <= $today){
-                    $status = 1; // if today is past 25%, status warning = YELLOW
+                    $status = 3; // if today is past 25%, status warning = YELLOW
                 }
 
             }else if($d_end < $today){
@@ -49,6 +54,12 @@
         }
         #ui-datepicker-div {
             z-index: 10000!important;
+        }
+        .t_gray {
+            background-color: #d8dbe0!important;
+        }
+        .t_blue {
+            background-color: #256ae2!important;
         }
         .t_red {
             background-color: #ec1d1d!important;
@@ -114,10 +125,95 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="trackingFilterModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Generar Reporte</h5>
+            </div>
+            <div class="modal-body">
+                <form action="{{route('agenda.tracking')}}" method="get" id="filter_pdf" onkeydown="return event.key != 'Enter';">
+                    <input type="hidden" name="search" value="Y">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-2">
+                                <label class="form-label">Sede:</label>
+                                <div class="p-2 border rounded">
+                                    @foreach ($branches as $branch)
+                                        <div class="form-check">
+                                            <input class="form-check-input" id="branch_check{{$branch->id}}" name="branches[]" value="{{$branch->id}}" type="checkbox" {{$filter['active'] == 'Y'?(in_array($branch->id,$filter['branches'])?'checked':''):'checked'}}>
+                                            <label class="form-check-label" for="branch_check{{$branch->id}}">{{$branch->nombre}}</label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="w-100">
+                                <p class="branch_error w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más sedes</p>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-2">
+                                <label class="form-label">Area:</label>
+                                <div class="p-2 border rounded">
+                                    @foreach ($areas as $area)
+                                        <div class="form-check">
+                                            <input class="form-check-input" id="area_check{{$area->id}}" name="areas[]" value="{{$area->id}}" type="checkbox" {{$filter['active'] == 'Y'?(in_array($area->id,$filter['areas'])?'checked':''):'checked'}}>
+                                            <label class="form-check-label" for="area_check{{$area->id}}">{{$area->nombre}}</label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="w-100">
+                                <p class="area_error w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más areas</p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-2">
+                                <label class="form-label" for="filter_from">Buscar desde:</label>
+                                <div class="input-group">
+                                    <input id="filter_from" class="form-control clear-readonly" type="text" name="search_from" value="{{$filter['active'] == 'Y'?$filter['date_from']:date('d/m/Y', strtotime("-1 month"))}}" onkeydown="return false;" readonly required>
+                                    <span class="input-group-text">
+                                        <svg class="icon">
+                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group mb-2">
+                                <label class="form-label" for="filter_to">Buscar hasta:</label>
+                                <div class="input-group">
+                                    <input id="filter_to" class="form-control clear-readonly" type="text" name="search_to" value="{{$filter['active'] == 'Y'?$filter['date_to']:date('d/m/Y', strtotime("now"))}}" onkeydown="return false;" readonly required>
+                                    <span class="input-group-text">
+                                        <svg class="icon">
+                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary text-white" type="button" data-coreui-dismiss="modal" aria-label="Close">Cerrar</button>
+                <input class="btn btn-success text-white form_submit" type="submit" form="filter_pdf" value="Buscar">
+            </div>
+        </div>
+    </div>
+</div>
 <div class="body flex-grow-1 px-3">
     <div class="container-lg">
         <div class="card mb-4">
             <div class="card-body">
+                <a href="#" id="filter" class="btn btn-{{$filter['active'] == 'Y'?'warning':'secondary'}} text-white">
+                    <i class="fa-solid fa-filter"></i> Filtrar
+                </a>
                 <a href="#" id="pdf_report" class="btn btn-success text-white">
                     <i class="fa-regular fa-file-pdf"></i> Reporte en PDF
                 </a>
@@ -131,6 +227,7 @@
                         <thead>
                             <tr>
                                 <th class="th-branch bg-dark text-white" width="100px">Sede</th>
+                                <th class="th-area bg-dark text-white" width="100px">Gerencia</th>
                                 <th class="th-user bg-dark text-white" width="120px">Usuario</th>
                                 <th class="th-travel-from bg-dark text-white" width="120px">Viaje Desde</th>
                                 <th class="th-travel-to bg-dark text-white" width="120px">Viaje Hasta</th>
@@ -144,11 +241,12 @@
                         </thead>
                         <tbody>
                             @php
-                                $s = ['t_red','t_yellow','t_green'];
+                                $s = ['t_red','t_gray','t_blue','t_yellow','t_green'];
                             @endphp
                             @foreach ($activities as $activity)
                             <tr class="act-row" data-actid="{{$activity->id}}">
                                 <td class="t-branch align-middle">{{$activity->travelSchedule->branch->nombre}}</td>
+                                <td class="t-area align-middle">{{$activity->travelSchedule->user->position->area->nombre}}</td>
                                 <td class="t-user align-middle">{{$activity->travelSchedule->user->nombre}}</td>
                                 <td class="t-travel-from align-middle">{{date("d-m-y",strtotime($activity->travelSchedule->viaje_comienzo))}}</td>
                                 <td class="t-travel-to align-middle">{{date("d-m-y",strtotime($activity->travelSchedule->viaje_fin))}}</td>
@@ -178,12 +276,20 @@
             <div class="card-header">Leyenda</div>
             <div class="card-body">
                 <p>
-                    <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
-                    <strong>Verde:</strong> Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
+                    <span class="d-inline-block text-block t_gray" style="width: 20px;">&nbsp;</span> 
+                    <strong>Gris:</strong> Actividad no iniciada
+                </p>
+                <p>
+                    <span class="d-inline-block text-block t_blue" style="width: 20px;">&nbsp;</span> 
+                    <strong>Azul:</strong> Actividad iniciada. Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
                 </p>
                 <p>
                     <span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span>
-                    <strong>Amarillo:</strong> Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                    <strong>Amarillo:</strong> Actividad iniciada. Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                </p>
+                <p>
+                    <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
+                    <strong>Verde:</strong> Actividad Completada.
                 </p>
                 <p>
                     <span class="d-inline-block text-block t_red" style="width: 20px;">&nbsp;</span>

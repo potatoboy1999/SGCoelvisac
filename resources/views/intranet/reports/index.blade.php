@@ -14,7 +14,7 @@
 
 <div class="body flex-grow-1 px-3">
     <div class="container-lg">
-        <div class="card">
+        <div class="card mb-2">
             <div class="card-header">
                 Reporte de Agendas
             </div>
@@ -68,36 +68,61 @@
                                 </td>
                                 {{-- <td class="d-report align-middle {{sizeof($schedule->reportActivities)>0?'text-success':'text-danger'}}">{{sizeof($schedule->reportActivities)>0?'CREADO':'SIN CREAR'}}</td> --}}
                                 <td class="d-action align-middle text-center">
-                                    @if ($progress >= 100)
-                                    <a href="{{route('agenda.reports.show')}}?id={{$schedule->id}}" class="btn btn-success btn-sm text-white btn-view">
-                                        <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar-check"></use>
-                                        </svg>
-                                    </a>
-                                    @endif
-                                    <form class="d-inline-block" action="{{route('agenda.reports.deactivate')}}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{$schedule->id}}">
-                                        <button class="btn {{$schedule->estado == 0?'btn-warning':'btn-danger'}} btn-sm text-white">
-                                            <svg class="icon">
-                                                <use xlink:href="{{asset("icons/sprites/free.svg")}}{{$schedule->estado == 0?'#cil-reload':'#cil-trash'}}"></use>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                    @if ($progress >= 100 && $schedule->finalizado == 1)
-                                    <a href="{{route('agenda.reports.pdf')}}?id={{$schedule->id}}" class="btn btn-info btn-sm text-white" style="padding: 4px 10px;">
-                                        <i class="fa-regular fa-file-pdf"></i>
-                                        {{-- <svg class="icon">
-                                            <use xlink:href="{{asset("icons/sprites/brand.svg")}}#cib-adobe-acrobat-reader"></use>
-                                        </svg> --}}
-                                    </a>
-                                    @endif
+                                    <div class="dropdown">
+                                        <a class="btn btn-secondary btn-sm dropdown-toggle" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                                            Acciones
+                                        </a>
+                                        <ul class="dropdown-menu p-0">
+                                            @if ($progress >= 100)
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('agenda.reports.show')}}?id={{$schedule->id}}">
+                                                    Ir a Reporte
+                                                </a>
+                                            </li>
+                                            @endif
+                                            <li>
+                                                <a href="{{route('agenda.schedule.pdf')}}?id={{$schedule->id}}" class="dropdown-item">
+                                                    Descargar solo agenda
+                                                </a>
+                                            </li>
+                                            @if ($progress >= 100 && $schedule->finalizado == 1)
+                                            <li>
+                                                <a href="{{route('agenda.reports.pdf')}}?id={{$schedule->id}}" class="dropdown-item">
+                                                    Descargar reporte
+                                                </a>
+                                            </li>
+                                            @endif
+                                            <li>
+                                                <form action="{{route('agenda.reports.deactivate')}}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{$schedule->id}}">
+                                                    <button class="dropdown-item {{$schedule->estado == 0?'bg-warning':'bg-danger'}} text-white">
+                                                        <svg class="icon">
+                                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}{{$schedule->estado == 0?'#cil-reload':'#cil-trash'}}"></use>
+                                                        </svg> Eliminar
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Leyenda
+            </div>
+            <div class="card-body">
+                <ul>
+                    <li><strong>25%</strong>: Agenda enviada y en espera a primera validación</li>
+                    <li><strong>50%</strong>: Agenda pasó primera validación, en espera de segunda validación</li>
+                    <li><strong>100%</strong>: Agenda pasó todas las validaciones</li>
+                </ul>
             </div>
         </div>
     </div>

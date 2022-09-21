@@ -52,11 +52,15 @@
                         <label for="">Estado</label>
                         <select class="form-select" name="estado" id="act_status">
                             @if ($rep_activity)
-                                <option value="1" {{$rep_activity->estado == 1? 'selected':''}}>No terminado</option>
-                                <option value="2" {{$rep_activity->estado == 2? 'selected':''}}>Terminado</option>
+                                <option value="1" {{$rep_activity->estado == 1? 'selected':''}}>No iniciado</option>
+                                <option value="2" {{$rep_activity->estado == 2? 'selected':''}}>En curso</option>
+                                <option value="3" {{$rep_activity->estado == 3? 'selected':''}}>Terminado</option>
+                                <option value="4" {{$rep_activity->estado == 4? 'selected':''}}>No terminado</option>
                             @else
-                                <option value="1">No terminado</option>
-                                <option value="2">Terminado</option>
+                                <option value="1">No iniciado</option>
+                                <option value="2">En curso</option>
+                                <option value="3">Terminado</option>
+                                <option value="4">No terminado</option>
                             @endif
                         </select>
                     </div>

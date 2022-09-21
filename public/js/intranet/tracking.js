@@ -88,6 +88,11 @@ $(document).on('click','#confirm-close', function(ev){
     });
 })
 
+$("#filter").on('click', function(ev){
+    ev.preventDefault();
+    $("#trackingFilterModal").modal('show');
+});
+
 $("#pdf_report").on('click', function(ev){
     ev.preventDefault();
     $.ajax({
@@ -137,45 +142,66 @@ $("#pdf_report").on('click', function(ev){
     });
 });
 
+$("#filter_from").datepicker({
+    dateFormat: "dd/mm/yy",
+    onSelect: function(date){
+        $("#filter_to").datepicker('option', 'minDate', date);
+    }
+});
+
+$("#filter_to").datepicker({
+    dateFormat: "dd/mm/yy",
+    beforeShow: function(){
+        var date = $("#filter_from").val();
+        $("#filter_to").datepicker('option', 'minDate', date);
+    }
+});
+
 $(document).on('click','.user-item', function(ev){
     var userid = $(this).attr('userid');
     $('.user'+userid).remove();
 });
 
-$(document).on('click',"#search_report",function(ev){
+$(document).on('click',".form_submit",function(ev){
     ev.preventDefault();
     var form = $(this).attr('form');
+    var valid = formValidation(form);
+
+    if(valid){
+        $("#"+form).submit();
+    }
+});
+
+function formValidation(form) {
     var valid = true;
 
     // check branch checkboxes
     var branch_valid = false;
-    $("input[name='branches[]']").each(function(){
+    $("#"+form+" input[name='branches[]']").each(function(){
         if($(this).is(':checked')){
             branch_valid = true;
         }
     });
     if(!branch_valid){
         valid = false;
-        $("#branch_error").show();
+        $("#"+form+" .branch_error").show();
     }else{
-        $("#branch_error").hide();
+        $("#"+form+" .branch_error").hide();
     }
 
     // check area checkboxes
     var areas_valid = false;
-    $("input[name='areas[]']").each(function(){
+    $("#"+form+" input[name='areas[]']").each(function(){
         if($(this).is(':checked')){
             areas_valid = true;
         }
     });
     if(!areas_valid){
         valid = false;
-        $("#area_error").show();
+        $("#"+form+" .area_error").show();
     }else{
-        $("#area_error").hide();
+        $("#"+form+" .area_error").hide();
     }
 
-    if(valid){
-        $("#"+form).submit();
-    }
-});
+    return valid;
+}

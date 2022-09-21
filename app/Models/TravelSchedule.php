@@ -24,7 +24,6 @@ class TravelSchedule extends Model
 
     // VALIDACION
     // ======================================
-    // 0 = not set
     // 1 = no aprovado
     // 2 = aprobado
 

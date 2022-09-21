@@ -1,8 +1,13 @@
 @php
     function progressStatus($activity){
+        // ['t_red','t_gray','t_blue','t_yellow','t_green'];
         $status = 0; // not done = RED
-        if($activity->estado == 2){
-            $status = 2; // done = GREEN
+        if($activity->estado == 1){
+            $status = 1; // not started = GRAY
+        }elseif($activity->estado == 3){
+            $status = 4; // done = GREEN
+        }elseif($activity->estado == 4){
+            $status = 0; // not done = RED
         }else{
             $today = time();
             $d_start = strtotime($activity->fecha_comienzo);
@@ -13,11 +18,11 @@
                 $d_limit = $d_start + $diff;
 
                 if($today < $d_limit){
-                    $status = 2; // if today is within 25% of start, status OK = GREEN
+                    $status = 2; // if today is within 25% of start, status OK = BLUE
                 }
                 
                 if($d_limit <= $today){
-                    $status = 1; // if today is past 25%, status warning = YELLOW
+                    $status = 3; // if today is past 25%, status warning = YELLOW
                 }
 
             }else if($d_end < $today){
@@ -63,14 +68,20 @@
         }
 
         /* --- Activities Report --- */
+        .t_gray {
+            background-color: #d8dbe0!important;
+        }
+        .t_blue {
+            background-color: #256ae2!important;
+        }
         .t_red {
-            background-color: #ec1d1d;
+            background-color: #ec1d1d!important;
         }
         .t_green {
-            background-color: #12c212;
+            background-color: #12c212!important;
         }
         .t_yellow {
-            background-color: #f9e715;
+            background-color: #f9e715!important;
         }
 
         #report_activities .table td, 
@@ -149,7 +160,7 @@
                     </thead>
                     <tbody>
                         @php
-                            $s = ['t_red','t_yellow','t_green'];
+                            $s = ['t_red','t_gray','t_blue','t_yellow','t_green'];
                         @endphp
                         @foreach ($activities as $activity)
                         <tr class="rep-act" act-id="{{$activity->id}}">
@@ -171,12 +182,20 @@
                 <div class="card-header">Leyenda</div>
                 <div class="card-body">
                     <p>
-                        <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
-                        <strong>Verde:</strong> Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
+                        <span class="d-inline-block text-block t_gray" style="width: 20px;">&nbsp;</span> 
+                        <strong>Gris:</strong> Actividad no iniciada
+                    </p>
+                    <p>
+                        <span class="d-inline-block text-block t_blue" style="width: 20px;">&nbsp;</span> 
+                        <strong>Azul:</strong> Actividad iniciada. Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
                     </p>
                     <p>
                         <span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span>
-                        <strong>Amarillo:</strong> Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                        <strong>Amarillo:</strong> Actividad iniciada. Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                    </p>
+                    <p>
+                        <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
+                        <strong>Verde:</strong> Actividad Completada.
                     </p>
                     <p>
                         <span class="d-inline-block text-block t_red" style="width: 20px;">&nbsp;</span>

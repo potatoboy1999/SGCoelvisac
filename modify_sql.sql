@@ -168,3 +168,6 @@ UPDATE t_sgcv_opciones SET opcion = 'Presentaciones', url_img = 'cil-airplay' WH
 ALTER TABLE t_sgcv_reuniones ADD INDEX `fk_t_sgcv_reuniones_fecha_idx` (`fecha`);
 
 -- Everything on top of this on Live Server
+
+UPDATE t_sgcv_reporte_actividades SET estado = 4 where estado = 1;
+UPDATE t_sgcv_reporte_actividades SET estado = 3 where estado = 2;

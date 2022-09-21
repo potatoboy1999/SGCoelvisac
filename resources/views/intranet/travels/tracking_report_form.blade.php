@@ -30,7 +30,7 @@
             </div>
             <div class="col-12">
                 <div class="w-100">
-                    <p id="branch_error" class="w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más sedes</p>
+                    <p class="branch_error w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más sedes</p>
                 </div>
             </div>
             <div class="col-12">
@@ -48,7 +48,7 @@
             </div>
             <div class="col-12">
                 <div class="w-100">
-                    <p id="area_error" class="w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más areas</p>
+                    <p class="area_error w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más areas</p>
                 </div>
             </div>
             <div class="col-12">
@@ -62,7 +62,7 @@
                 <div class="form-group mb-2">
                     <label class="form-label" for="searchFrom">Buscar desde:</label>
                     <div class="input-group">
-                        <input id="search_from" class="form-control" type="text" name="search_from" value="{{date('d/m/Y', strtotime("-1 month"))}}" onkeydown="return false;" required>
+                        <input id="search_from" class="form-control clear-readonly" type="text" name="search_from" value="{{date('d/m/Y', strtotime("-1 month"))}}" onkeydown="return false;" readonly required>
                         <span class="input-group-text">
                             <svg class="icon">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
@@ -75,7 +75,7 @@
                 <div class="form-group mb-2">
                     <label class="form-label" for="searchTo">Buscar hasta:</label>
                     <div class="input-group">
-                        <input id="search_to" class="form-control" type="text" name="search_to" value="{{date('d/m/Y', strtotime("now"))}}" onkeydown="return false;" required>
+                        <input id="search_to" class="form-control clear-readonly" type="text" name="search_to" value="{{date('d/m/Y', strtotime("now"))}}" onkeydown="return false;" readonly required>
                         <span class="input-group-text">
                             <svg class="icon">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-calendar"></use>
@@ -89,5 +89,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-secondary text-white" type="button" data-coreui-dismiss="modal" aria-label="Close">Cerrar</button>
-    <input id="search_report" class="btn btn-success text-white" type="submit" form="report_pdf" value="Buscar">
+    <input class="btn btn-success text-white form_submit" type="submit" form="report_pdf" value="Buscar">
 </div>
