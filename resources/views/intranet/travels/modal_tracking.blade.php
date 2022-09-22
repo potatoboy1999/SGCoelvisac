@@ -101,10 +101,10 @@
                             <div class="mb-2">
                                 <label class="form-label" for=""><strong>Estado</strong></label>
                                 <select class="form-select" name="status">
-                                    <option value="1" {{$rep_activity->estado == 1? 'selected':''}}>No iniciado</option>
-                                    <option value="2" {{$rep_activity->estado == 2? 'selected':''}}>En curso</option>
-                                    <option value="3" {{$rep_activity->estado == 3? 'selected':''}}>Terminado</option>
-                                    <option value="4" {{$rep_activity->estado == 4? 'selected':''}}>No terminado</option>
+                                    <option value="1" {{$activity->estado == 1? 'selected':''}}>No iniciado</option>
+                                    <option value="2" {{$activity->estado == 2? 'selected':''}}>En curso</option>
+                                    <option value="3" {{$activity->estado == 3? 'selected':''}}>Terminado</option>
+                                    <option value="4" {{$activity->estado == 4? 'selected':''}}>No terminado</option>
                                 </select>
                             </div>
                         </div>
