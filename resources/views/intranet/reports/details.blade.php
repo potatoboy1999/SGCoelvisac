@@ -9,6 +9,7 @@
         }elseif($activity->estado == 4){
             $status = 0; // not done = RED
         }else{
+            $status = 2; // working on it = BLUE
             $today = time();
             $d_start = strtotime($activity->fecha_comienzo);
             $d_end = strtotime($activity->fecha_fin);

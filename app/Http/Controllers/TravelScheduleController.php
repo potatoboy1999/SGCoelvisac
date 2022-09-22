@@ -496,6 +496,7 @@ class TravelScheduleController extends Controller
             }elseif($report->estado == 4){
                 $status = 0; // not done = RED
             }else{
+                $status = 2; // working on it = BLUE
                 $today = time();
                 $d_start = strtotime($report->fecha_comienzo);
                 $d_end = strtotime($report->fecha_fin);
