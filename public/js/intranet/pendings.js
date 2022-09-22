@@ -21,14 +21,12 @@ $(document).on('click', ".travel-confirm", function(ev){
     ev.preventDefault();
     var id = $(this).data('travelid');
     var confirmation = $(this).data('confirmation');
+    var form = $("#form_schedule").serialize()+"&id="+id+"&confirmation="+confirmation;
+    console.log('form: ', form);
     $.ajax({
         url: confirm_route,
         method: 'POST',
-        data: {
-            id: id,
-            confirmation: confirmation,
-            _token: $("input[name='_token']").val()
-        },
+        data: form,
         beforeSend: function(){
             $("#scheduleModal .form-btns").hide();
             $("#scheduleModal .modal-form").hide();
@@ -83,4 +81,36 @@ $(document).on('click', ".travel-deny", function(ev){
             }
         }
     });
+});
+
+$(document).on('click',".add-act", function(ev){
+    ev.preventDefault();
+    var type = $(this).attr('type');
+    var areas = $(this).parent().parent().find('.act_areas');
+    var counter = parseInt(areas.attr('count')) + 1;
+    if(counter <= 7){
+        areas.attr('count', counter);
+        if(type == "area"){
+            areas.append(newActivity('area_act',type));
+        }else{
+            areas.append(newActivity('non_area_act', type));
+        }
+    }
+    if (counter == 7) {
+        $(".add-act[type='"+type+"']").hide();
+    }
+});
+
+$(document).on('click', '.btn-del-act', function(ev){
+    ev.preventDefault();
+    var type = $(this).attr('type');
+    var areas = $(this).parent().parent().parent().parent();
+    var counter = parseInt(areas.attr('count')) - 1;
+    areas.attr('count', counter);
+    $(this).parent().parent().parent().remove();
+    if (counter < 7) {
+        $(".add-act[type='"+type+"']").show();
+    }
+    var act_id = $(this).data('act');
+    $("#deleted_act").append("<input type='hidden' name='deleted_act[]' value='"+act_id+"'>");
 });

@@ -83,5 +83,23 @@
     var pop_schedule_route = "{{route('agenda.popup.schedule')}}";
     var confirm_route = "{{route('agenda.confirm')}}";
     var deny_route = "{{route('agenda.deny')}}";
+
+    function newActivity(name, type){
+        var html = '<div class="mb-2 act-ta">'+
+                        '<div style="display: flex;">'+
+                            '<div style="flex: 0 40px;">'+
+                                '<a class="btn btn-danger btn-sm btn-del-act" type="'+type+'">'+
+                                    '<svg class="icon">'+
+                                        '<use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-minus"></use>'+
+                                    '</svg>'+
+                                '</a>'+
+                            '</div>'+
+                            '<div style="flex: 1;">'+
+                                '<textarea name="'+name+'[]" rows="2" class="form-control" required></textarea>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>';
+        return html;
+    }
 </script>
 @endsection

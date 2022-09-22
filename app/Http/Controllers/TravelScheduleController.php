@@ -95,7 +95,9 @@ class TravelScheduleController extends Controller
                     ->where('estado', 2) // aprovado por el gerente de area
                     ->where('validacion_uno', 2); // validation 1 accepted
             }
-            $schedule->with(['activities']);
+            $schedule->with(['activities'=>function($qAct){
+                $qAct->where('estado', 1);
+            }]);
             $schedule->with(['user']);
             $schedule = $schedule->first();
         }
@@ -258,6 +260,50 @@ class TravelScheduleController extends Controller
                 $schedule->estado = 5; // aprovado a area de gestion
             }
             $schedule->save();
+
+            if (isset($request->area_act)) {
+                $x = 0;
+                $update_count = isset($request->area_act_id)?count($request->area_act_id):0;
+                
+                foreach ($request->area_act as $activity) {
+                    if($x < $update_count){
+                        $id = $request->area_act_id[$x];
+                        $new_activity = TravelActivity::find($id);
+                    }else{
+                        $new_activity = new TravelActivity;
+                        $new_activity->estado = 1;
+                    }
+                    $new_activity->descripcion = $activity;
+                    $new_activity->tipo = 1;
+                    $new_activity->agenda_viaje_id = $schedule->id;
+                    $new_activity->save();
+                    $x++;
+                }
+            }
+    
+            if (isset($request->non_area_act)) {
+                $x = 0;
+                $update_count = isset($request->non_area_act_id)?count($request->non_area_act_id):0;
+                foreach ($request->non_area_act as $activity) {
+                    if($x < $update_count){
+                        $id = $request->non_area_act_id[$x];
+                        $new_activity = TravelActivity::find($id);
+                    }else{
+                        $new_activity = new TravelActivity;
+                        $new_activity->estado = 1;
+                    }
+                    $new_activity->descripcion = $activity;
+                    $new_activity->tipo = 2;
+                    $new_activity->agenda_viaje_id = $schedule->id;
+                    $new_activity->save();
+                    $x++;
+                }
+            }
+
+            if (isset($request->deleted_act)) {
+                TravelActivity::whereIn('id', $request->deleted_act)
+                            ->update(['estado' => 0]);
+            }
 
             if ($request->confirmation == 1) {
                 // find users from "area de gestion"
@@ -509,7 +555,7 @@ class TravelScheduleController extends Controller
         ];
     }
 
-    // FRONT
+    // FRONT ========================================
     public function frontIndex(Request $request)
     {
         $page = 'schedules';

@@ -110,13 +110,40 @@
                     <div class="card-header">Actividades del área (max: 7)</div>
                     <div class="card-body p-2">
                         @if ($schedule)
-                            <div id="area_act" class="act_areas">
+                            <div id="area_act" class="act_areas" count="{{sizeof($schedule->activities->where('tipo',1))}}">
                                 @foreach ($schedule->activities->where('tipo',1) as $activity)
-                                    <div class="mb-2 act-ta">
-                                        <textarea rows="2" class="form-control" readonly>{{$activity->descripcion}}</textarea>
-                                    </div>
+                                    @if ($action == 2)
+                                        <div class="mb-2 act-ta">
+                                            <textarea rows="2" class="form-control" readonly>{{$activity->descripcion}}</textarea>
+                                        </div>
+                                    @else
+                                        <div class="mb-2 act-ta">
+                                            <div style="display: flex;">
+                                                <div style="flex: 0 40px;">
+                                                    <a class="btn btn-danger btn-sm btn-del-act act_exists" type="area" data-act="{{$activity->id}}">
+                                                        <svg class="icon">
+                                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-minus"></use>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                                <div style="flex: 1;">
+                                                    <input type="hidden" name="area_act_id[]" value="{{$activity->id}}">
+                                                    <textarea name="area_act[]" rows="2" class="form-control" required>{{$activity->descripcion}}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
+                            @if ($action != 2)
+                            <div class="text-end text-white">
+                                <a href="#" class="btn btn-secondary btn-sm add-act" type="area">
+                                    <svg class="icon">
+                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-plus"></use>
+                                    </svg>
+                                </a>
+                            </div>
+                            @endif
                         @else
                             <div id="area_act" class="act_areas" count="0">
                                 <div class="mb-2 act-ta">
@@ -139,13 +166,40 @@
                     <div class="card-header">Actividades de otras áreas (max: 7)</div>
                     <div class="card-body p-2">
                         @if ($schedule)
-                            <div id="non_area_act" class="act_areas">
-                                @foreach ($schedule->activities->where('tipo',2) as $activity)
-                                    <div class="mb-2 act-ta">
-                                        <textarea rows="2" class="form-control" readonly>{{$activity->descripcion}}</textarea>
-                                    </div>
+                            <div id="non_area_act" class="act_areas" count="{{sizeof($schedule->activities->where('tipo', 2))}}">
+                                @foreach ($schedule->activities->where('tipo', 2) as $activity)
+                                    @if ($action == 2)
+                                        <div class="mb-2 act-ta">
+                                            <textarea rows="2" class="form-control" readonly>{{$activity->descripcion}}</textarea>
+                                        </div>
+                                    @else
+                                        <div class="mb-2 act-ta">
+                                            <div style="display: flex;">
+                                                <div style="flex: 0 40px;">
+                                                    <a class="btn btn-danger btn-sm btn-del-act act_exists" type="non_area" data-act="{{$activity->id}}">
+                                                        <svg class="icon">
+                                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-minus"></use>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                                <div style="flex: 1;">
+                                                    <input type="hidden" name="non_area_act_id[]" value="{{$activity->id}}">
+                                                    <textarea name="non_area_act[]" rows="2" class="form-control" required>{{$activity->descripcion}}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
+                            @if ($action != 2)
+                            <div class="text-end text-white">
+                                <a href="#" class="btn btn-secondary btn-sm add-act" type="non_area">
+                                    <svg class="icon">
+                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-plus"></use>
+                                    </svg>
+                                </a>
+                            </div>
+                            @endif
                         @else
                             <div id="non_area_act" class="act_areas" count="0"></div>
                             <div class="text-end text-white">
@@ -190,6 +244,7 @@
                     @endif
                 </div>
             </div>
+            <div id="deleted_act"></div>
         </form>
     </div>
     <div class="modal-success" style="display: none">
