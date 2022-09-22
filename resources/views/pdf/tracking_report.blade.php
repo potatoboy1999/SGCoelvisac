@@ -141,7 +141,7 @@
 </head>
 <body>
     <div class="container">
-        <h3 style="font-family: sans-serif; color:#008cff">COELVISAC</h3>
+        <h3 style="font-family: sans-serif; color:#008cff">CVC ENERGIA</h3>
         <h2 style="text-align: center;">Reporte de Actividades</h2>
         @if (sizeof($activities) > 0)
             <div id="report_activities">
