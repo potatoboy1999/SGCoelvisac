@@ -427,11 +427,11 @@
                             if($activity->estado == 1){
                                 $status = 1; // not started = GRAY
                             }elseif($activity->estado == 3){
-                                $status = 4; // done = GREEN
+                                $status = 2; // done = BLUE
                             }elseif($activity->estado == 4){
                                 $status = 0; // not done = RED
                             }else{
-                                $status = 2; // working on it = BLUE
+                                $status = 4; // working on it = GREEN
                                 $today = time();
                                 $d_start = strtotime($activity->fecha_comienzo);
                                 $d_end = strtotime($activity->fecha_fin);
@@ -441,7 +441,7 @@
                                     $d_limit = $d_start + $diff;
 
                                     if($today < $d_limit){
-                                        $status = 2; // if today is within 25% of start, status OK = BLUE
+                                        $status = 4; // if today is within 25% of start, status OK = GREEN
                                     }
                                     
                                     if($d_limit <= $today){
@@ -535,7 +535,7 @@
                 </p>
                 <p>
                     <span class="d-inline-block text-block t_blue" style="width: 20px;">&nbsp;</span> 
-                    <strong>Azul:</strong> Actividad iniciada. Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
+                    <strong>Verde:</strong> Actividad iniciada. Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
                 </p>
                 <p>
                     <span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span>
@@ -543,7 +543,7 @@
                 </p>
                 <p>
                     <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
-                    <strong>Verde:</strong> Actividad Completada.
+                    <strong>Azul:</strong> Actividad Completada.
                 </p>
                 <p>
                     <span class="d-inline-block text-block t_red" style="width: 20px;">&nbsp;</span>

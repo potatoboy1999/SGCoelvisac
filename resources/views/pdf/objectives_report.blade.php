@@ -2,8 +2,9 @@
     function progressStatus($activity){
         $status = 0; // not done = RED
         if($activity->cumplido == 1){
-            $status = 2; // done = GREEN
+            $status = 3; // done = BLUE
         }else{
+            $status = 2;
             $today = time();
             $d_start = strtotime($activity->fecha_comienzo);
             $d_end = strtotime($activity->fecha_fin);
@@ -31,7 +32,7 @@
             return false;
         }
         if($filter['active']){
-            $labels = ['red','yellow','green'];
+            $labels = ['red','yellow','green','blue'];
             $progStatus = progressStatus($activity);
             if($filter['status'][$labels[$progStatus]]){
                 return true;
@@ -125,6 +126,9 @@
         }
         .t_yellow {
             background-color: #f9e715!important;
+        }
+        .t_blue {
+            background-color: #5759d5!important;
         }
         .area-name{
             background: #ececec;
@@ -222,7 +226,7 @@
                                                 </div>
                                             </td>
                                             @php
-                                                $s = ['t_red','t_yellow','t_green'];
+                                                $s = ['t_red','t_yellow','t_green','t_blue'];
                                             @endphp
                                             <td class="t-status {{ $s[progressStatus($activity)] }}"></td>
                                         </tr>

@@ -492,11 +492,11 @@ class TravelScheduleController extends Controller
             if($report->estado == 1){
                 $status = 1; // not started = GRAY
             }elseif($report->estado == 3){
-                $status = 4; // done = GREEN
+                $status = 2; // done = BLUE
             }elseif($report->estado == 4){
                 $status = 0; // not done = RED
             }else{
-                $status = 2; // working on it = BLUE
+                $status = 4; // working on it = GREEN
                 $today = time();
                 $d_start = strtotime($report->fecha_comienzo);
                 $d_end = strtotime($report->fecha_fin);
@@ -506,7 +506,7 @@ class TravelScheduleController extends Controller
                     $d_limit = $d_start + $diff;
 
                     if($today < $d_limit){
-                        $status = 2; // if today is within 25% of start, status OK = BLUE
+                        $status = 4; // if today is within 25% of start, status OK = GREEN
                     }
                     
                     if($d_limit <= $today){

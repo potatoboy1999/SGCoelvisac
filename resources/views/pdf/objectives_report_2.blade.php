@@ -2,8 +2,9 @@
     function progressStatus($activity){
         $status = 0; // not done = RED
         if($activity->cumplido == 1){
-            $status = 2; // done = GREEN
+            $status = 3; // done = BLUE
         }else{
+            $status = 2; // OK = GREEN
             $today = time();
             $d_start = strtotime($activity->fecha_comienzo);
             $d_end = strtotime($activity->fecha_fin);
@@ -31,7 +32,7 @@
             return false;
         }
         if($filter['active']){
-            $labels = ['red','yellow','green'];
+            $labels = ['red','yellow','green','blue'];
             $progStatus = progressStatus($activity);
             if($filter['status'][$labels[$progStatus]]){
                 return true;
@@ -128,6 +129,9 @@
         }
         .t_yellow {
             background-color: #f9e715!important;
+        }
+        .t_blue {
+            background-color: #5759d5!important;
         }
         .area-name{
             background: #ececec;
@@ -242,7 +246,7 @@
                                                                             <td class="text-center align-middle t-date-start"><p>{{date("d-m-Y", strtotime($activity->fecha_comienzo))}}</p></td>
                                                                             <td class="text-center align-middle t-date-end"><p>{{date("d-m-Y", strtotime($activity->fecha_fin))}}</p></td>
                                                                             @php
-                                                                                $s = ['t_red','t_yellow','t_green'];
+                                                                                $s = ['t_red','t_yellow','t_green','t_blue'];
                                                                             @endphp
                                                                             <td class="t-status {{ $s[progressStatus($activity)] }}"></td>
                                                                         </tr>
@@ -267,6 +271,10 @@
                                             <p>
                                                 <span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span>
                                                 <strong>Amarillo:</strong> Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                                            </p>
+                                            <p>
+                                                <span class="d-inline-block text-block t_blue" style="width: 20px;">&nbsp;</span> 
+                                                <strong>Azul:</strong> La actividad ha sido cumplida.
                                             </p>
                                             <p>
                                                 <span class="d-inline-block text-block t_red" style="width: 20px;">&nbsp;</span>

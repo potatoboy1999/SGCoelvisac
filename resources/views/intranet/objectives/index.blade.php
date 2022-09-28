@@ -2,8 +2,9 @@
     function progressStatus($activity){
         $status = 0; // not done = RED
         if($activity->cumplido == 1){
-            $status = 2; // done = GREEN
+            $status = 3; // done = BLUE
         }else{
+            $status = 2; // OK = GREEN
             $today = time();
             $d_start = strtotime($activity->fecha_comienzo);
             $d_end = strtotime($activity->fecha_fin);
@@ -31,7 +32,7 @@
             return false;
         }
         if($filter['active']){
-            $labels = ['red','yellow','green'];
+            $labels = ['red','yellow','green','blue'];
             $progStatus = progressStatus($activity);
             if($filter['status'][$labels[$progStatus]]){
                 return true;
@@ -330,6 +331,7 @@
                     $sGreen = $filter['status']['green'];
                     $sYellow = $filter['status']['yellow'];
                     $sRed = $filter['status']['red'];
+                    $sBlue = $filter['status']['blue'];
                 @endphp
                 <form id="search_form" action="{{route('objectives')}}" method="GET" autocomplete="off" onkeydown="return event.key != 'Enter';">
                     <input type="hidden" name="search" value="Y">
@@ -346,6 +348,15 @@
                                         </svg>
                                     </a>
                                     <input id="s-green" class="d-none" type="checkbox" name="s_green" {{$isFiltered?($sGreen?'checked':''):'checked'}}>
+                                </li>
+                                <li class="s-choice-item choice-blue {{$isFiltered?($sBlue?'active':''):'active'}}">
+                                    <a href="javascript:;" class="s-choice" data-target="#s-blue" active="{{$isFiltered?($sBlue?'on':'off'):'on'}}">
+                                        Azul
+                                        <svg class="i-check icon">
+                                            <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-check"></use>
+                                        </svg>
+                                    </a>
+                                    <input id="s-blue" class="d-none" type="checkbox" name="s_blue" {{$isFiltered?($sBlue?'checked':''):'checked'}}>
                                 </li>
                                 <li class="s-choice-item choice-yellow {{$isFiltered?($sYellow?'active':''):'active'}}">
                                     <a href="javascript:;" class="s-choice" data-target="#s-yellow" active="{{$isFiltered?($sYellow?'on':'off'):'on'}}">
@@ -631,7 +642,7 @@
                                                                             </a>
                                                                         </td>
                                                                         @php
-                                                                            $s = ['t_red','t_yellow','t_green'];
+                                                                            $s = ['t_red','t_yellow','t_green','t_blue'];
                                                                         @endphp
                                                                         <td class="t-status {{ $s[progressStatus($activity)] }}"></td>
                                                                         
@@ -686,6 +697,10 @@
                 <p>
                     <span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span>
                     <strong>Amarillo:</strong> Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
+                </p>
+                <p>
+                    <span class="d-inline-block text-block t_blue" style="width: 20px;">&nbsp;</span> 
+                    <strong>Azul:</strong> La actividad ha sido cumplida.
                 </p>
                 <p>
                     <span class="d-inline-block text-block t_red" style="width: 20px;">&nbsp;</span>
