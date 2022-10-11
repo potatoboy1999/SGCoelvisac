@@ -67,4 +67,9 @@ class DashboardController extends Controller
         }
         return ['status'=>'ok'];
     }
+
+    public function testPage(Request $request)
+    {
+        print('hello world');
+    }
 }
