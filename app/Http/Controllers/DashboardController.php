@@ -70,6 +70,16 @@ class DashboardController extends Controller
 
     public function testPage(Request $request)
     {
-        print('hello world');
+        print('hello world!');
+        $schedule = TravelSchedule::first();
+
+        // Mail::to("alejandrodazaculqui@hotmail.com")
+        //     ->send(new TravelAlert("Alejandro Daza", route('agenda.pending'), $schedule));
+
+        Mail::raw("Testing email content", function($message){
+            $message->to("alejandrodazaculqui@hotmail.com");
+            $message->subject("TEST EMAIL");
+        });
+
     }
 }
