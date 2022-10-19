@@ -534,7 +534,7 @@
                     <strong>Gris:</strong> Actividad no iniciada
                 </p>
                 <p>
-                    <span class="d-inline-block text-block t_blue" style="width: 20px;">&nbsp;</span> 
+                    <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
                     <strong>Verde:</strong> Actividad iniciada. Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
                 </p>
                 <p>
@@ -542,7 +542,7 @@
                     <strong>Amarillo:</strong> Actividad iniciada. Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.
                 </p>
                 <p>
-                    <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
+                    <span class="d-inline-block text-block t_blue" style="width: 20px;">&nbsp;</span> 
                     <strong>Azul:</strong> Actividad Completada.
                 </p>
                 <p>
