@@ -154,6 +154,7 @@
                                 <p class="branch_error w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más sedes</p>
                             </div>
                         </div>
+                        @if (Auth::user()->is_admin == 1)
                         <div class="col-12">
                             <div class="mb-2">
                                 <label class="form-label">Area:</label>
@@ -172,6 +173,7 @@
                                 <p class="area_error w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más areas</p>
                             </div>
                         </div>
+                        @endif
                         <div class="col-12 col-sm-6">
                             <div class="form-group mb-2">
                                 <label class="form-label" for="filter_from">Buscar desde:</label>
