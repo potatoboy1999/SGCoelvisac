@@ -804,7 +804,9 @@ class TravelScheduleController extends Controller
         $activities->whereIn('t_sgcv_agenda_viajes.sede_id', $request->branches);
         
         // search all selected areas
-        $activities->whereIn('t_sgcv_posiciones.area_id', $request->areas);
+        if(isset($request->areas)){
+            $activities->whereIn('t_sgcv_posiciones.area_id', $request->areas);
+        }
 
         // search all selected users
         if(isset($request->users)){
