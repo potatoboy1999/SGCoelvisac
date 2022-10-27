@@ -171,3 +171,6 @@ UPDATE t_sgcv_reporte_actividades SET estado = 4 where estado = 1;
 UPDATE t_sgcv_reporte_actividades SET estado = 3 where estado = 2;
 
 -- Everything on top of this on Live Server
+
+ALTER TABLE t_sgcv_usuarios ADD COLUMN is_admin TINYINT(1) NOT NULL DEFAULT 0 AFTER posicion_id;
+UPDATE t_sgcv_usuarios SET is_admin = 1 where id IN (1, 52);

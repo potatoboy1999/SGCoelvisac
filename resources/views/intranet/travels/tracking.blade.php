@@ -228,7 +228,9 @@
                         <thead>
                             <tr>
                                 <th class="th-branch bg-dark text-white" width="100px">Sede</th>
+                                @if (Auth::user()->is_admin == 1)
                                 <th class="th-area bg-dark text-white" width="100px">Gerencia</th>
+                                @endif
                                 <th class="th-user bg-dark text-white" width="120px">Usuario</th>
                                 <th class="th-travel-from bg-dark text-white" width="120px">Viaje Desde</th>
                                 <th class="th-travel-to bg-dark text-white" width="120px">Viaje Hasta</th>
@@ -247,7 +249,9 @@
                             @foreach ($activities as $activity)
                             <tr class="act-row" data-actid="{{$activity->id}}">
                                 <td class="t-branch align-middle">{{$activity->travelSchedule->branch->nombre}}</td>
+                                @if (Auth::user()->is_admin == 1)
                                 <td class="t-area align-middle">{{$activity->travelSchedule->user->position->area->nombre}}</td>
+                                @endif
                                 <td class="t-user align-middle">{{$activity->travelSchedule->user->nombre}}</td>
                                 <td class="t-travel-from align-middle">{{date("d-m-y",strtotime($activity->travelSchedule->viaje_comienzo))}}</td>
                                 <td class="t-travel-to align-middle">{{date("d-m-y",strtotime($activity->travelSchedule->viaje_fin))}}</td>

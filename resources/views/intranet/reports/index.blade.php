@@ -24,7 +24,7 @@
                         <thead>
                             <tr>
                                 <th class="bg-dark text-white align-middle h-created" width="120">Fecha de creación</th>
-                                @if (Auth::user()->position->area->id == 1)
+                                @if (Auth::user()->is_admin == 1)
                                 <th class="bg-dark text-white align-middle h-user" width="50">Usuario</th>
                                 @endif
                                 <th class="bg-dark text-white align-middle h-branch" width="200">Sede</th>
@@ -32,14 +32,14 @@
                                 <th class="bg-dark text-white align-middle h-to" width="100">Hasta</th>
                                 <th class="bg-dark text-white align-middle h-status no-sort" width="100">Estado</th>
                                 {{-- <th class="bg-dark text-white align-middle h-report" width="100">Reporte</th> --}}
-                                <th class="bg-dark text-white align-middle h-action no-sort" width="{{Auth::user()->position->area->id == 1?'85':'70'}}"></th>
+                                <th class="bg-dark text-white align-middle h-action no-sort" width="{{Auth::user()->is_admin == 1?'85':'70'}}"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($schedules as $schedule)
                             <tr>
                                 <td class="d-created align-middle">{{date("d-m-Y", strtotime($schedule->created_at))}}</td>
-                                @if (Auth::user()->position->area->id == 1)
+                                @if (Auth::user()->is_admin == 1)
                                 <td class="d-user align-middle" width="100">{{$schedule->user->nombre}}</td>
                                 @endif
                                 <td class="d-branch align-middle">{{$schedule->branch->nombre}}</td>
@@ -137,7 +137,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script>
-    var colDefaultSort = {{Auth::user()->position->area->id == 1?'2':'1'}};
+    var colDefaultSort = {{Auth::user()->is_admin == 1?'2':'1'}};
 </script>
 <script src="{{asset("js/intranet/reports.js")}}"></script>
 @endsection

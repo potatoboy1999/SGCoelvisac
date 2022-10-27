@@ -43,6 +43,10 @@ class TravelScheduleController extends Controller
 
     public function viewCalendar(Request $request)
     {
+        $user = Auth::user();
+        $u_area = $user->position->area->id;
+        $is_admin = $user->is_admin;
+
         $year = intval(isset($request->year) ? $request->year : date('Y'));
         $month = intval(isset($request->month) ? $request->month : date('m'));
         $endMonth = $month + 1;
@@ -52,13 +56,23 @@ class TravelScheduleController extends Controller
             $endYear = $year + 1;
         }
 
-        $schedules = TravelSchedule::where('estado', '>', 0)
-            ->where('viaje_comienzo', '>=', $year . '-' . $month . '-01')
-            ->where('viaje_comienzo', '<', ($endYear) . '-' . $endMonth . '-01')
-            ->where('validacion_uno', 2) // validation 1 accepted
-            ->where('validacion_dos', 2) // validation 2 accepted
-            ->orderBy('viaje_comienzo', 'asc')
-            ->orderBy('viaje_fin', 'desc');
+        $schedules = TravelSchedule::where('t_sgcv_agenda_viajes.estado', '>', 0)
+            ->where('t_sgcv_agenda_viajes.viaje_comienzo', '>=', $year . '-' . $month . '-01')
+            ->where('t_sgcv_agenda_viajes.viaje_comienzo', '<', ($endYear) . '-' . $endMonth . '-01')
+            ->where('t_sgcv_agenda_viajes.validacion_uno', 2) // validation 1 accepted
+            ->where('t_sgcv_agenda_viajes.validacion_dos', 2); // validation 2 accepted
+
+        if($is_admin == 0){ // if it's regular user, only get schedules from area
+            $schedules->join('t_sgcv_usuarios', 't_sgcv_agenda_viajes.usuario_id', 't_sgcv_usuarios.id')
+                ->join('t_sgcv_posiciones', 't_sgcv_usuarios.posicion_id', 't_sgcv_posiciones.id')
+                ->join('t_sgcv_areas', 't_sgcv_posiciones.area_id', 't_sgcv_areas.id')
+                ->where('t_sgcv_areas.id', $u_area);
+        }
+
+
+        $schedules->orderBy('t_sgcv_agenda_viajes.viaje_comienzo', 'asc')
+                ->orderBy('t_sgcv_agenda_viajes.viaje_fin', 'desc');
+
         $schedules->with(['user.position']);
         $schedules = $schedules->get();
 
@@ -194,9 +208,10 @@ class TravelScheduleController extends Controller
         $user = Auth::user();
         $schedules = TravelSchedule::where('t_sgcv_agenda_viajes.estado', '>', 0);
         //->where('estado','<',5)
+        $is_admin = $user->is_admin;
         $u_area = $user->position->area->id;
         // if is from DEV ADMIN, 
-        if ($u_area == 1) {
+        if ($is_admin == 1) {
 
             if ($type == 1) {
                 $schedules->where('t_sgcv_agenda_viajes.validacion_uno', 0); // not set
@@ -575,6 +590,8 @@ class TravelScheduleController extends Controller
         ]);
     }
 
+    // END FRONT ========================================
+
     public function exportReportPdf(Request $request)
     {
         $schedule = TravelSchedule::find($request->id);
@@ -652,6 +669,9 @@ class TravelScheduleController extends Controller
     {
         $page = 'tracking';
         $bcrums = ['Seguimiento'];
+        $user = Auth::user();
+        $is_admin = $user->is_admin;
+        $u_area = $user->position->area->id;
         $day_limit = date('Y-m-d', strtotime("+3 days"));
         // $activities = ReportActivity::whereNotNull('id');
         $activities = ReportActivity::where('t_sgcv_reporte_actividades.estado', '>', '0')
@@ -661,9 +681,20 @@ class TravelScheduleController extends Controller
             ->where('t_sgcv_agenda_viajes.estado', '>', '0')
             ->join('t_sgcv_agenda_viajes', 't_sgcv_reporte_actividades.agenda_viaje_id', 't_sgcv_agenda_viajes.id');
         
+        if ($is_admin == 0) { // if is regular user, only show activities from current area
+            $activities
+                ->join('t_sgcv_usuarios', 't_sgcv_agenda_viajes.usuario_id', 't_sgcv_usuarios.id')
+                ->join('t_sgcv_posiciones', 't_sgcv_usuarios.posicion_id', 't_sgcv_posiciones.id')
+                ->join('t_sgcv_areas', 't_sgcv_posiciones.area_id', 't_sgcv_areas.id')
+                ->where('t_sgcv_areas.id', $u_area);
+        }
+        
         if(isset($request->search) && $request->search == "Y"){
-            $activities->join('t_sgcv_usuarios', 't_sgcv_agenda_viajes.usuario_id', 't_sgcv_usuarios.id')
-                        ->join('t_sgcv_posiciones', 't_sgcv_usuarios.posicion_id', 't_sgcv_posiciones.id');
+            if ($is_admin == 1){
+                $activities
+                    ->join('t_sgcv_usuarios', 't_sgcv_agenda_viajes.usuario_id', 't_sgcv_usuarios.id')
+                    ->join('t_sgcv_posiciones', 't_sgcv_usuarios.posicion_id', 't_sgcv_posiciones.id');
+            }
 
             if(isset($request->branches)){
                 // search all selected branches

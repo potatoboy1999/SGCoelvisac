@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'posicion_id',
+        'is_admin',
         'estado',
     ];
 
