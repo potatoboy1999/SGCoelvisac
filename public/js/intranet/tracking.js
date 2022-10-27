@@ -191,17 +191,21 @@ function formValidation(form) {
 
     // check area checkboxes
     var areas_valid = false;
-    $("#"+form+" input[name='areas[]']").each(function(){
-        if($(this).is(':checked')){
-            areas_valid = true;
-        }
-    });
-    if(!areas_valid){
-        valid = false;
-        $("#"+form+" .area_error").show();
+    var count = $("#"+form+" input[name='areas[]']").length;
+    if(count == 0){
+        areas_valid = true;
     }else{
-        $("#"+form+" .area_error").hide();
+        $("#"+form+" input[name='areas[]']").each(function(){
+            if($(this).is(':checked')){
+                areas_valid = true;
+            }
+        });
+        if(!areas_valid){
+            valid = false;
+            $("#"+form+" .area_error").show();
+        }else{
+            $("#"+form+" .area_error").hide();
+        }
     }
-
     return valid;
 }
