@@ -44,7 +44,8 @@
     $months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
     $days = ['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
 @endphp
-
+<span>AreaId: {{Auth::user()->position->area->id}}</span><br>
+<span>IsAdmin: {{Auth::user()->is_admin}}</span>
 <div class="p-1 mb-1">
     <span style="display: none;">{{$months[$month-1]}}</span>
     <div class="overflow-auto">

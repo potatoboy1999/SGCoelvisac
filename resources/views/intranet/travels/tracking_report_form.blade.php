@@ -47,12 +47,12 @@
                     </div>
                 </div>
             </div>
-            @endif
             <div class="col-12">
                 <div class="w-100">
                     <p class="area_error w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más areas</p>
                 </div>
             </div>
+            @endif
             <div class="col-12">
                 <div class="mb-2">
                     <label class="form-label">Usuario <i>(No seleccione ninguno para buscar todos)</i></label>
