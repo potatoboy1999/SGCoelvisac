@@ -45,6 +45,7 @@ class TravelScheduleController extends Controller
     {
         $user = Auth::user();
         $u_area = $user->position->area->id;
+        $is_manager = $user->position->es_gerente;
         $is_admin = $user->is_admin;
 
         $year = intval(isset($request->year) ? $request->year : date('Y'));
@@ -67,9 +68,14 @@ class TravelScheduleController extends Controller
                 ->join('t_sgcv_posiciones', 't_sgcv_usuarios.posicion_id', 't_sgcv_posiciones.id')
                 ->join('t_sgcv_areas', 't_sgcv_posiciones.area_id', 't_sgcv_areas.id')
                 ->where('t_sgcv_areas.id', $u_area);
+            if($is_manager == 0){
+                $schedules->where('t_sgcv_usuarios.id', $user->id);
+            }
         }
 
-
+        $schedules->select('t_sgcv_agenda_viajes.id',
+                            't_sgcv_agenda_viajes.viaje_comienzo',
+                            't_sgcv_agenda_viajes.viaje_fin');
         $schedules->orderBy('t_sgcv_agenda_viajes.viaje_comienzo', 'asc')
                 ->orderBy('t_sgcv_agenda_viajes.viaje_fin', 'desc');
 
