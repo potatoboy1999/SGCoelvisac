@@ -73,9 +73,6 @@ class TravelScheduleController extends Controller
             }
         }
 
-        $schedules->select('t_sgcv_agenda_viajes.id',
-                            't_sgcv_agenda_viajes.viaje_comienzo',
-                            't_sgcv_agenda_viajes.viaje_fin');
         $schedules->orderBy('t_sgcv_agenda_viajes.viaje_comienzo', 'asc')
                 ->orderBy('t_sgcv_agenda_viajes.viaje_fin', 'desc');
 
