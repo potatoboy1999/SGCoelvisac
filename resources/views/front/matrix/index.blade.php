@@ -270,7 +270,7 @@
                       <th class="text-center align-middle th-act-name" width="180">Actividades Principales</th>
                       <th class="text-center align-middle th-date-start" width="50">Fecha Inicio</th>
                       <th class="text-center align-middle th-date-end" width="50">Fecha Fin</th>
-                      <th class="text-center align-middle th-policies" width="65" style="max-width: 60px!important;">Procedimiento/<br>Politica</th>
+                      <th class="text-center align-middle th-policies" width="65" style="max-width: 60px!important;">Procedimiento/<br>Política</th>
                       <th class="text-center align-middle th-adjacents" width="85" style="max-width: 55px!important;">Documento<br>Adjunto</th>
                       <th class="text-center align-middle th-status" width="60">Estado</th>
                   </tr>

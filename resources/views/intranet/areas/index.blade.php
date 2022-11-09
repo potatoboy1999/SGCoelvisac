@@ -19,7 +19,7 @@
 <div class="modal fade" id="deleteAreaModal" data-coreui-backdrop="static" data-coreui-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">Eliminar Area</div>
+            <div class="modal-header">Eliminar Área</div>
             <div class="modal-body">
                 <div class="modal-area modal-loading" style="display: none">
                     <div class="spinner-border" role="status">
@@ -29,15 +29,15 @@
                 <div class="modal-area modal-form">
                     <form id="form_delete" action="{{route('branches.delete')}}" method="POST">
                         @csrf
-                        <p>¿Estás seguro que quieres eliminar esta area?</p>
+                        <p>¿Estás seguro que quieres eliminar esta área?</p>
                         <input type="hidden" name="reunion_id" value="">
                     </form>
                 </div>
                 <div class="modal-area modal-success" style="display: none">
-                    <p>¡El area ha sido eliminada correctamente!</p>
+                    <p>¡El área ha sido eliminada correctamente!</p>
                 </div>
                 <div class="modal-area modal-error" style="display: none">
-                    <p class="text-danger" id="error_msg">Ha ocurrido un error al eliminar el area</p>
+                    <p class="text-danger" id="error_msg">Ha ocurrido un error al eliminar el área</p>
                 </div>
             </div>
             <div class="modal-footer">

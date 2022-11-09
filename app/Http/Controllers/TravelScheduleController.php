@@ -107,7 +107,7 @@ class TravelScheduleController extends Controller
         if ($action > 1 && isset($request->id)) {
             if ($action == 2) {
                 $schedule = TravelSchedule::where('id', $request->id)
-                    ->where('estado', 5); // aprovado a area de gestion
+                    ->where('estado', 5); // aprobado a area de gestion
             }
             if ($action == 3) {
                 $schedule = TravelSchedule::where('id', $request->id)
@@ -115,7 +115,7 @@ class TravelScheduleController extends Controller
             }
             if ($action == 4) {
                 $schedule = TravelSchedule::where('id', $request->id)
-                    ->where('estado', 2) // aprovado por el gerente de area
+                    ->where('estado', 2) // aprobado por el gerente de area
                     ->where('validacion_uno', 2); // validation 1 accepted
             }
             $schedule->with(['activities'=>function($qAct){
@@ -277,11 +277,11 @@ class TravelScheduleController extends Controller
             if ($request->confirmation == 1) {
                 $schedule->validacion_uno = 2; // confirmed
                 $schedule->val_uno_por = Auth::user()->id;
-                $schedule->estado = 2; // aprovado por el gerente de area
+                $schedule->estado = 2; // aprobado por el gerente de area
             } else {
                 $schedule->validacion_dos = 2; // confirmed
                 $schedule->val_dos_por = Auth::user()->id;
-                $schedule->estado = 5; // aprovado a area de gestion
+                $schedule->estado = 5; // aprobado a area de gestion
             }
             $schedule->save();
 
@@ -332,6 +332,7 @@ class TravelScheduleController extends Controller
             if ($request->confirmation == 1) {
                 // find users from "area de gestion"
                 $gestion = User::join('t_sgcv_posiciones', 't_sgcv_usuarios.posicion_id', 't_sgcv_posiciones.id')
+                    ->where('t_sgcv_posiciones.es_gerente', 1) // only manager
                     ->where('t_sgcv_posiciones.area_id', 11) // Area de gestion
                     ->get();
 

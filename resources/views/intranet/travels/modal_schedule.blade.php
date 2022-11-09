@@ -218,7 +218,7 @@
                     @if ($schedule)
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" {{$schedule->vehiculo==1?'checked':''}} onclick="return false;">
-                            <label class="form-check-label">¿Requiere Vehiculo?</label>
+                            <label class="form-check-label">¿Requiere Vehículo?</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" {{$schedule->hospedaje==1?'checked':''}} onclick="return false;">
@@ -231,7 +231,7 @@
                     @else
                         <div class="form-check">
                             <input class="form-check-input" id="vehicle_check" name="vehicle_check" type="checkbox">
-                            <label class="form-check-label" for="vehicle_check">¿Requiere Vehiculo?</label>
+                            <label class="form-check-label" for="vehicle_check">¿Requiere Vehículo?</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" id="hab_check" name="hab_check" type="checkbox">
@@ -268,7 +268,7 @@
             <input class="btn btn-info text-white" type="submit" form="form_schedule" value="Crear">
         @elseif ($action >= 3)
             <button class="btn btn-danger text-white btn-actions travel-deny" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Rechazar</button>
-            <button class="btn btn-success text-white btn-actions travel-confirm" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Aprovar</button>
+            <button class="btn btn-success text-white btn-actions travel-confirm" data-travelid="{{$schedule->id}}" data-confirmation="{{$action==3?'1':'2'}}">Aprobar</button>
         @endif
     </div>
 </div>

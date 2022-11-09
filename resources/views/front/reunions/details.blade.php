@@ -36,7 +36,7 @@
                 <a href="#" class="btn btn-secondary btn-sm search-calendar" id="backToCalendar">
                     <svg class="icon">
                         <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-arrow-left"></use>
-                    </svg> Atras
+                    </svg> Atrás
                 </a> 
                 Fecha: {{date('d/m/Y',strtotime($date))}}
             </p>
@@ -62,7 +62,7 @@
                         @endforeach
                         </div>
                     @else
-                        <p class="m-0 p-3 border rounded bg-light">No hay documentos para esta area</p>
+                        <p class="m-0 p-3 border rounded bg-light">No hay documentos para esta área</p>
                     @endif
                 </div>
             </div>

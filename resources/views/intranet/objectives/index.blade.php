@@ -103,7 +103,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group py-1">
-                                <label>Area:</label>
+                                <label>Área:</label>
                                 <input type="text" class="form-control" value="{{$area?$area->nombre:''}}" readonly>
                                 <input type="hidden" name="area_id" value="{{$area?$area->id:''}}">
                             </div>
@@ -199,7 +199,7 @@
                         </div>
                         {{-- <div class="col-12">
                             <div class="form-group py-1">
-                                <label class="form-label" for="policy_file">Procedimiento / Politica:</label>
+                                <label class="form-label" for="policy_file">Procedimiento / Política:</label>
                                 <input id="policy_file" class="form-control" type="file" name="policy_file">
                             </div>
                         </div> --}}
@@ -267,7 +267,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="policyModalLabel">Documento: Politica</h5>
+                <h5 class="modal-title" id="policyModalLabel">Documento: Política</h5>
                 <button class="btn-close" type="button" data-coreui-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -286,7 +286,7 @@
                         <form id="policy-form" action="{{route('upd_activity_policy')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
-                                <label for="">Nuevo Procedimiento / Politica:</label>
+                                <label for="">Nuevo Procedimiento / Política:</label>
                                 <input type="file" name="p_file" id="policy_upd_file" class="form-control" required>
                                 <input type="hidden" name="p_edit" value="false">
                                 <input type="hidden" name="p_act_id" value="">
@@ -478,7 +478,7 @@
                         <div class="form-group w-100">
                             <label>Area:</label>
                             <select name="area" id="area-sel" class="form-select d-inline" style="width: calc(100% - 41px);">
-                                <option value="0">-- Selecciona un area --</option>
+                                <option value="0">-- Selecciona un área --</option>
                                 @foreach ($all_areas as $a)
                                     <option value="{{$a->id}}" {{($area && $area->id == $a->id)? 'selected':''}}>{{$a->nombre}}</option>
                                 @endforeach
@@ -590,7 +590,7 @@
                                                                 <th class="text-center align-middle t-head-act-name" width="180">Actividades Principales</th>
                                                                 <th class="text-center align-middle t-head-date-start" width="100" style="display: none;">Fecha Inicio</th>
                                                                 <th class="text-center align-middle t-head-date-end" width="100" style="display: none;">Fecha Fin</th>
-                                                                <th class="text-center align-middle t-head-policies" width="80">Procedimiento/<br>Politica</th>
+                                                                <th class="text-center align-middle t-head-policies" width="80">Procedimiento/<br>Política</th>
                                                                 <th class="text-center align-middle t-head-adjacents" width="120">Documento<br>Adjunto</th>
                                                                 <th class="text-center align-middle t-head-status" width="50">Estado</th>
                                                                 <th class="text-center align-middle t-head-comments" width="100"></th>

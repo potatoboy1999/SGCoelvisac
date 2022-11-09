@@ -36,7 +36,7 @@
             @if (Auth::user()->is_admin == 1)
             <div class="col-12">
                 <div class="mb-2">
-                    <label class="form-label">Area:</label>
+                    <label class="form-label">Área:</label>
                     <div class="p-2 border rounded">
                         @foreach ($areas as $area)
                             <div class="form-check">
@@ -49,7 +49,7 @@
             </div>
             <div class="col-12">
                 <div class="w-100">
-                    <p class="area_error w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más areas</p>
+                    <p class="area_error w-100 text-danger border border-danger rounded m-0 p-2" style="display: none">Seleccione una o más áreas</p>
                 </div>
             </div>
             @endif

@@ -20,7 +20,7 @@
   </div>
   <div class="marco col-12">
     <div class="box">
-      <h3 class="titulo">AREAS</h3>
+      <h3 class="titulo">ÁREAS</h3>
       <div class="cuerpo text-center">
         <!--<img src="{{asset('img/grap1.png')}}" alt="">-->
         <div class="d-flex flex-row flex-wrap">

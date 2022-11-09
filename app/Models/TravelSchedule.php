@@ -16,15 +16,15 @@ class TravelSchedule extends Model
     // ======================================
     // 0 = eliminado
     // 1 = enviado a gerente de area
-    // 2 = aprovado por el gerente de area
+    // 2 = aprobado por el gerente de area
     // 3 = rechazado por el gerente de area
-    // 4 = enviado a area de gestion
-    // 5 = aprovado a area de gestion
-    // 6 = rechazado a area de gestion
+    // 4 = enviado a area de gestión
+    // 5 = aprobado a area de gestión
+    // 6 = rechazado a area de gestión
 
-    // VALIDACION
+    // VALIDACIÓN
     // ======================================
-    // 1 = no aprovado
+    // 1 = no aprobado
     // 2 = aprobado
 
     protected $fillable = [

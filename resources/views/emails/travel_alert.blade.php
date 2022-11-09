@@ -1,7 +1,7 @@
 @component('mail::message')
 # Nueva agenda de viaje
 
-Fue creada por "{{$name}}" de su area.
+Fue creada por "{{$name}}" de su área.
 
 <table style="box-sizing:border-box; margin:30px auto; width:100%">
     <tbody style="box-sizing:border-box">
@@ -33,7 +33,7 @@ Fue creada por "{{$name}}" de su area.
 </table>
 
 @component('mail::button', ['url' => $link])
-Aprovar o Rechazar
+Aprobar o Rechazar
 @endcomponent
 
 @endcomponent
