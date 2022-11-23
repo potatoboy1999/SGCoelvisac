@@ -24,7 +24,7 @@
 <div class="body flex-grow-1 px-3">
     <div class="container-lg">
         {{-- if area is ADMIN, show both options --}}
-        @if (Auth::user()->is_admin == 1)
+        @if (Auth::user()->is_admin == 1 || (Auth::user()->position->area->id == 11 && Auth::user()->position->es_gerente))
             <div class="card mb-4">
                 <div class="card-body">
                     <div class="nav nav-pills nav-fill">

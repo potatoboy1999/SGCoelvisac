@@ -238,9 +238,19 @@ class TravelScheduleController extends Controller
         } else {
 
             if ($u_area == 11) { // area 'gestion', check schedules with 1st validation approved, ALL AREAS
-                $type = 2;
-                $schedules->where('t_sgcv_agenda_viajes.validacion_uno', 2);
-                $schedules->where('t_sgcv_agenda_viajes.validacion_dos', 0);
+                if ($user->position->es_gerente == 1) {
+                    if ($type == 1) {
+                        $schedules->where('t_sgcv_agenda_viajes.validacion_uno', 0); // not set
+                        $schedules->where('t_sgcv_agenda_viajes.validacion_dos', 0); // not set
+                    } else if ($type == 2) {
+                        $schedules->where('t_sgcv_agenda_viajes.validacion_uno', 2); // aprobado
+                        $schedules->where('t_sgcv_agenda_viajes.validacion_dos', 0); // not set
+                    }
+                }else{
+                    $type = 2;
+                    $schedules->where('t_sgcv_agenda_viajes.validacion_uno', 2);
+                    $schedules->where('t_sgcv_agenda_viajes.validacion_dos', 0);
+                }
             } else if ($user->position->es_gerente == 1) { // if not from area 'gestion', check if user is manager
                 // get schedules with no validation approved from an specific area
                 $type = 1;
