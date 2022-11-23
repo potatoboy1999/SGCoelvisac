@@ -476,7 +476,8 @@ class ReunionController extends Controller
         }
         if($reunion){
             $alert = "";
-            $sizeMax = 8388608; // 8MB
+            //$sizeMax = 8388608; // 8MB
+            $sizeMax = 6388608; // 8MB
             $valMimes = ["application/pdf"]; // pdf
             $destinationPath = 'uploads';
 
