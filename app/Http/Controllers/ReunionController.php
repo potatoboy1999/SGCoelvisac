@@ -518,7 +518,7 @@ class ReunionController extends Controller
                     return [
                         'status'=> 'error',
                         'code'=> 3, // file too big
-                        'alert' => 'Problemas con el archivo adjunto',
+                        'alert' => 'Error: Archivo muy grande',
                         'reunion'=> $reunion,
                     ];
                 }
@@ -526,7 +526,7 @@ class ReunionController extends Controller
                 return [
                     'status'=> 'error',
                     'code'=> 2, // file not valid
-                    'alert' => 'Problemas con el archivo adjunto',
+                    'alert' => 'Error: Problemas con el archivo adjunto',
                     'reunion'=> $reunion,
                 ];
             }
@@ -539,7 +539,7 @@ class ReunionController extends Controller
             return [
                 'status'=>'error',
                 'code'=> 1, // reunion not created or found
-                'msg'=> 'Reunion not found'
+                'alert'=> 'Reunión no encontrada'
             ];
         }
     }

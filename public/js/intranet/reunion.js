@@ -169,7 +169,7 @@ $(document).on("change", ".add-file", function(ev){
                     $("input[name='reunion']").val(res.reunion.id);
                 }
                 $(".file-loading[areaid='"+areaid+"']").remove();
-                alert(res.msg)
+                alert(res.alert)
             }
         },
         error: function(xhr, ajaxOptions, thrownError){
