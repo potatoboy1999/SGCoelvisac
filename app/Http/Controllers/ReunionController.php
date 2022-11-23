@@ -476,8 +476,7 @@ class ReunionController extends Controller
         }
         if($reunion){
             $alert = "";
-            //$sizeMax = 8388608; // 8MB
-            $sizeMax = 6388608; // 8MB
+            $sizeMax = 8388608; // 8MB
             $valMimes = ["application/pdf"]; // pdf
             $destinationPath = 'uploads';
 
@@ -527,7 +526,7 @@ class ReunionController extends Controller
                 return [
                     'status'=> 'error',
                     'code'=> 2, // file not valid
-                    'alert' => 'Error: Problemas con el archivo adjunto',
+                    'alert' => 'Error: Problemas con el archivo adjunto. Máximo tamaño valido es 8MB',
                     'reunion'=> $reunion,
                 ];
             }
