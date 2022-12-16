@@ -7,7 +7,9 @@ use App\Models\ActivityDocuments;
 use App\Models\Area;
 use App\Models\Document;
 use App\Models\Objective;
+use App\Models\Pilars;
 use App\Models\Role;
+use App\Models\StratObjective;
 use App\Models\Theme;
 use DateTime;
 use Illuminate\Http\Request;
@@ -15,12 +17,113 @@ use Illuminate\Support\Facades\App;
 
 class ObjectiveController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index(Request $request)
+    {
+        $page = "objectives";
+        $bcrums = ["Agenda Estrategica","Objetivos"];
+
+        $area = null;
+        $all_areas = Area::where("estado", 1)->where("vis_matriz",1)->get();
+        $roles = [];
+
+        $pilars = Pilars::where('estado',1)->get();
+
+        // return $roles->toArray();
+        
+        return view("intranet.objectives.index",[
+            "page"=>$page,
+            "bcrums" => $bcrums,
+            "roles" => $roles,
+            "all_areas" => $all_areas,
+            "area" => $area,
+            "pilars" => $pilars
+        ]);
+    }
+
+    public function getPilarMatrix(Request $request)
+    {
+        $data = [];
+        $pilar = Pilars::find($request->pilar_id);
+        if($pilar){
+            $data = ["status"=>"ok","pilar" => $pilar];
+        }else{
+            $data = ["status"=>"error","msg"=>"pilar not found"];
+        }
+
+        return view("intranet.objectives.pilarMatrix", $data);
+    }
+
+    public function specificsIndex(Request $request)
+    {
+        $page = "objectives";
+        $bcrums = ["Agenda Estrategica","Objetivos"];
+
+        $data = [
+            "page"=>$page,
+            "bcrums" => $bcrums
+        ];
+        $objStrat = StratObjective::find($request->strat);
+        if($objStrat){
+            $data['status'] = "ok";
+            $data['strat'] = $objStrat;
+        }else{
+            $data['status'] = "error";
+            $data['msg'] = "Objectivo no encontrado";
+        }
+        return view("intranet.objectives.indexSpecific", $data);
+    }
+
+    public function getspecificsMatrix(Request $request)
+    {
+        $data = [];
+        $strat = StratObjective::find($request->strat_id);
+        if($strat){
+            $specifics = StratObjective::where('obj_estrategico_id', $request->strat_id)->get();
+            $data = ["status"=>"ok","strat" => $strat,"specifics"=>$specifics];
+        }else{
+            $data = ["status"=>"error","msg"=>"strat not found"];
+        }
+
+        return view("intranet.objectives.specificMatrix", $data);
+    }
+
+    public function actionsIndex(Request $request)
+    {
+        $page = "objectives";
+        $bcrums = ["Agenda Estrategica","Objetivos"];
+
+        $data = [
+            "page"=>$page,
+            "bcrums" => $bcrums
+        ];
+        $objSpec = StratObjective::find($request->specific);
+        if($objSpec){
+            $data['status'] = "ok";
+            $data['strat'] = $objSpec;
+        }else{
+            $data['status'] = "error";
+            $data['msg'] = "Objectivo no encontrado";
+        }
+        return view("intranet.objectives.indexActions", $data);
+    }
+
+    public function actionsMatrix(Request $request)
+    {
+        $data = [];
+        $strat = StratObjective::find($request->strat_id);
+        if($strat){
+            $data = ["status"=>"ok","strat" => $strat];
+        }else{
+            $data = ["status"=>"error","msg"=>"strat not found"];
+        }
+
+        return view("intranet.objectives.actionsMatrix", $data);
+    }
+
+
+    // -- OLD MATRIX TABLE
+    public function index2(Request $request)
     {
         $page = "objectives";
         $bcrums = ["Agenda Estrategica","Objetivos"];
@@ -144,7 +247,7 @@ class ObjectiveController extends Controller
 
         // return $roles->toArray();
         
-        return view("intranet.objectives.index",[
+        return view("intranet.objectives.index2",[
             "page"=>$page,
             "bcrums" => $bcrums,
             "roles" => $roles,
@@ -167,6 +270,7 @@ class ObjectiveController extends Controller
             ]
         ]);
     }
+    // -- END OLD MATRIX TABLE
 
     public function viewPDF(Request $request)
     {

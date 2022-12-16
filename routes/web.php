@@ -34,9 +34,24 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
 
     Route::group(["prefix"=>"matriz"], function(){
         Route::get('/', [ObjectiveController::class,"index"])->name("objectives");
+        Route::get('/getMatrix', [ObjectiveController::class,"getPilarMatrix"])->name("objectives.matrix");
         Route::get('/pdf', [ObjectiveController::class,"viewPDF"])->name("objectives.pdf");
         Route::post('new_item', [ObjectiveController::class,"storeItem"])->name("new_item");
         Route::get("all_items", [ObjectiveController::class,"allItems"])->name("api_all_activities");
+
+        Route::get('obj_especificos/', [ObjectiveController::class,"specificsIndex"])->name("specifics");
+        Route::get('obj_especificos/getMatrix', [ObjectiveController::class,"getspecificsMatrix"])->name("specifics.matrix");
+
+        Route::get('obj_especificos/acciones', [ObjectiveController::class,"actionsIndex"])->name("actions");
+        Route::get('obj_especificos/acciones/getMatrix', [ObjectiveController::class,"actionsMatrix"])->name("actions.matrix");
+    });
+
+    Route::group(["prefix"=>"roles"], function(){
+        Route::get('/', [AreaRoleController::class,"index"])->name("areaRoles");
+        Route::post('new', [AreaRoleController::class,"storeItem"])->name("areaRoles.store");
+        Route::get('popup_edit', [AreaRoleController::class,"storeItem"])->name("areaRoles.popup.edit");
+        Route::post('update', [AreaRoleController::class,"storeItem"])->name("areaRoles.update");
+        Route::post('delete', [AreaRoleController::class,"storeItem"])->name("areaRoles.delete");
     });
 
     Route::group(["prefix"=>"role"], function(){

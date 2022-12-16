@@ -1,29 +1,24 @@
 $(document).ready(function() {
-    // loadAllPilars
-    $(".pilar-body").each(function(){
-        var pilarId = $(this).attr("pilar");
-        if(pilarId != undefined){
-            loadMatrix(pilarId, false);
-        }
-    });
+    // load Objectives
+    loadSpecificMatrix();
 });
 
-function loadMatrix(pilarId, withLoading) {
+function loadSpecificMatrix(withLoading) {
     $.ajax({
         url: matrixUrl,
         data: {
-            pilar_id: pilarId
+            strat_id: stratId
         },
         method: "GET",
         beforeSend: function(){
             if(withLoading){
-                $(".pilar-body.pilar-"+pilarId).html(
+                $("#matrix_content").html(
                     '<div class="spinner-border" role="status"><span class="sr-only"></span></div>'
                 );
             }
         },
         success: function(res){
-            $(".pilar-body.pilar-"+pilarId).html(res);
+            $("#matrix_content").html(res);
         },
         error: function (err) {
             
