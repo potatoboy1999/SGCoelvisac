@@ -26,7 +26,12 @@ class Area extends Model
         return $this->belongsToMany(Document::class,'t_sgcv_reu_document','area_id','documento_id');
     }
 
-    public function roles(){
-        return $this->hasMany(Role::class,'area_id','id');
+    // public function roles(){
+    //     return $this->hasMany(Role::class,'area_id','id');
+    // }
+
+    public function roles()
+    {
+        return $this->hasMany(AreaRoles::class,'area_id','id');
     }
 }

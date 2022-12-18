@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\AreaRoleController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CommentController;
@@ -55,9 +56,9 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
     Route::group(["prefix"=>"roles"], function(){
         Route::get('/', [AreaRoleController::class,"index"])->name("areaRoles");
         Route::post('new', [AreaRoleController::class,"storeItem"])->name("areaRoles.store");
-        Route::get('popup_edit', [AreaRoleController::class,"storeItem"])->name("areaRoles.popup.edit");
-        Route::post('update', [AreaRoleController::class,"storeItem"])->name("areaRoles.update");
-        Route::post('delete', [AreaRoleController::class,"storeItem"])->name("areaRoles.delete");
+        Route::get('popup_edit', [AreaRoleController::class,"popUpEdit"])->name("areaRoles.popup.edit");
+        Route::post('update', [AreaRoleController::class,"update"])->name("areaRoles.update");
+        Route::post('delete', [AreaRoleController::class,"delete"])->name("areaRoles.delete");
     });
 
     Route::group(["prefix"=>"role"], function(){
