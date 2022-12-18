@@ -63,7 +63,7 @@ class ObjectiveController extends Controller
             "page"=>$page,
             "bcrums" => $bcrums
         ];
-        $objStrat = StratObjective::find($request->strat);
+        $objStrat = StratObjective::where('id',$request->strat)->where('estado', 1)->first();
         if($objStrat){
             $data['status'] = "ok";
             $data['strat'] = $objStrat;
@@ -74,12 +74,27 @@ class ObjectiveController extends Controller
         return view("intranet.objectives.indexSpecific", $data);
     }
 
+    public function getStrategicSummMatrix(Request $request)
+    {
+        $data = [];
+        $strat = StratObjective::where('id', $request->strat_id)->where('estado', 1)->first();
+        if($strat){
+            $data = ["status"=>"ok","strat" => $strat];
+        }else{
+            $data = ["status"=>"error","msg"=>"strat not found"];
+        }
+
+        return view("intranet.objectives.strategicSummaryMatrix", $data);
+    }
+
     public function getspecificsMatrix(Request $request)
     {
         $data = [];
-        $strat = StratObjective::find($request->strat_id);
+        $strat = StratObjective::where('id',$request->strat_id)->where('estado', 1)->first();
         if($strat){
-            $specifics = StratObjective::where('obj_estrategico_id', $request->strat_id)->get();
+            $specifics = StratObjective::where('obj_estrategico_id', $request->strat_id)
+                ->where('estado', 1)
+                ->get();
             $data = ["status"=>"ok","strat" => $strat,"specifics"=>$specifics];
         }else{
             $data = ["status"=>"error","msg"=>"strat not found"];
@@ -97,7 +112,7 @@ class ObjectiveController extends Controller
             "page"=>$page,
             "bcrums" => $bcrums
         ];
-        $objSpec = StratObjective::find($request->specific);
+        $objSpec = StratObjective::where('id', $request->specific)->where('estado',1)->first();
         if($objSpec){
             $data['status'] = "ok";
             $data['strat'] = $objSpec;
@@ -111,7 +126,7 @@ class ObjectiveController extends Controller
     public function actionsMatrix(Request $request)
     {
         $data = [];
-        $strat = StratObjective::find($request->strat_id);
+        $strat = StratObjective::where('id', $request->strat_id)->where('estado', 1)->first();
         if($strat){
             $data = ["status"=>"ok","strat" => $strat];
         }else{
@@ -121,6 +136,30 @@ class ObjectiveController extends Controller
         return view("intranet.objectives.actionsMatrix", $data);
     }
 
+    public function specificMatrixIndex(Request $request)
+    {
+        $page = "objectives";
+        $bcrums = ["Agenda Estrategica","Objetivos"];
+
+        return view("intranet.objectives.specific",[
+            "page"=>$page,
+            "bcrums" => $bcrums,
+        ]);
+    }
+
+    public function getSpecificMatrix(Request $request)
+    {
+        $specObjec = StratObjective::whereNotNull('obj_estrategico_id')
+                    ->where('estado', 1);
+
+        $specObjec->with(['stratObjective']);
+        
+        $specObjec = $specObjec->get();
+
+        return view("intranet.objectives.specificMatrix2",[
+            "specObjec" => $specObjec,
+        ]);
+    }
 
     // -- OLD MATRIX TABLE
     public function index2(Request $request)

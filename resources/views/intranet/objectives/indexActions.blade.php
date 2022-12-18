@@ -75,6 +75,10 @@
             <div class="card-header">Leyenda</div>
             <div class="card-body">
                 <p>
+                    <span class="d-inline-block text-block t_gray" style="width: 20px;">&nbsp;</span> 
+                    <strong>Gris:</strong> La actividad aun no ha comenzado
+                </p>
+                <p>
                     <span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> 
                     <strong>Verde:</strong> Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.
                 </p>

@@ -1,9 +1,9 @@
 <div class="card mb-4">
-@if ($status == "ok")
     <div class="card-body p-0">
         <table class="table table-bordered m-0">
             <thead>
                 <tr>
+                    <th class="text-center align-middle t-head-code" width="100">Objetivo Estrategico</th>
                     <th class="text-center align-middle t-head-code" width="50">Código</th>
                     <th class="text-center align-middle t-head-objective" width="180">Objetivo Específico</th>
                     <th class="text-center align-middle t-head-sponsor" width="50">Responsable</th>
@@ -17,13 +17,16 @@
             </thead>
             <tbody>
                 <?php $y = 0; ?>
-                @foreach ($specifics as $spec)
+                @foreach ($specObjec as $spec)
                     <?php 
                         $kpis = $spec->kpis;
                         $k = 0;
                     ?>
                     @foreach ($kpis as $kpi)
                         <tr>
+                            <td class="align-middle" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
+                                {{$spec->stratObjective->nombre}}
+                            </td>
                             <td class="align-middle" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
                                 <a href="{{route('actions')}}?specific={{$spec->id}}"><span class="badge bg-primary obj-code">{{$spec->codigo}}</span></a>
                             </td>
@@ -95,9 +98,4 @@
             </tbody>
         </table>
     </div>
-@else
-    <div class="card-body">
-        <h3 class="text-danger">Objetivo no encontrado</h3>
-    </div>
-@endif
 </div>

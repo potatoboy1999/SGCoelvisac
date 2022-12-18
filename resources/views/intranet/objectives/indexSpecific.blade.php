@@ -38,37 +38,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body p-0">
-                        <table class="table table-bordered m-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-center align-middle t-head-curryear" width="50">KPI</th>
-                                    <th class="text-center align-middle t-head-curryear" width="50">2022</th>
-                                    <th class="text-center align-middle t-head-nextyear" width="50">2023</th>
-                                    <th class="text-center align-middle t-head-resmes" width="50">Res. Mes</th>
-                                    <th class="text-center align-middle t-head-resacum" width="50">Res. Acum.</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>...</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>...</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div id="matrix_summary" class="col-md-6">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only"></span>
                 </div>
             </div>
         </div>
@@ -112,6 +84,7 @@
 <script>
     let stratId = "{{$strat->id}}";
     let matrixUrl = "{{route('specifics.matrix')}}";
+    let summMatrixUrl = "{{route('specifics.summarymatrix')}}";
 </script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>

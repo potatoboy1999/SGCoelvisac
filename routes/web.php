@@ -40,10 +40,16 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get("all_items", [ObjectiveController::class,"allItems"])->name("api_all_activities");
 
         Route::get('obj_especificos/', [ObjectiveController::class,"specificsIndex"])->name("specifics");
+        Route::get('obj_especificos/getSummMatrix', [ObjectiveController::class,"getStrategicSummMatrix"])->name("specifics.summarymatrix");
         Route::get('obj_especificos/getMatrix', [ObjectiveController::class,"getspecificsMatrix"])->name("specifics.matrix");
 
         Route::get('obj_especificos/acciones', [ObjectiveController::class,"actionsIndex"])->name("actions");
         Route::get('obj_especificos/acciones/getMatrix', [ObjectiveController::class,"actionsMatrix"])->name("actions.matrix");
+    });
+
+    Route::group(["prefix"=>"specific_obj"], function(){
+        Route::get('/', [ObjectiveController::class,"specificMatrixIndex"])->name("specifics_matrix");
+        Route::get('/get_matrix', [ObjectiveController::class,"getSpecificMatrix"])->name("spec_matrix.matrix");
     });
 
     Route::group(["prefix"=>"roles"], function(){

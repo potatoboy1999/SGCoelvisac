@@ -44,6 +44,7 @@
             gtag('config', 'UA-118965717-5');
         </script>
         <!-- <link href="{{asset("css/node_vendors/coreui-chartjs.css")}}" rel="stylesheet"> -->
+        <link rel="stylesheet" href="{{ asset('css/app_global.css') }}">
         @yield('style')
     </head>
     <body>
@@ -131,7 +132,7 @@
                     </li>
                     </ul>
                 </div>
-                <div class="header-divider"></div>
+                {{-- <div class="header-divider"></div>
                 <div class="container-fluid">
                     <nav aria-label="breadcrumb">
                     <ol class="breadcrumb my-0 ms-2">
@@ -146,7 +147,7 @@
                         @endfor
                     </ol>
                     </nav>
-                </div>
+                </div> --}}
             </header>
             @yield('content')
         </div>

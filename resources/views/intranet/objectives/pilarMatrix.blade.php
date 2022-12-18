@@ -65,9 +65,57 @@
                                 <td class="align-middle">{{$kpi->meta}}</td>
                                 <td class="align-middle" align="center">0</td>
                                 <td class="align-middle" align="center">100</td>
-                                <td class="align-middle" align="center"></td>
-                                <td class="align-middle" align="center"></td>
-                                <td class="align-middle" align="center"><span class="badge bg-secondary btn-more">...</span></td>
+                                <td class="align-middle" align="center">
+                                    <div class="dropdown">
+                                        <div class="circle c-red" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
+                                        <ul class="dropdown-menu p-2">
+                                            <li class="info-pop">
+                                                <div class="pop-banner pop-red"></div>
+                                                <span><strong>Meta %</strong>: 100%</span><br>
+                                                <span><strong>Meta</strong>: 7,484,790.73</span>
+                                                <hr>
+                                                <span><strong>Real %</strong>: 80%</span><br>
+                                                <span><strong>Real</strong>: 6,022,325.34</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td class="align-middle" align="center">
+                                    <div class="dropdown">
+                                        <div class="circle c-green" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
+                                        <ul class="dropdown-menu p-2">
+                                            <li class="info-pop">
+                                                <div class="pop-banner pop-green"></div>
+                                                <span><strong>Meta %</strong>: 100%</span><br>
+                                                <span><strong>Meta</strong>: 7,484,790.73</span>
+                                                <hr>
+                                                <span><strong>Real %</strong>: 80%</span><br>
+                                                <span><strong>Real</strong>: 6,022,325.34</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td class="align-middle" align="center">
+                                    <div class="dropdown">
+                                        <span class="badge bg-secondary btn-more text-black" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                        </span>
+                                        <ul class="dropdown-menu p-0">
+                                            <li>
+                                                <a class="dropdown-item" href="">
+                                                    Editar
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item bg-danger text-white" href="">
+                                                    <svg class="icon">
+                                                        <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
+                                                    </svg> Eliminar
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
                             </tr>
                             <?php $k++; ?>
                         @endforeach
