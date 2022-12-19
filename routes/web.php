@@ -7,6 +7,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\KpiController;
 use App\Http\Controllers\ObjectiveController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
@@ -59,6 +60,12 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('popup_edit', [AreaRoleController::class,"popUpEdit"])->name("areaRoles.popup.edit");
         Route::post('update', [AreaRoleController::class,"update"])->name("areaRoles.update");
         Route::post('delete', [AreaRoleController::class,"delete"])->name("areaRoles.delete");
+    });
+
+    Route::group(["prefix"=>"kpi"], function(){
+        Route::get('/',[KpiController::class,"index"])->name("kpi");
+        Route::get('/getNowMatrix',[KpiController::class,"getMatrixNow"])->name("kpi.matrix_now");
+        Route::get('/getFutureMatrix',[KpiController::class,"getMatrixFuture"])->name("kpi.matrix_future");
     });
 
     Route::group(["prefix"=>"role"], function(){

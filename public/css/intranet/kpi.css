@@ -1,0 +1,13 @@
+.pilar-header {
+    margin-bottom: 10px;
+}
+
+thead tr th{
+    background-color: #51607c!important;
+    color: white!important;
+}
+
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}

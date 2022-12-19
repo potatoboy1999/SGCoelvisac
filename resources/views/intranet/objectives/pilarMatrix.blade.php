@@ -102,7 +102,7 @@
                                         </span>
                                         <ul class="dropdown-menu p-0">
                                             <li>
-                                                <a class="dropdown-item" href="">
+                                                <a class="dropdown-item" href="{{route('kpi')}}?id={{$kpi->id}}">
                                                     Editar
                                                 </a>
                                             </li>
