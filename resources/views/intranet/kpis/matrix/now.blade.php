@@ -22,6 +22,20 @@
             "label" => date('Y')
         ],
     ];
+    $cicles_data = [];
+    for ($i=0; $i < 12; $i++) { 
+        $cicles_data[] = [
+            "real" => 0,
+            "plan" => 0
+        ];
+    }
+    if($kpi){
+        $kpiDates = $kpi->kpiDates;
+        foreach ($kpiDates as $k => $kpiDate) {
+            $cicles_data[$k]["real"] = ($kpiDate->real_cantidad?:0)+0; // add +0 to remove excess of ceros
+            $cicles_data[$k]["plan"] = ($kpiDate->meta_cantidad?:0)+0; // add +0 to remove excess of ceros
+        }
+    }
 @endphp
 <div class="card mb-4">
     <div class="card-body p-0">
@@ -30,7 +44,7 @@
                 <tr>
                     <th class="text-center align-middle" width="110">Metas</th>
                     @for ($i = 1; $i <= $cicles[$frequency]["count"]; $i++)
-                        <th class="text-center align-middle">
+                        <th class="text-center align-middle {{$frequency == "men"?'f-14':''}}">
                             @switch($frequency)
                                 @case("men")
                                     {{$months[$i-1]}}
@@ -49,13 +63,17 @@
                 <tr>
                     <td class="text-center align-middle">Real</td>
                     @for ($i = 1; $i <= $cicles[$frequency]["count"]; $i++)
-                        <td class="text-center align-middle">0</td>
+                        <td class="text-center align-middle p-0">
+                            <input class="form-control input-number border-0 text-center" type="number" name="real_cicle[]" value="{{$cicles_data[$i-1]["real"]}}">
+                        </td>
                     @endfor
                 </tr>
                 <tr>
                     <td class="text-center align-middle">Planificado</td>
                     @for ($i = 1; $i <= $cicles[$frequency]["count"]; $i++)
-                        <td class="text-center align-middle">0</td>
+                        <td class="text-center align-middle p-0">
+                            <input class="form-control input-number border-0 text-center" type="number" name="plan_cicle[]" value="{{$cicles_data[$i-1]["plan"]}}">
+                        </td>
                     @endfor
                 </tr>
             </tbody>

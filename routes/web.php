@@ -66,6 +66,9 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/',[KpiController::class,"index"])->name("kpi");
         Route::get('/getNowMatrix',[KpiController::class,"getMatrixNow"])->name("kpi.matrix_now");
         Route::get('/getFutureMatrix',[KpiController::class,"getMatrixFuture"])->name("kpi.matrix_future");
+        Route::get('/getNowBar',[KpiController::class,"getGraphDataNow"])->name("kpi.bar_now");
+        Route::post('/store',[KpiController::class,"store"])->name("kpi.store");
+        Route::post('/update',[KpiController::class,"update"])->name("kpi.update");
     });
 
     Route::group(["prefix"=>"role"], function(){

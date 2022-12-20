@@ -1,3 +1,18 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.form-control:focus {
+    box-shadow: none;
+}
+
 .pilar-header {
     margin-bottom: 10px;
 }
@@ -10,4 +25,7 @@ thead tr th{
 table {
     table-layout: fixed;
     word-wrap: break-word;
+}
+.f-14{
+    font-size: 14px;
 }
