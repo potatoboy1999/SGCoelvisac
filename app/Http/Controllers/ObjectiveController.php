@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\ActivityDocuments;
 use App\Models\Area;
 use App\Models\Document;
+use App\Models\Kpis;
 use App\Models\Objective;
 use App\Models\Pilars;
 use App\Models\Role;
@@ -44,13 +45,29 @@ class ObjectiveController extends Controller
     public function getPilarMatrix(Request $request)
     {
         $data = [];
-        $pilar = Pilars::find($request->pilar_id);
+        $pilar = Pilars::where('id',$request->pilar_id);
+        $pilar->with(['dimensions' => function($qDim){
+            $qDim->where('estado', 1);
+            $qDim->with(['stratObjectives' => function($qStrObj){
+                $qStrObj->where('estado', 1);
+                $qStrObj->whereNull('obj_estrategico_id');
+                $qStrObj->with(['kpis' => function($qKpi){
+                    $qKpi->where('estado',1);
+                    $qKpi->with(['kpiDates'=>function($qDates){
+                        $qDates->where('estado', 1);
+                        $qDates->where('anio', date('Y'));
+                    }]);
+                }]);
+            }]);
+        }]);
+        $pilar = $pilar->first();
         if($pilar){
             $data = ["status"=>"ok","pilar" => $pilar];
         }else{
             $data = ["status"=>"error","msg"=>"pilar not found"];
         }
-
+        $data["cicles"] = Kpis::getCicleDef();
+        $data["types"] = Kpis::getTypeDef();
         return view("intranet.objectives.pilarMatrix", $data);
     }
 

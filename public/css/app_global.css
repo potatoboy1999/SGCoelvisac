@@ -12,6 +12,10 @@
     background-color: rgba(4, 192, 0, 1);
     border: 2px solid rgba(0, 150, 15, 1);
 }
+.circle.c-blue{
+    background-color: rgb(17, 63, 189, 1);
+    border: 2px solid rgb(2, 0, 150, 1);
+}
 .pop-banner{
     width: 100%!important;
     height: 15px;
@@ -24,6 +28,9 @@
 }
 .pop-banner.pop-green{
     background-color: rgba(4, 192, 0, 1);
+}
+.pop-banner.pop-blue{
+    background-color: rgb(17, 63, 189, 1);
 }
 .info-pop hr{
     margin: 3px 0!important;

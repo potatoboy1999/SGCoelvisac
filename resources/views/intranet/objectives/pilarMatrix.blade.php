@@ -1,4 +1,5 @@
 @php
+    $colors = ["red","green","blue"];
     function countAllKpis($dimension)
     {
         $count = 0;
@@ -8,6 +9,19 @@
             $count += sizeOf($kpis);
         }
         return $count;
+    }
+
+    function progressColor($progress)
+    {
+        $color = 0;
+        if($progress < 80){
+            $color = 0;
+        }else if(80 <= $progress && $progress < 100){
+            $color = 1;
+        }else if($progress >= 100){
+            $color = 2;
+        }
+        return $color;
     }
 @endphp
 
@@ -60,22 +74,62 @@
                                 </td>
                                 <td class="align-middle">{{$kpi->nombre}}</td>
                                 <td class="align-middle">{{$kpi->formula}}</td>
-                                <td class="align-middle">{{$kpi->frecuencia}}</td>
-                                <td class="align-middle">{{$kpi->tipo}}</td>
+                                <td class="align-middle">{{$cicles[$kpi->frecuencia]["name"]}}</td>
+                                <td class="align-middle">{{$types[$kpi->tipo]["name"]}}</td>
                                 <td class="align-middle">{{$kpi->meta}}</td>
                                 <td class="align-middle" align="center">0</td>
                                 <td class="align-middle" align="center">100</td>
+                                @php
+                                    $month = intval(date('m'));
+                                    $cicles_groups = $cicles[$kpi->frecuencia]["cicles"];
+                                    $cicle_i = 0;
+                                    for($i = 0; $i < sizeOf($cicles_groups); $i++){
+                                        $group = $cicles_groups[$i];
+                                        if(array_search($month, $group) !== false){
+                                            $cicle_i = $i;
+                                            break;
+                                        };
+                                    }
+                                    $real = 0;
+                                    $real_acumm = 0;
+                                    $plan = 0;
+                                    $plan_acumm = 0;
+                                    $perc = 0;
+                                    $perc_acumm = 0;
+                                    if($kpi->kpiDates){
+                                        foreach ($kpi->kpiDates as $k => $date) {
+                                            // get acummulated
+                                            $t_real = $date->real_cantidad + 0;
+                                            $t_plan = $date->meta_cantidad + 0;
+                                            if($date->ciclo <= ($cicle_i+1)){
+                                                $real_acumm += $t_real;
+                                                $plan_acumm += $t_plan;
+                                            }
+                                            // get current
+                                            if($k == $cicle_i && $date->ciclo == ($cicle_i+1)){
+                                                $real = $t_real;
+                                                $plan = $t_plan;
+                                            }
+                                        }
+                                    }
+                                    if($plan != 0){
+                                        $perc = round(($real/$plan),2)*100;
+                                    }
+                                    if($plan_acumm != 0){
+                                        $perc_acumm = round(($real_acumm/$plan_acumm),2)*100;
+                                    }
+                                @endphp
                                 <td class="align-middle" align="center">
                                     <div class="dropdown">
                                         <div class="circle c-red" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
                                         <ul class="dropdown-menu p-2">
                                             <li class="info-pop">
                                                 <div class="pop-banner pop-red"></div>
-                                                <span><strong>Meta %</strong>: 100%</span><br>
-                                                <span><strong>Meta</strong>: 7,484,790.73</span>
+                                                {{-- <span><strong>Meta %</strong>: {{$plan}}</span><br> --}}
+                                                <span><strong>Meta</strong>: {{$plan}}</span>
                                                 <hr>
-                                                <span><strong>Real %</strong>: 80%</span><br>
-                                                <span><strong>Real</strong>: 6,022,325.34</span>
+                                                <span><strong>Real %</strong>: {{$perc}}%</span><br>
+                                                <span><strong>Real</strong>: {{$real}}</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -85,12 +139,12 @@
                                         <div class="circle c-green" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
                                         <ul class="dropdown-menu p-2">
                                             <li class="info-pop">
-                                                <div class="pop-banner pop-green"></div>
-                                                <span><strong>Meta %</strong>: 100%</span><br>
-                                                <span><strong>Meta</strong>: 7,484,790.73</span>
+                                                <div class="pop-banner pop-red"></div>
+                                                {{-- <span><strong>Meta %</strong>: {{$plan}}</span><br> --}}
+                                                <span><strong>Meta</strong>: {{$plan_acumm}}</span>
                                                 <hr>
-                                                <span><strong>Real %</strong>: 80%</span><br>
-                                                <span><strong>Real</strong>: 6,022,325.34</span>
+                                                <span><strong>Real %</strong>: {{$perc_acumm}}%</span><br>
+                                                <span><strong>Real</strong>: {{$real_acumm}}</span>
                                             </li>
                                         </ul>
                                     </div>
