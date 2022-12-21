@@ -1,5 +1,4 @@
 @php
-    $colors = ["red","green","blue"];
     function countAllKpis($dimension)
     {
         $count = 0;
@@ -13,6 +12,7 @@
 
     function progressColor($progress)
     {
+        $colors = ["red","green","blue"];
         $color = 0;
         if($progress < 80){
             $color = 0;
@@ -21,7 +21,7 @@
         }else if($progress >= 100){
             $color = 2;
         }
-        return $color;
+        return $colors[$color];
     }
 @endphp
 
@@ -121,10 +121,10 @@
                                 @endphp
                                 <td class="align-middle" align="center">
                                     <div class="dropdown">
-                                        <div class="circle c-red" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
+                                        <div class="circle c-{{progressColor($perc)}}" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
                                         <ul class="dropdown-menu p-2">
                                             <li class="info-pop">
-                                                <div class="pop-banner pop-red"></div>
+                                                <div class="pop-banner pop-{{progressColor($perc)}}"></div>
                                                 {{-- <span><strong>Meta %</strong>: {{$plan}}</span><br> --}}
                                                 <span><strong>Meta</strong>: {{$plan}}</span>
                                                 <hr>
@@ -136,10 +136,10 @@
                                 </td>
                                 <td class="align-middle" align="center">
                                     <div class="dropdown">
-                                        <div class="circle c-green" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
+                                        <div class="circle c-{{progressColor($perc_acumm)}}" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
                                         <ul class="dropdown-menu p-2">
                                             <li class="info-pop">
-                                                <div class="pop-banner pop-red"></div>
+                                                <div class="pop-banner pop-{{progressColor($perc_acumm)}}"></div>
                                                 {{-- <span><strong>Meta %</strong>: {{$plan}}</span><br> --}}
                                                 <span><strong>Meta</strong>: {{$plan_acumm}}</span>
                                                 <hr>
