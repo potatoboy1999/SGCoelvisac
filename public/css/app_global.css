@@ -35,3 +35,12 @@
 .info-pop hr{
     margin: 3px 0!important;
 }
+.icon-btn {
+    cursor: pointer;
+    padding: 0 3px;
+}
+.icon-btn:hover {
+    color: #ffffff;
+    background-color: #51607c;
+    border-radius: 5px;
+}
