@@ -7,6 +7,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\HighlightController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\ObjectiveController;
 use App\Http\Controllers\PositionController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\TravelScheduleController;
 use App\Http\Controllers\UserController;
+use App\Models\Highlight;
 use App\Models\TravelSchedule;
 use Illuminate\Support\Facades\Route;
 
@@ -69,6 +71,10 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/getNowBar',[KpiController::class,"getGraphDataNow"])->name("kpi.bar_now");
         Route::post('/store',[KpiController::class,"store"])->name("kpi.store");
         Route::post('/update',[KpiController::class,"update"])->name("kpi.update");
+
+        Route::get('/highlights',[HighlightController::class,"getMatrix"])->name('kpi.highlights');
+        Route::post('/storeHighlight',[HighlightController::class,"store"])->name('kpi.highlights.store');
+        Route::post('/deleteHighlight',[HighlightController::class,"delete"])->name('kpi.highlights.delete');
     });
 
     Route::group(["prefix"=>"role"], function(){

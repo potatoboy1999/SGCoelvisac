@@ -52,7 +52,7 @@
                     <span class="pilar-name">{{mb_strtoupper($pilar->nombre)}}</span>&nbsp;
                     <span class="icon-hover icon-info"><i class="fa-solid fa-circle-info"></i></span>&nbsp;
                     {{-- <span><i class="fa-regular fa-lightbulb"></i></span>&nbsp; --}}
-                    <span class="icon-btn switch-view" view="general"><i class="fa-regular fa-eye"></i></span>
+                    <span class="icon-btn switch-view" pilar="{{$pilar->id}}" view="general"><i class="fa-regular fa-eye"></i></span>
                 </div>
                 <div class="pilar-body pilar-{{$pilar->id}} collapse show" id="collapsePilar-{{$pilar->id}}" pilar="{{$pilar->id}}">
                     <div class="spinner-border" role="status">

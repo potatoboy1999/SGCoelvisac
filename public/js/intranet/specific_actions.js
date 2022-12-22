@@ -25,3 +25,19 @@ function loadSpecificMatrix(withLoading) {
         }
     });
 }
+
+$(document).on('show.coreui.dropdown','.dropdown', function() {
+    var ddTrack = $(this).attr('ddTrack');
+    $('body').append($(".dropdown-menu[ddTrack='"+ddTrack+"']").css({
+        position: 'absolute',
+        left: $(this).offset().left,
+        top: $(this).offset().top ,
+        display: "block"
+    }).detach());
+});
+$(document).on('hidden.coreui.dropdown', '.dropdown',function () {
+    var ddTrack = $(this).attr('ddTrack');
+    $(".dropdown[ddTrack='"+ddTrack+"']").append($(".dropdown-menu[ddTrack='"+ddTrack+"']").css({
+        position:false, left:false, top:false, display: "none"
+    }).detach());
+});

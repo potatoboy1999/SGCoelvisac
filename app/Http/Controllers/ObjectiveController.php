@@ -56,6 +56,7 @@ class ObjectiveController extends Controller
                     $qKpi->with(['kpiDates'=>function($qDates){
                         $qDates->where('estado', 1);
                         $qDates->where('anio', date('Y'));
+                        $qDates->orderBy('ciclo', 'asc');
                     }]);
                 }]);
             }]);
@@ -68,7 +69,12 @@ class ObjectiveController extends Controller
         }
         $data["cicles"] = Kpis::getCicleDef();
         $data["types"] = Kpis::getTypeDef();
-        return view("intranet.objectives.pilarMatrix", $data);
+        $view = isset($request->view)?$request->view:'general';
+        if($view == "general"){
+            return view("intranet.objectives.matrix.pilar", $data);
+        }else{
+            return view("intranet.objectives.matrix.pilarCicles", $data);
+        }
     }
 
     public function specificsIndex(Request $request)
@@ -100,8 +106,10 @@ class ObjectiveController extends Controller
         }else{
             $data = ["status"=>"error","msg"=>"strat not found"];
         }
+        $data["cicles"] = Kpis::getCicleDef();
+        $data["types"] = Kpis::getTypeDef();
 
-        return view("intranet.objectives.strategicSummaryMatrix", $data);
+        return view("intranet.objectives.matrix.strategic", $data);
     }
 
     public function getspecificsMatrix(Request $request)
@@ -116,8 +124,16 @@ class ObjectiveController extends Controller
         }else{
             $data = ["status"=>"error","msg"=>"strat not found"];
         }
+        $data["cicles"] = Kpis::getCicleDef();
+        $data["types"] = Kpis::getTypeDef();
 
-        return view("intranet.objectives.specificMatrix", $data);
+        $view = isset($request->view)?$request->view:'general';
+        if($view == "general"){
+            return view("intranet.objectives.matrix.specific", $data);
+        }else{
+            return view("intranet.objectives.matrix.specificCicles", $data);
+        }
+
     }
 
     public function actionsIndex(Request $request)
@@ -150,7 +166,7 @@ class ObjectiveController extends Controller
             $data = ["status"=>"error","msg"=>"strat not found"];
         }
 
-        return view("intranet.objectives.actionsMatrix", $data);
+        return view("intranet.objectives.matrix.actions", $data);
     }
 
     public function specificMatrixIndex(Request $request)
@@ -173,9 +189,21 @@ class ObjectiveController extends Controller
         
         $specObjec = $specObjec->get();
 
-        return view("intranet.objectives.specificMatrix2",[
-            "specObjec" => $specObjec,
-        ]);
+        $view = isset($request->view)?$request->view:'general';
+        if($view == "general"){
+            return view("intranet.objectives.matrix.specific2",[
+                "specObjec" => $specObjec,
+                "cicles" => Kpis::getCicleDef(),
+                "types" => Kpis::getTypeDef(),
+            ]);
+        }else{
+            return view("intranet.objectives.matrix.specificCicles2",[
+                "specObjec" => $specObjec,
+                "cicles" => Kpis::getCicleDef(),
+                "types" => Kpis::getTypeDef(),
+            ]);
+        }
+
     }
 
     // -- OLD MATRIX TABLE

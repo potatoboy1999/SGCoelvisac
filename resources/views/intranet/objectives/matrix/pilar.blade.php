@@ -91,6 +91,7 @@
                                                 break;
                                             };
                                         }
+                                        $tracker = 'temp'.$stratObj->id.$k.$cicle_i;
                                         $real = 0;
                                         $real_acumm = 0;
                                         $plan = 0;
@@ -98,7 +99,7 @@
                                         $perc = 0;
                                         $perc_acumm = 0;
                                         if($kpi->kpiDates){
-                                            foreach ($kpi->kpiDates as $k => $date) {
+                                            foreach ($kpi->kpiDates as $kd => $date) {
                                                 // get acummulated
                                                 $t_real = $date->real_cantidad + 0;
                                                 $t_plan = $date->meta_cantidad + 0;
@@ -107,7 +108,7 @@
                                                     $plan_acumm += $t_plan;
                                                 }
                                                 // get current
-                                                if($k == $cicle_i && $date->ciclo == ($cicle_i+1)){
+                                                if($kd == $cicle_i && $date->ciclo == ($cicle_i+1)){
                                                     $real = $t_real;
                                                     $plan = $t_plan;
                                                 }
@@ -121,9 +122,9 @@
                                         }
                                     @endphp
                                     <td class="align-middle" align="center">
-                                        <div class="dropdown">
+                                        <div class="dropdown" ddTrack="{{$tracker}}">
                                             <div class="circle c-{{progressColor($perc)}}" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
-                                            <ul class="dropdown-menu p-2">
+                                            <ul class="dropdown-menu p-2" ddTrack="{{$tracker}}">
                                                 <li class="info-pop">
                                                     <div class="pop-banner pop-{{progressColor($perc)}}"></div>
                                                     {{-- <span><strong>Meta %</strong>: {{$plan}}</span><br> --}}
@@ -136,9 +137,9 @@
                                         </div>
                                     </td>
                                     <td class="align-middle" align="center">
-                                        <div class="dropdown">
+                                        <div class="dropdown" ddTrack="accum-{{$tracker}}">
                                             <div class="circle c-{{progressColor($perc_acumm)}}" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
-                                            <ul class="dropdown-menu p-2">
+                                            <ul class="dropdown-menu p-2" ddTrack="accum-{{$tracker}}">
                                                 <li class="info-pop">
                                                     <div class="pop-banner pop-{{progressColor($perc_acumm)}}"></div>
                                                     {{-- <span><strong>Meta %</strong>: {{$plan}}</span><br> --}}
@@ -151,11 +152,11 @@
                                         </div>
                                     </td>
                                     <td class="align-middle" align="center">
-                                        <div class="dropdown">
+                                        <div class="dropdown" ddTrack="{{'act'.$stratObj->id.$k}}">
                                             <span class="badge bg-secondary btn-more text-black" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa-solid fa-ellipsis"></i>
                                             </span>
-                                            <ul class="dropdown-menu p-0">
+                                            <ul class="dropdown-menu p-0" ddTrack="{{'act'.$stratObj->id.$k}}">
                                                 <li>
                                                     <a class="dropdown-item" href="{{route('kpi')}}?id={{$kpi->id}}">
                                                         Editar

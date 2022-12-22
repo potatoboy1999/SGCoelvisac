@@ -25,6 +25,7 @@
     $cicles_data = [];
     for ($i=0; $i < 12; $i++) { 
         $cicles_data[] = [
+            "id" => null,
             "real" => 0,
             "plan" => 0
         ];
@@ -32,6 +33,7 @@
     if($kpi){
         $kpiDates = $kpi->kpiDates;
         foreach ($kpiDates as $k => $kpiDate) {
+            $cicles_data[$k]["id"] = ($kpiDate->id?:null);
             $cicles_data[$k]["real"] = ($kpiDate->real_cantidad?:0)+0; // add +0 to remove excess of ceros
             $cicles_data[$k]["plan"] = ($kpiDate->meta_cantidad?:0)+0; // add +0 to remove excess of ceros
         }
@@ -44,7 +46,7 @@
                 <tr>
                     <th class="text-center align-middle" width="110">Metas</th>
                     @for ($i = 1; $i <= $cicles[$frequency]["count"]; $i++)
-                        <th class="text-center align-middle {{$frequency == "men"?'f-14':''}}">
+                        <th class="text-center align-middle {{$frequency == "men"?'f-14':''}} show-highlights" dateid="{{$cicles_data[$i-1]["id"]}}" data-coreui-toggle="modal" data-coreui-target="#highlightModal">
                             @switch($frequency)
                                 @case("men")
                                     {{$months[$i-1]}}

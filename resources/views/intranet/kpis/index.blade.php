@@ -9,6 +9,33 @@
 @endsection
 
 @section('content')
+<div class="modal fade" id="highlightModal" tabindex="-1" aria-labelledby="highlightModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="highlightModalLabel">Highlights: <span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="table-highlights">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                @csrf
+                <div class="form-group mt-3">
+                    <label>Agregar</label>
+                    <div class="input-group my-1">
+                        <input type="text" class="form-control" name="highlight_desc">
+                        <a href="{{route('kpi.highlights.store')}}" id="btn-add-high" class="btn btn-sm btn-success text-white" kpidate="" style="padding-top: 7px;">
+                            <i class="fa-solid fa-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="body flex-grow-1 px-3">
     <div class="container">
         <h4>INDICADOR CLAVE DESEMPEÑO (KPI)</h4>
@@ -214,6 +241,9 @@
     var ogFrequency = "{{$kpi?$kpi->frecuencia:'men'}}";
     var nowMatrixUrl = "{{route('kpi.matrix_now')}}";
     var futureMatrixUrl = "{{route('kpi.matrix_future')}}";
+    var highlightsUrl = "{{route('kpi.highlights')}}";
+    var addHighUrl = "{{route('kpi.highlights.store')}}";
+    var rmvHighUrl = "{{route('kpi.highlights.delete')}}";
     var graphUrl = "{{route('kpi.bar_now')}}";
     var cicles = JSON.parse('{!! $cicles !!}');
 </script>

@@ -43,6 +43,63 @@ $(document).on('change','#kpi_frequency', function(ev){
     $("#matrix_future .card-body").html(table);
 });
 
+$(document).on("click", ".show-highlights", function(ev){
+    var dateid = $(this).attr('dateid');
+    $("#hl-label").html($(this).html());
+    $("#btn-add-high").attr('kpidate', dateid);
+    loadHighlights(dateid);
+});
+
+$(document).on('click', '.btn-delete', function(ev){
+    ev.preventDefault();
+    var id = $(this).data('id');
+    var dateid = $(this).data('date');
+    var row = $(this).parent().parent();
+    row.remove();
+    $.ajax({
+        url: rmvHighUrl,
+        data:{
+            id: id,
+            _token: $("[name='_token']").val()
+        },
+        method: "POST",
+        beforeSend: function(){
+            //$("#table-highlights").html('<div class="spinner-border" role="status"><span class="sr-only"></span></div>');
+        },
+        success: function(res){
+            //loadHighlights(dateid);
+        },
+        error: function(err){
+            console.log('error removing highlight');
+        }
+    });
+});
+
+$(document).on('click','#btn-add-high', function(ev){
+    ev.preventDefault();
+    var kpidate = $(this).attr('kpidate');
+    $.ajax({
+        url: addHighUrl,
+        data:{
+            kpidate: kpidate,
+            descr: $("input[name='highlight_desc']").val(),
+            _token: $("[name='_token']").val()
+        },
+        method: "POST",
+        beforeSend: function(){
+            $("input[name='highlight_desc']").val('');
+            $("#table-highlights").html('<div class="spinner-border" role="status"><span class="sr-only"></span></div>');
+        },
+        success: function(res){
+            loadHighlights(kpidate);
+        },
+        error: function(err){
+            console.log('error adding highlight');
+        }
+
+    });
+})
+
 function createTable(type, freq) {
     var table = 
         "<table class='table table-bordered m-0'>"+
@@ -91,6 +148,25 @@ function createTable(type, freq) {
     table += 
         "</table>";
     return table;
+}
+
+function loadHighlights(dateid) {
+    $.ajax({
+        url: highlightsUrl,
+        data:{
+            kpi_date: dateid
+        },
+        method: "GET",
+        beforeSend: function(){
+            $("#table-highlights").html('<div class="spinner-border" role="status"><span class="sr-only"></span></div>');
+        },
+        success: function(res){
+            $("#table-highlights").html(res);
+        },
+        error: function(err){
+            console.log("loading highlights error");
+        }
+    });
 }
 
 function loadNowMatrix(frequency, type, withLoading) {

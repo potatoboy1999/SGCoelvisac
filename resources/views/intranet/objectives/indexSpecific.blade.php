@@ -62,7 +62,7 @@
                         </button>
                     </div>
                     <div class="p-1">
-                        <a href="#" class="btn btn-danger text-white">
+                        <a href="#" class="btn btn-danger text-white switch-view" view="general">
                             <i class="fa-regular fa-eye"></i> Vista
                         </a>
                         

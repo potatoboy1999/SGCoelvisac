@@ -94,11 +94,11 @@
                                     @endphp
                                 </td>
                                 <td class="align-middle" align="center">
-                                    <div class="dropdown">
+                                    <div class="dropdown" ddTrack="{{'act-'.$action->id}}">
                                         <span class="badge bg-secondary btn-more text-black" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
                                             <i class="fa-solid fa-ellipsis"></i>
                                         </span>
-                                        <ul class="dropdown-menu p-0">
+                                        <ul class="dropdown-menu p-0" ddTrack="{{'act-'.$action->id}}">
                                             <li>
                                                 <a class="dropdown-item" href="">
                                                     Editar

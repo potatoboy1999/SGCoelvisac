@@ -6,3 +6,30 @@ thead tr th{
     background-color: #51607c!important;
     color: white!important;
 }
+
+.t-head-cicle {
+    min-width: 75px!important;
+}
+
+.t-head-kpi {
+    min-width: 150px;
+}
+
+.t-head-sponsor {
+    min-width: 150px;
+}
+
+.t-head-dimension {
+    min-width: 130px!important;
+}
+
+.t-head-objective {
+    min-width: 200px;
+}
+
+.t-head-resmes{
+    min-width: 82px;
+}
+.t-head-resacum{
+    min-width: 96px;
+}

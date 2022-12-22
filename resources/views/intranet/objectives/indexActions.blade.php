@@ -55,14 +55,7 @@
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-filter"></use>
                             </svg> Filtrar
                         </button>
-                    </div>
-                    <div class="p-1">
-                        <a href="#" class="btn btn-danger text-white">
-                            <i class="fa-regular fa-eye"></i> Vista
-                        </a>
-                        
-                    </div>
-                    
+                    </div>                    
                 </div>
             </div>
         </div>
