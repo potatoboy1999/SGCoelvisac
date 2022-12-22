@@ -46,13 +46,15 @@
             @foreach ($pilars as $pilar)
             <div class="pilar">
                 <div class="pilar-header">
-                    <span><i class="fa-solid fa-chevron-down"></i></span>&nbsp;
+                    <span class="icon-btn" style="padding-right: 0;" data-coreui-target="#collapsePilar-{{$pilar->id}}" data-coreui-toggle="collapse" aria-coreui-expanded="true">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </span>&nbsp;
                     <span class="pilar-name">{{mb_strtoupper($pilar->nombre)}}</span>&nbsp;
-                    <span><i class="fa-solid fa-circle-info"></i></span>&nbsp;
+                    <span class="icon-hover icon-info"><i class="fa-solid fa-circle-info"></i></span>&nbsp;
                     {{-- <span><i class="fa-regular fa-lightbulb"></i></span>&nbsp; --}}
-                    <span><i class="fa-regular fa-eye"></i></span>
+                    <span class="icon-btn switch-view" view="general"><i class="fa-regular fa-eye"></i></span>
                 </div>
-                <div class="pilar-body pilar-{{$pilar->id}}" pilar="{{$pilar->id}}">
+                <div class="pilar-body pilar-{{$pilar->id}} collapse show" id="collapsePilar-{{$pilar->id}}" pilar="{{$pilar->id}}">
                     <div class="spinner-border" role="status">
                         <span class="sr-only"></span>
                     </div>
