@@ -38,6 +38,41 @@
                             $kpis = $spec->kpis;
                             $k = 0;
                         ?>
+                        @if (sizeof($kpis) == 0)
+                            <tr>
+                                <td class="align-middle" align="center" style="">
+                                    {{$spec->stratObjective->nombre}}
+                                </td>
+                                <td class="align-middle" style="">
+                                    <a href="{{route('actions')}}?specific={{$spec->id}}"><span class="badge bg-primary obj-code">{{$spec->codigo}}</span></a>
+                                </td>
+                                <td class="align-middle" style="">
+                                    <a href="{{route('actions')}}?specific={{$spec->id}}">{{$spec->nombre}}</a>
+                                </td>
+                                <td class="align-middle" style="">
+                                    {{$spec->area->nombre}}
+                                </td>
+                                <td class="align-middle"></td>
+                                <td class="align-middle" align="center"></td>
+                                <td class="align-middle" align="center"></td>
+                                <td class="align-middle" align="center"></td>
+                                <td class="align-middle" align="center"></td>
+                                <td class="align-middle" align="center">
+                                    <div class="dropdown" ddTrack="{{'act'.$spec->id.$k}}">
+                                        <span class="badge bg-secondary btn-more text-black" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                        </span>
+                                        <ul class="dropdown-menu p-0" ddTrack="{{'act'.$spec->id.$k}}">
+                                            <li>
+                                                <a class="dropdown-item" href="{{route('kpi')}}?obj={{$spec->id}}">
+                                                    Crear KPI
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endif
                         @foreach ($kpis as $kpi)
                             <tr>
                                 <td class="align-middle" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">

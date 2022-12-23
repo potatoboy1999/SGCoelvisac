@@ -61,6 +61,48 @@
                                 $kpis = $stratObj->kpis;
                                 $k = 0;
                             ?>
+                            @if (sizeof($kpis) == 0)
+                                <tr>
+                                    <td class="align-middle">{{$dimension->nombre}}</td>
+                                    <td class="align-middle" align="center" style="">
+                                        <a href="{{route('specifics')}}?strat={{$stratObj->id}}"><span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span></a>
+                                    </td>
+                                    <td class="align-middle" style="">
+                                        <a href="{{route('specifics')}}?strat={{$stratObj->id}}">{{$stratObj->nombre}}</a>
+                                    </td>
+                                    <td class="align-middle" style="">
+                                        {{$stratObj->area->nombre}}
+                                    </td>
+                                    <td class="align-middle"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="align-middle"></td>
+                                    <td class="align-middle" align="center"></td>
+                                    <td class="align-middle" align="center"></td>
+                                    <td class="align-middle" align="center"></td>
+                                    <td class="align-middle" align="center"></td>
+                                    <td class="align-middle" align="center">
+                                        <div class="dropdown" ddTrack="{{'act'.$stratObj->id.$k}}">
+                                            <span class="badge bg-secondary btn-more text-black" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa-solid fa-ellipsis"></i>
+                                            </span>
+                                            <ul class="dropdown-menu p-0" ddTrack="{{'act'.$stratObj->id.$k}}">
+                                                <li>
+                                                    <a class="dropdown-item edit-obj" obj="{{$stratObj->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#objectiveEditModal">
+                                                        Editar Objetivo
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="{{route('kpi')}}?obj={{$stratObj->id}}">
+                                                        Crear KPI
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
                             @foreach ($kpis as $kpi)
                                 <tr>
                                     <td class="align-middle" rowspan="{{$rowSpan}}" style="{{($x == 0 && $k == 0)?'':'display: none;'}}">{{$dimension->nombre}}</td>
@@ -159,7 +201,12 @@
                                             <ul class="dropdown-menu p-0" ddTrack="{{'act'.$stratObj->id.$k}}">
                                                 <li>
                                                     <a class="dropdown-item" href="{{route('kpi')}}?id={{$kpi->id}}">
-                                                        Editar
+                                                        Editar KPI
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item edit-obj" obj="{{$stratObj->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#objectiveEditModal">
+                                                        Editar Objetivo
                                                     </a>
                                                 </li>
                                                 <li>

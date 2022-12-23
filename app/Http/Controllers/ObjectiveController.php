@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Activity;
 use App\Models\ActivityDocuments;
 use App\Models\Area;
+use App\Models\AreaRoles;
+use App\Models\Dimensions;
 use App\Models\Document;
+use App\Models\KpiDates;
 use App\Models\Kpis;
 use App\Models\Objective;
+use App\Models\ObjectiveUsers;
 use App\Models\Pilars;
 use App\Models\Role;
 use App\Models\StratObjective;
 use App\Models\Theme;
+use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -204,6 +209,251 @@ class ObjectiveController extends Controller
             ]);
         }
 
+    }
+
+    public function getNewForm(Request $request)
+    {
+        $pilar = Pilars::where('estado',1);
+        $pilar->with(['dimensions'=>function($qDim){
+            $qDim->where('estado', 1)
+                 ->orderBy('nombre', 'asc');
+        }]);
+        $pilar->select('id','nombre');
+        $pilar = $pilar->get();
+        $areas_arr = [];
+        $areas = Area::where('estado', 1)->where('vis_matriz', 1)->orderBy('nombre','asc')->get();
+        foreach ($areas as $k => $area) {
+            $users = User::join('t_sgcv_posiciones','t_sgcv_posiciones.id','t_sgcv_usuarios.posicion_id')
+                    ->where('t_sgcv_usuarios.estado', 1)
+                    ->where('t_sgcv_posiciones.estado', 1)
+                    ->where('t_sgcv_posiciones.area_id', $area->id)
+                    ->select('t_sgcv_usuarios.id','t_sgcv_usuarios.nombre')
+                    ->orderBy('t_sgcv_usuarios.nombre','asc')
+                    ->get();
+
+            $roles = AreaRoles::where('area_id', $area->id)->where('estado', 1)->get();
+
+            $areas_arr[] = [
+                "id" => $area->id,
+                "name" => $area->nombre,
+                "users" => $users,
+                "roles" => $roles
+            ];
+        }
+        return view('intranet.objectives.forms.newObjective', [
+            "pilars" => $pilar,
+            "areas" => $areas_arr
+        ]);
+    }
+
+    public function getEditForm(Request $request)
+    {
+        $obj = StratObjective::find($request->id);
+
+        $areas_arr = [];
+        $areas = Area::where('estado', 1)->where('vis_matriz', 1)->orderBy('nombre','asc')->get();
+        foreach ($areas as $k => $area) {
+            $users = User::join('t_sgcv_posiciones','t_sgcv_posiciones.id','t_sgcv_usuarios.posicion_id')
+                    ->where('t_sgcv_usuarios.estado', 1)
+                    ->where('t_sgcv_posiciones.estado', 1)
+                    ->where('t_sgcv_posiciones.area_id', $area->id)
+                    ->select('t_sgcv_usuarios.id','t_sgcv_usuarios.nombre')
+                    ->orderBy('t_sgcv_usuarios.nombre','asc')
+                    ->get();
+
+            $roles = AreaRoles::where('area_id', $area->id)->where('estado', 1)->get();
+
+            $areas_arr[] = [
+                "id" => $area->id,
+                "name" => $area->nombre,
+                "users" => $users,
+                "roles" => $roles
+            ];
+        }
+        return view('intranet.objectives.forms.editObjective', [
+            "obj" => $obj,
+            "areas" => $areas_arr
+        ]);
+    }
+
+    public function storeStrat(Request $request)
+    {
+        
+        $dimension = Dimensions::where('id', $request->dimension_id)->first();
+        $area = Area::where('id',$request->area_id)->where('estado', 1)->first();
+        $rol = AreaRoles::where('area_id', $request->area_id)->where('id', $request->rol_id)->where('estado', 1)->first();
+        if($dimension && $area && $rol){
+            // crear codigo
+            $code = "";
+            $pilar = $dimension->pilar;
+            $pilar_words = explode(" ",$pilar->nombre);
+            foreach($pilar_words as $word){
+                $code .= ucfirst($word[0]);
+            }
+            $code .= ".";
+            $dim_words = explode(" ",$dimension->nombre);
+            foreach($dim_words as $word){
+                $code .= ucfirst($word[0]);
+            }
+
+            // store new objective
+            $obj = new StratObjective();
+            $obj->codigo = "";
+            $obj->dimension_id = $dimension->id;
+            $obj->rol_id = $rol->id;
+            $obj->area_id = $area->id;
+            $obj->nombre = $request->nombre;
+            $obj->estado = 1;
+            $obj->save();
+
+            // add code
+            $obj->codigo = $code.$obj->id;
+            $obj->save();
+
+            // add users to objective
+            foreach($request->users as $k => $user_id){
+                $user = new ObjectiveUsers();
+                $user->objetivo_id = $obj->id;
+                $user->usuario_id = $user_id;
+                $user->estado = 1;
+                $user->save();
+            }
+
+            // add default KPI
+            /*
+            $kpi = new Kpis();
+            $kpi->objetivo_id = $obj->id;
+            $kpi->nombre = "";
+            $kpi->descripcion = "";
+            $kpi->formula = "";
+            $kpi->frecuencia = "men";
+            $kpi->tipo = "per";
+            $kpi->meta = "";
+            $kpi->estado = 1;
+            $kpi->save();
+
+            for ($i=0; $i < 12; $i++) { 
+                $real = 0;
+                $plan = 0;
+                $kpiDate = new KpiDates();
+                $kpiDate->kpi_id = $kpi->id;
+                $kpiDate->anio = intval(date('Y'));
+                $kpiDate->ciclo = ($i+1);
+                $kpiDate->real_cantidad = $real;
+                $kpiDate->meta_cantidad = $plan;
+                $kpiDate->estado = 1;
+                $kpiDate->save();
+            }
+    
+            for ($i=0; $i < 12; $i++) {
+                $plan = 0;
+                $kpiDate = new KpiDates();
+                $kpiDate->kpi_id = $kpi->id;
+                $kpiDate->anio = intval(date('Y',strtotime('+1 year')));
+                $kpiDate->ciclo = ($i+1);
+                $kpiDate->real_cantidad = 0;
+                $kpiDate->meta_cantidad = $plan;
+                $kpiDate->estado = 1;
+                $kpiDate->save();
+            }
+            */
+
+            return ["status"=>"ok","obj"=>$obj->id];
+        }
+        return ["status"=>"error","msg"=>"datos no permitidos"];
+    }
+
+    public function updateStrat(Request $request)
+    {
+        $area = Area::where('id',$request->area_id)->where('estado', 1)->first();
+        $rol = AreaRoles::where('area_id', $request->area_id)->where('id', $request->rol_id)->where('estado', 1)->first();
+        $obj = StratObjective::find($request->id);
+
+        if(!$obj){
+            return ["status"=>"error","msg"=>"Objetivo no encontrado"];
+        }
+
+        if($area && $rol){
+            $obj->area_id = $area->id;
+            $obj->nombre = $request->nombre;
+            $obj->estado = 1;
+            $obj->save();
+
+            // change users to objective
+            ObjectiveUsers::where('objetivo_id', $obj->id)->delete();
+            foreach($request->users as $k => $user_id){
+                $user = new ObjectiveUsers();
+                $user->objetivo_id = $obj->id;
+                $user->usuario_id = $user_id;
+                $user->estado = 1;
+                $user->save();
+            }
+
+            return ["status"=>"ok","obj"=>$obj->id];
+        }
+        return ["status"=>"error","msg"=>"Datos no permitidos"];
+    }
+
+    public function storeSpecific(Request $request)
+    {
+        $objStrat = StratObjective::where('id', $request->strat_id)->where('estado', 1)->first();
+        $area = Area::where('id',$request->area_id)->where('estado', 1)->first();
+
+        if($objStrat && $area){
+            // crear codigo
+            $code = $objStrat->codigo;
+
+            // store new objective
+            $obj = new StratObjective();
+            $obj->codigo = "";
+            $obj->obj_estrategico_id = $objStrat->id;
+            $obj->nombre = $request->nombre;
+            $obj->area_id = $area->area_id;
+            $obj->estado = 1;
+            $obj->save();
+
+            // add code
+            $obj->codigo = $code.$obj->id;
+            $obj->save();
+
+            // add users to objective
+            foreach($request->users as $k => $user){
+                $user = new ObjectiveUsers();
+                $user->objetivo_id = $obj->id;
+                $user->usuario_id = $user;
+                $user->estado = 1;
+                $user->save();
+            }
+
+            return ["status"=>"ok","obj"=>$obj->id];
+        }
+        return ["status"=>"error","msg"=>"datos no permitidos"];
+    }
+
+    public function updateSpecific(Request $request)
+    {
+        $obj = StratObjective::where('id', $request->strat_id)->where('estado', 1)->first();
+        $area = Area::where('id',$request->area_id)->where('estado', 1)->first();
+        if($obj && $area){
+            // update objective
+            $obj->obj_estrategico_id = $obj->id;
+            $obj->nombre = $request->nombre;
+            $obj->area_id = $area->area_id;
+            $obj->estado = 1;
+            $obj->save();
+
+            // add users to objective
+            foreach($request->users as $k => $user){
+                $user = new ObjectiveUsers();
+                $user->objetivo_id = $obj->id;
+                $user->usuario_id = $user;
+                $user->estado = 1;
+                $user->save();
+            }
+
+            return ["status"=>"ok","obj"=>$obj->id];
+        }
+        return ["status"=>"error","msg"=>"datos no permitidos"];
     }
 
     // -- OLD MATRIX TABLE

@@ -9,16 +9,85 @@
 @endsection
 
 @section('content')
+<div class="modal fade" id="objectiveModal" tabindex="-1" aria-labelledby="ObjectiveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="objectiveModalLabel">Nuevo Objetivo<span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section" id="form-objectives">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                <div class="modal-section" id="form-new-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="objectiveEditModal" tabindex="-1" aria-labelledby="ObjectiveEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="objectiveEditModalLabel">Editar Objetivo<span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section" id="form-edit-objectives">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                <div class="modal-section" id="form-edit-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="redirectKpiModal" tabindex="-1" aria-labelledby="redirectKpiModalLabel" aria-hidden="true" data-coreui-backdrop="static" data-coreui-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="redirectKpiModalLabel">Create Kpi<span id="hl-label"></span></h5>
+            </div>
+            <div class="modal-body">
+                <p>
+                    ¡Nuevo Item Creado!<br>
+                    Continuar a creación de KPI
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-success text-white" id="redirect-kpi" href="{{route('kpi')}}" obj="">Continuar</a>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="body flex-grow-1 px-3">
     <div class="container-fluid">
         <div class="card mb-4">
             <div class="card-body">
                 <div class="d-flex flex-row flex-wrap">
                     <div class="p-1">
-                        <a href="#" class="btn btn-success text-white">
+                        <a href="#" class="btn btn-success text-white btn-new-obj" data-coreui-toggle="modal" data-coreui-target="#objectiveModal">
                             <svg class="icon">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-plus"></use>
-                            </svg> Nuevo Item
+                            </svg> Nuevo Objetivo
+                        </a>
+                    </div>
+                    <div class="p-1">
+                        <a href="#" class="btn btn-success text-white btn-new-kpi" data-coreui-toggle="modal" data-coreui-target="#kpiModal">
+                            <svg class="icon">
+                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-plus"></use>
+                            </svg> Nuevo KPI
                         </a>
                     </div>
                     <div class="p-1">
@@ -68,7 +137,10 @@
 
 @section('script')
 <script>
+    var obj_form_data = null;
     let matrixUrl = "{{route('objectives.matrix')}}";
+    let newFormUrl = "{{route('obj_strat.matrix.create')}}";
+    let editFormUrl = "{{route('obj_strat.matrix.edit')}}";
 </script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
