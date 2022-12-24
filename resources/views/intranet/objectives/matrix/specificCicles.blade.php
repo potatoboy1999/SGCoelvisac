@@ -38,17 +38,17 @@
                             $k = 0;
                         ?>
                         @foreach ($kpis as $kpi)
-                            <tr>
-                                <td class="align-middle" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
+                            <tr class="obj-{{$spec->id}} kpi-{{$kpi->id}}" strat="{{$spec->id}}" kpi="{{$kpi->id}}">
+                                <td class="align-middle rowspan-bound td-speccode" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
                                     <a href="{{route('actions')}}?specific={{$spec->id}}"><span class="badge bg-primary obj-code">{{$spec->codigo}}</span></a>
                                 </td>
-                                <td class="align-middle" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                <td class="align-middle rowspan-bound td-spec" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                     <a href="{{route('actions')}}?specific={{$spec->id}}">{{$spec->nombre}}</a>
                                 </td>
-                                <td class="align-middle" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                <td class="align-middle rowspan-bound td-area" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                     {{$spec->area->nombre}}
                                 </td>
-                                <td class="align-middle">{{$kpi->nombre}}</td>
+                                <td class="align-middle kpi-name">{{$kpi->nombre}}</td>
                                 @for ($cicle_i = 0; $cicle_i < 12; $cicle_i++)
                                     @php
                                         $cicles_groups = $cicles[$kpi->frecuencia]["cicles"];
@@ -99,11 +99,16 @@
                                         <ul class="dropdown-menu p-0" ddTrack="{{'act'.$spec->id.$k}}">
                                             <li>
                                                 <a class="dropdown-item" href="{{route('kpi')}}?id={{$kpi->id}}">
-                                                    Editar
+                                                    Editar KPI
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item bg-danger text-white" href="">
+                                                <a class="dropdown-item edit-obj" obj="{{$spec->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#objectiveEditModal">
+                                                    Editar Objetivo
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item bg-danger text-white dlt-kpi" kpi="{{$kpi->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#deleteKpiModal">
                                                     <svg class="icon">
                                                         <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                     </svg> Eliminar

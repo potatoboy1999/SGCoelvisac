@@ -249,7 +249,8 @@ $(document).on('submit',"#form-editObjective", function(ev){
         success: function(res){
             if(res.status == "ok"){
                 $("#objectiveEditModal").modal("hide");
-                loadMatrix(pilar, "general", true);
+                var view = $(".switch-view[pilar='"+pilar+"']").attr('view');
+                loadMatrix(pilar, view, true);
             }else{
                 console.error("error saving objective");
                 console.error("msg:",res.msg);
@@ -300,6 +301,9 @@ $(document).on('submit','#f-form-delete', function(ev){
                 $("#deleteKpiModal").modal("hide");
                 var row = $("tr.kpi-"+res.kpi);
                 var pilar = row.parent().parent().attr("pilar");
+                var view = $(".switch-view[pilar='"+pilar+"']").attr('view');
+                loadMatrix(pilar,view,true);
+
                 // TO DO [LATER VERSION]
                 /*
                     // find row & remove
@@ -308,7 +312,6 @@ $(document).on('submit','#f-form-delete', function(ev){
                     var d = $("tr.kpi-"+k).attr('dim');
                     var o = $("tr.kpi-"+k).attr('strat');
                 */
-               loadMatrix(pilar,"general",true);
             }else{
                 console.error('error deleting kpi: '+res.msg);
             }

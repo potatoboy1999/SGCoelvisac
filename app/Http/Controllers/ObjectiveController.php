@@ -105,7 +105,16 @@ class ObjectiveController extends Controller
     public function getStrategicSummMatrix(Request $request)
     {
         $data = [];
-        $strat = StratObjective::where('id', $request->strat_id)->where('estado', 1)->first();
+        $strat = StratObjective::where('id', $request->strat_id)->where('estado', 1);
+        $strat->with(['kpis'=>function($qKpis){
+            $qKpis->where('estado', 1);
+            $qKpis->with(['kpiDates'=>function($qDates){
+                $qDates->where('estado', 1);
+                $qDates->where('anio', date('Y'));
+                $qDates->orderBy('ciclo', 'asc');
+            }]);
+        }]);
+        $strat = $strat->first();
         if($strat){
             $data = ["status"=>"ok","strat" => $strat];
         }else{
@@ -123,8 +132,16 @@ class ObjectiveController extends Controller
         $strat = StratObjective::where('id',$request->strat_id)->where('estado', 1)->first();
         if($strat){
             $specifics = StratObjective::where('obj_estrategico_id', $request->strat_id)
-                ->where('estado', 1)
-                ->get();
+                ->where('estado', 1);
+            $specifics->with(['kpis' => function($qKpi){
+                $qKpi->where('estado',1);
+                $qKpi->with(['kpiDates'=>function($qDates){
+                    $qDates->where('estado', 1);
+                    $qDates->where('anio', date('Y'));
+                    $qDates->orderBy('ciclo', 'asc');
+                }]);
+            }]);    
+            $specifics = $specifics->get();
             $data = ["status"=>"ok","strat" => $strat,"specifics"=>$specifics];
         }else{
             $data = ["status"=>"error","msg"=>"strat not found"];
@@ -211,6 +228,7 @@ class ObjectiveController extends Controller
 
     }
 
+    // Strategic Forms
     public function getNewForm(Request $request)
     {
         $pilar = Pilars::where('estado',1);
@@ -276,6 +294,65 @@ class ObjectiveController extends Controller
         ]);
     }
 
+    // Specific Forms
+    public function getNewSpecForm(Request $request)
+    {
+        $areas_arr = [];
+        $areas = Area::where('estado', 1)->where('vis_matriz', 1)->orderBy('nombre','asc')->get();
+        foreach ($areas as $k => $area) {
+            $users = User::join('t_sgcv_posiciones','t_sgcv_posiciones.id','t_sgcv_usuarios.posicion_id')
+                    ->where('t_sgcv_usuarios.estado', 1)
+                    ->where('t_sgcv_posiciones.estado', 1)
+                    ->where('t_sgcv_posiciones.area_id', $area->id)
+                    ->select('t_sgcv_usuarios.id','t_sgcv_usuarios.nombre')
+                    ->orderBy('t_sgcv_usuarios.nombre','asc')
+                    ->get();
+
+            $roles = AreaRoles::where('area_id', $area->id)->where('estado', 1)->get();
+
+            $areas_arr[] = [
+                "id" => $area->id,
+                "name" => $area->nombre,
+                "users" => $users,
+                "roles" => $roles
+            ];
+        }
+        return view('intranet.objectives.forms.newSpecific', [
+            "obj_strat" => $request->obj_strat,
+            "areas" => $areas_arr
+        ]);
+    }
+    public function getEditSpecForm(Request $request)
+    {
+        $specific = StratObjective::find($request->id);
+
+        $areas_arr = [];
+        $areas = Area::where('estado', 1)->where('vis_matriz', 1)->orderBy('nombre','asc')->get();
+        foreach ($areas as $k => $area) {
+            $users = User::join('t_sgcv_posiciones','t_sgcv_posiciones.id','t_sgcv_usuarios.posicion_id')
+                    ->where('t_sgcv_usuarios.estado', 1)
+                    ->where('t_sgcv_posiciones.estado', 1)
+                    ->where('t_sgcv_posiciones.area_id', $area->id)
+                    ->select('t_sgcv_usuarios.id','t_sgcv_usuarios.nombre')
+                    ->orderBy('t_sgcv_usuarios.nombre','asc')
+                    ->get();
+
+            $roles = AreaRoles::where('area_id', $area->id)->where('estado', 1)->get();
+
+            $areas_arr[] = [
+                "id" => $area->id,
+                "name" => $area->nombre,
+                "users" => $users,
+                "roles" => $roles
+            ];
+        }
+        return view('intranet.objectives.forms.editSpecific', [
+            "obj" => $specific,
+            "areas" => $areas_arr
+        ]);
+    }
+
+    // Strat CRUD
     public function storeStrat(Request $request)
     {
         
@@ -311,12 +388,14 @@ class ObjectiveController extends Controller
             $obj->save();
 
             // add users to objective
-            foreach($request->users as $k => $user_id){
-                $user = new ObjectiveUsers();
-                $user->objetivo_id = $obj->id;
-                $user->usuario_id = $user_id;
-                $user->estado = 1;
-                $user->save();
+            if(isset($request->users)){
+                foreach($request->users as $k => $user_id){
+                    $user = new ObjectiveUsers();
+                    $user->objetivo_id = $obj->id;
+                    $user->usuario_id = $user_id;
+                    $user->estado = 1;
+                    $user->save();
+                }
             }
 
             // add default KPI
@@ -376,17 +455,18 @@ class ObjectiveController extends Controller
         if($area && $rol){
             $obj->area_id = $area->id;
             $obj->nombre = $request->nombre;
-            $obj->estado = 1;
             $obj->save();
 
             // change users to objective
             ObjectiveUsers::where('objetivo_id', $obj->id)->delete();
-            foreach($request->users as $k => $user_id){
-                $user = new ObjectiveUsers();
-                $user->objetivo_id = $obj->id;
-                $user->usuario_id = $user_id;
-                $user->estado = 1;
-                $user->save();
+            if(isset($request->users)){
+                foreach($request->users as $k => $user_id){
+                    $user = new ObjectiveUsers();
+                    $user->objetivo_id = $obj->id;
+                    $user->usuario_id = $user_id;
+                    $user->estado = 1;
+                    $user->save();
+                }
             }
 
             return ["status"=>"ok","obj"=>$obj->id];
@@ -394,6 +474,7 @@ class ObjectiveController extends Controller
         return ["status"=>"error","msg"=>"Datos no permitidos"];
     }
 
+    // Specific CRUD
     public function storeSpecific(Request $request)
     {
         $objStrat = StratObjective::where('id', $request->strat_id)->where('estado', 1)->first();
@@ -408,21 +489,23 @@ class ObjectiveController extends Controller
             $obj->codigo = "";
             $obj->obj_estrategico_id = $objStrat->id;
             $obj->nombre = $request->nombre;
-            $obj->area_id = $area->area_id;
+            $obj->area_id = $area->id;
             $obj->estado = 1;
             $obj->save();
 
             // add code
-            $obj->codigo = $code.$obj->id;
+            $obj->codigo = $code.'.'.$obj->id;
             $obj->save();
 
             // add users to objective
-            foreach($request->users as $k => $user){
-                $user = new ObjectiveUsers();
-                $user->objetivo_id = $obj->id;
-                $user->usuario_id = $user;
-                $user->estado = 1;
-                $user->save();
+            if(isset($request->users)){
+                foreach($request->users as $k => $user_id){
+                    $user = new ObjectiveUsers();
+                    $user->objetivo_id = $obj->id;
+                    $user->usuario_id = $user_id;
+                    $user->estado = 1;
+                    $user->save();
+                }
             }
 
             return ["status"=>"ok","obj"=>$obj->id];
@@ -432,23 +515,24 @@ class ObjectiveController extends Controller
 
     public function updateSpecific(Request $request)
     {
-        $obj = StratObjective::where('id', $request->strat_id)->where('estado', 1)->first();
+        $obj = StratObjective::where('id', $request->id)->where('estado', 1)->first();
         $area = Area::where('id',$request->area_id)->where('estado', 1)->first();
         if($obj && $area){
             // update objective
-            $obj->obj_estrategico_id = $obj->id;
             $obj->nombre = $request->nombre;
-            $obj->area_id = $area->area_id;
-            $obj->estado = 1;
+            $obj->area_id = $area->id;
             $obj->save();
 
-            // add users to objective
-            foreach($request->users as $k => $user){
-                $user = new ObjectiveUsers();
-                $user->objetivo_id = $obj->id;
-                $user->usuario_id = $user;
-                $user->estado = 1;
-                $user->save();
+            // change users to objective
+            ObjectiveUsers::where('objetivo_id', $obj->id)->delete();
+            if(isset($request->users)){
+                foreach($request->users as $k => $user_id){
+                    $user = new ObjectiveUsers();
+                    $user->objetivo_id = $obj->id;
+                    $user->usuario_id = $user_id;
+                    $user->estado = 1;
+                    $user->save();
+                }
             }
 
             return ["status"=>"ok","obj"=>$obj->id];

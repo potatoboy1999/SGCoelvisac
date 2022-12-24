@@ -160,7 +160,7 @@
         </div>
         <div id="matrix_content">
             @foreach ($pilars as $pilar)
-            <div class="pilar">
+            <div class="pilar" pilar="{{$pilar->id}}">
                 <div class="pilar-header">
                     <span class="icon-btn" style="padding-right: 0;" data-coreui-target="#collapsePilar-{{$pilar->id}}" data-coreui-toggle="collapse" aria-coreui-expanded="true">
                         <i class="fa-solid fa-chevron-down"></i>

@@ -51,6 +51,10 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('obj_especificos/', [ObjectiveController::class,"specificsIndex"])->name("specifics");
         Route::get('obj_especificos/getSummMatrix', [ObjectiveController::class,"getStrategicSummMatrix"])->name("specifics.summarymatrix");
         Route::get('obj_especificos/getMatrix', [ObjectiveController::class,"getspecificsMatrix"])->name("specifics.matrix");
+        Route::get('obj_especificos/newSpecForm', [ObjectiveController::class,"getNewSpecForm"])->name("specifics.matrix.create");
+        Route::get('obj_especificos/editSpecForm', [ObjectiveController::class,"getEditSpecForm"])->name("specifics.matrix.edit");
+        Route::post('obj_especificos/store', [ObjectiveController::class,"storeSpecific"])->name("specifics.matrix.store");
+        Route::post('obj_especificos/update', [ObjectiveController::class,"updateSpecific"])->name("specifics.matrix.update");
 
         Route::get('obj_especificos/acciones', [ObjectiveController::class,"actionsIndex"])->name("actions");
         Route::get('obj_especificos/acciones/getMatrix', [ObjectiveController::class,"actionsMatrix"])->name("actions.matrix");

@@ -39,7 +39,7 @@
                             $k = 0;
                         ?>
                         @if (sizeof($kpis) == 0)
-                            <tr>
+                            <tr class="obj-{{$spec->id}}" strat="{{$spec->id}}">
                                 <td class="align-middle" align="center" style="">
                                     <a href="{{route('actions')}}?specific={{$spec->id}}"><span class="badge bg-primary obj-code">{{$spec->codigo}}</span></a>
                                 </td>
@@ -61,6 +61,11 @@
                                         </span>
                                         <ul class="dropdown-menu p-0" ddTrack="{{'act'.$spec->id.$k}}">
                                             <li>
+                                                <a class="dropdown-item edit-obj" obj="{{$spec->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#objectiveEditModal">
+                                                    Editar Objetivo
+                                                </a>
+                                            </li>
+                                            <li>
                                                 <a class="dropdown-item" href="{{route('kpi')}}?obj={{$spec->id}}">
                                                     Crear KPI
                                                 </a>
@@ -71,17 +76,17 @@
                             </tr>
                         @endif
                         @foreach ($kpis as $kpi)
-                            <tr>
-                                <td class="align-middle" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
+                            <tr class="obj-{{$spec->id}} kpi-{{$kpi->id}}" strat="{{$spec->id}}" kpi="{{$kpi->id}}">
+                                <td class="align-middle rowspan-bound td-speccode" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
                                     <a href="{{route('actions')}}?specific={{$spec->id}}"><span class="badge bg-primary obj-code">{{$spec->codigo}}</span></a>
                                 </td>
-                                <td class="align-middle" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                <td class="align-middle rowspan-bound td-spec" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                     <a href="{{route('actions')}}?specific={{$spec->id}}">{{$spec->nombre}}</a>
                                 </td>
-                                <td class="align-middle" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                <td class="align-middle rowspan-bound td-area" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                     {{$spec->area->nombre}}
                                 </td>
-                                <td class="align-middle">{{$kpi->nombre}}</td>                            
+                                <td class="align-middle kpi-name">{{$kpi->nombre}}</td>                            
                                 <td class="align-middle" align="center">0</td>
                                 <td class="align-middle" align="center">100</td>
                                 @php
@@ -103,7 +108,7 @@
                                     $perc = 0;
                                     $perc_acumm = 0;
                                     if($kpi->kpiDates){
-                                        foreach ($kpi->kpiDates as $k => $date) {
+                                        foreach ($kpi->kpiDates as $kd => $date) {
                                             // get acummulated
                                             $t_real = $date->real_cantidad + 0;
                                             $t_plan = $date->meta_cantidad + 0;
@@ -112,7 +117,7 @@
                                                 $plan_acumm += $t_plan;
                                             }
                                             // get current
-                                            if($k == $cicle_i && $date->ciclo == ($cicle_i+1)){
+                                            if($kd == $cicle_i && $date->ciclo == ($cicle_i+1)){
                                                 $tracker = $date->id;
                                                 $real = $t_real;
                                                 $plan = $t_plan;
@@ -164,11 +169,16 @@
                                         <ul class="dropdown-menu p-0" ddTrack="{{'act'.$spec->id.$k}}">
                                             <li>
                                                 <a class="dropdown-item" href="{{route('kpi')}}?id={{$kpi->id}}">
-                                                    Editar
+                                                    Editar KPI
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item bg-danger text-white" href="">
+                                                <a class="dropdown-item edit-obj" obj="{{$spec->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#objectiveEditModal">
+                                                    Editar Objetivo
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item bg-danger text-white dlt-kpi" kpi="{{$kpi->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#deleteKpiModal">
                                                     <svg class="icon">
                                                         <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                     </svg> Eliminar
