@@ -38,7 +38,7 @@
 </div>
 <div class="body flex-grow-1 px-3">
     <div class="container">
-        <h4>INDICADOR CLAVE DESEMPEÑO (KPI)</h4>
+        <h4>{{($kpi)?'':'NUEVO '}}INDICADOR CLAVE DESEMPEÑO (KPI)</h4>
         <form id="kpi_form" action="{{$kpi?route('kpi.update'):route('kpi.store')}}" method="POST">
             @csrf
             @if ($kpi)

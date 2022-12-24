@@ -62,7 +62,7 @@
                                 $k = 0;
                             ?>
                             @if (sizeof($kpis) == 0)
-                                <tr>
+                                <tr class="dim-{{$dimension->id}} obj-{{$stratObj->id}}" dim="{{$dimension->id}}" strat="{{$stratObj->id}}">
                                     <td class="align-middle">{{$dimension->nombre}}</td>
                                     <td class="align-middle" align="center" style="">
                                         <a href="{{route('specifics')}}?strat={{$stratObj->id}}"><span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span></a>
@@ -104,18 +104,18 @@
                                 </tr>
                             @endif
                             @foreach ($kpis as $kpi)
-                                <tr>
-                                    <td class="align-middle" rowspan="{{$rowSpan}}" style="{{($x == 0 && $k == 0)?'':'display: none;'}}">{{$dimension->nombre}}</td>
-                                    <td class="align-middle" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
+                                <tr class="dim-{{$dimension->id}} obj-{{$stratObj->id}} kpi-{{$kpi->id}}" dim="{{$dimension->id}}" strat="{{$stratObj->id}}" kpi="{{$kpi->id}}">
+                                    <td class="align-middle rowspan-bound td-dimension" rowspan="{{$rowSpan}}" style="{{($x == 0 && $k == 0)?'':'display: none;'}}">{{$dimension->nombre}}</td>
+                                    <td class="align-middle rowspan-bound td-stratcode" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
                                         <a href="{{route('specifics')}}?strat={{$stratObj->id}}"><span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span></a>
                                     </td>
-                                    <td class="align-middle" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                    <td class="align-middle rowspan-bound td-strat" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                         <a href="{{route('specifics')}}?strat={{$stratObj->id}}">{{$stratObj->nombre}}</a>
                                     </td>
-                                    <td class="align-middle" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                    <td class="align-middle rowspan-bound td-area" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                         {{$stratObj->area->nombre}}
                                     </td>
-                                    <td class="align-middle">{{$kpi->nombre}}</td>
+                                    <td class="align-middle kpi-name">{{$kpi->nombre}}</td>
                                     <td class="align-middle">{{$kpi->formula}}</td>
                                     <td class="align-middle">{{$cicles[$kpi->frecuencia]["name"]}}</td>
                                     <td class="align-middle">{{$types[$kpi->tipo]["name"]}}</td>
@@ -210,7 +210,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item bg-danger text-white" href="">
+                                                    <a class="dropdown-item bg-danger text-white dlt-kpi" kpi="{{$kpi->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#deleteKpiModal">
                                                         <svg class="icon">
                                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                         </svg> Eliminar

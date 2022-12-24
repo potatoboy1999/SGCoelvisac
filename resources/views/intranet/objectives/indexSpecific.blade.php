@@ -54,13 +54,13 @@
                             </svg> Nuevo Item
                         </a>
                     </div>
-                    <div class="p-1">
+                    {{-- <div class="p-1">
                         <button type="button" class="btn btn-secondary text-white" data-coreui-toggle="modal" data-coreui-target="#filterModal">
                             <svg class="icon">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-filter"></use>
                             </svg> Filtrar
                         </button>
-                    </div>
+                    </div> --}}
                     <div class="p-1">
                         <a href="#" class="btn btn-danger text-white switch-view" view="general">
                             <i class="fa-regular fa-eye"></i> Vista

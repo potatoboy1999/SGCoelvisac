@@ -54,7 +54,6 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
 
         Route::get('obj_especificos/acciones', [ObjectiveController::class,"actionsIndex"])->name("actions");
         Route::get('obj_especificos/acciones/getMatrix', [ObjectiveController::class,"actionsMatrix"])->name("actions.matrix");
-
     });
 
     Route::group(["prefix"=>"specific_obj"], function(){
@@ -81,6 +80,9 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/highlights',[HighlightController::class,"getMatrix"])->name('kpi.highlights');
         Route::post('/storeHighlight',[HighlightController::class,"store"])->name('kpi.highlights.store');
         Route::post('/deleteHighlight',[HighlightController::class,"delete"])->name('kpi.highlights.delete');
+
+        Route::get('/getKpiForm', [KpiController::class,"getAddKpiForm"])->name("kpi.redirect.form");
+        Route::post('/delete', [KpiController::class,"delete"])->name("kpi.delete");
     });
 
     Route::group(["prefix"=>"role"], function(){

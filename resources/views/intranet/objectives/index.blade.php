@@ -9,6 +9,58 @@
 @endsection
 
 @section('content')
+<div class="modal fade" id="deleteKpiModal" tabindex="-1" aria-labelledby="deleteKpiModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteKpiModalLabel">Eliminar KPI<span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section" id="form-delete">
+                    <form id="f-form-delete" action="{{route('kpi.delete')}}" method="post">
+                        @csrf
+                        <input type="hidden" name="kpi_id" value="">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>
+                                    <strong class="text-danger">¡Estas por eliminar un KPI!</strong><br>
+                                    Estas por eliminar el KPI: <br>
+                                    <strong><span id="kpi_dlt_name"></span></strong>
+                                </p>
+                            </div>
+                            <div class="col-md-12">
+                                <button class="btn btn-danger text-white float-end mx-1">Eliminar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-section" id="form-delete-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newKpiModal" tabindex="-1" aria-labelledby="newKpiModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newKpiModalLabel">Nuevo KPI<span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="form-kpi">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="objectiveModal" tabindex="-1" aria-labelledby="ObjectiveModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -66,7 +118,7 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-success text-white" id="redirect-kpi" href="{{route('kpi')}}" obj="">Continuar</a>
+                <button class="btn btn-success text-white" id="redirect-kpi" href="{{route('kpi')}}" obj="">Continuar</button>
             </div>
         </div>
     </div>
@@ -84,25 +136,20 @@
                         </a>
                     </div>
                     <div class="p-1">
-                        <a href="#" class="btn btn-success text-white btn-new-kpi" data-coreui-toggle="modal" data-coreui-target="#kpiModal">
+                        <a href="#" class="btn btn-success text-white btn-new-kpi" data-coreui-toggle="modal" data-coreui-target="#newKpiModal">
                             <svg class="icon">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-plus"></use>
                             </svg> Nuevo KPI
                         </a>
                     </div>
-                    <div class="p-1">
+                    {{-- <div class="p-1">
                         <button type="button" class="btn btn-secondary text-white" data-coreui-toggle="modal" data-coreui-target="#filterModal">
                             <svg class="icon">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-filter"></use>
                             </svg> Filtrar
                         </button>
-                    </div>
+                    </div> --}}
                     <div class="p-1">
-                        {{-- <button type="button" class="btn btn-secondary text-white" data-coreui-toggle="modal" data-coreui-target="#filterModal">
-                            <svg class="icon">
-                                <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-filter"></use>
-                            </svg> Filtrar
-                        </button> --}}
                         <a href="#" class="btn btn-danger text-white">
                             <i class="fa-regular fa-file-pdf"></i> Exportar a PDF
                         </a>
@@ -141,6 +188,7 @@
     let matrixUrl = "{{route('objectives.matrix')}}";
     let newFormUrl = "{{route('obj_strat.matrix.create')}}";
     let editFormUrl = "{{route('obj_strat.matrix.edit')}}";
+    let redirectKpiUrl = "{{route('kpi.redirect.form')}}";
 </script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>

@@ -306,4 +306,28 @@ class KpiController extends Controller
     {
         //
     }
+
+    public function getAddKpiForm(Request $request)
+    {
+        $objectives = StratObjective::where('estado',1);
+        if(isset($request->strat_id)){
+            $objectives->where('obj_estrategico_id', $request->strat_id);
+        }
+        $objectives = $objectives->orderBy('codigo','asc')
+                    ->get();
+        return view('intranet.objectives.forms.newKpi',[
+            "objectives" => $objectives
+        ]);
+    }
+
+    public function delete(Request $request)
+    {
+        $kpi = Kpis::find($request->kpi_id);
+        if($kpi){
+            $kpi->estado = 0;
+            $kpi->save();
+            return ['status'=>'ok', 'kpi'=>$kpi->id];
+        }
+        return ['status'=>'error', 'msg'=>'Kpi no encontrado'];
+    }
 }
