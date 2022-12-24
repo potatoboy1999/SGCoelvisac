@@ -21,3 +21,12 @@ thead tr th, td.side-title{
 .t_yellow {
     background-color: #f9e715!important;
 }
+.file-downloadable {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    border-color: #2eb85c;
+}
+.file-downloadable p{
+    margin: 0;
+}

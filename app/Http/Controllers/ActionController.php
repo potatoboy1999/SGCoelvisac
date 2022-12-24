@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Action;
+use App\Models\ActionDocuments;
 use App\Models\Area;
+use App\Models\Document;
 use App\Models\StratObjective;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 
 class ActionController extends Controller
@@ -38,6 +41,12 @@ class ActionController extends Controller
         $data = [];
         $obj = StratObjective::where('id', $request->strat_id)->where('estado', 1);
         $obj->with(['area' => function($qArea){}]);
+        $obj->with(['actions'=> function($qAction){
+            $qAction->where('estado','>=',1);
+            $qAction->with(['documents'=>function($qDocs){
+                $qDocs->where('t_sgcv_documentos.estado', 1);
+            }]);
+        }]);
         $obj = $obj->first();
 
         if($obj){
@@ -129,5 +138,97 @@ class ActionController extends Controller
             return ["status"=>"ok","action"=>$action->id];
         }
         return ["status"=>"error","msg"=>"Acción no encontrada"];
+    }
+
+    public function popupDocs(Request $request){
+        $action = Action::where('id',$request->id)->where('estado',1);
+        $action->with(['documents' => function($qDoc){
+            $qDoc->where('t_sgcv_documentos.estado', 1);
+        }]);
+        $action = $action->first();
+        return view('intranet.actions.forms.docs',[
+            "action" => $action,
+        ]);
+    }
+
+    public function addDocuments(Request $request)
+    {
+        $adj_file = null;
+
+        $sizeMax = 8388608; // 8MB
+        $valMimes = [
+            "image/png", // png
+            "image/jpeg", // jpg
+            "application/pdf", // pdf
+            "application/vnd.ms-powerpoint", // ppt
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation", // pptx
+            "application/vnd.ms-excel", // xls
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // xlsx
+        ];
+        $destinationPath = 'uploads';
+
+        if($request->hasFile("a_file") && $request->file("a_file")->isValid()){
+            $adjFile = $request->a_file;
+            
+            $ogName = $adjFile->getClientOriginalName();
+            $ogExtension = $adjFile->getClientOriginalExtension();
+            $size = $adjFile->getSize();
+            $mime = $adjFile->getMimeType();
+
+            if($size <= $sizeMax){
+                if(in_array($mime, $valMimes)){
+                    //Move Uploaded File
+                    $now = DateTime::createFromFormat('U.u', number_format(microtime(true), 6, '.', ''));
+                    $newName = "adjacent".$now->format("Ymd-His-u").".".$ogExtension;
+                    $adjFile->move($destinationPath, $newName);
+    
+                    $adjDoc = new Document();
+                    $adjDoc->nombre = substr($ogName, 0, 150);
+                    $adjDoc->file = $newName;
+                    $adjDoc->estado = 1;
+                    $adjDoc->save();
+    
+                    $adj_file = $adjDoc->id;
+                }else{
+                    return [
+                        "status" => "error",
+                        "msg" => "Error: Tipo de archivo no aceptado"
+                    ];
+                }
+            }else{
+                return [
+                    "status" => "error",
+                    "msg" => "Error: Archivo muy grande"
+                ];
+            }
+        }
+
+        $action = Action::where('id',$request->action_id)
+                            ->where('estado',1)
+                            ->first();
+        if($action && $request->a_edit == "true"){
+            if($adj_file){
+                $actionDoc = new ActionDocuments();
+                $actionDoc->accion_id = $action->id;
+                $actionDoc->documento_id = $adj_file;
+                $actionDoc->estado = 1;
+                $actionDoc->save();
+            }
+    
+            return [
+                "status" => "ok",
+                "msg" => "Archivo correctamente guardado"
+            ];
+        }
+        
+        return [
+            "status" => "error",
+            "msg" => "Error: Actividad no encontrada"
+        ];
+    }
+
+    public function deleteDocuments(Request $request)
+    {
+        # code...
     }
 }

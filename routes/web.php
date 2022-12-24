@@ -67,6 +67,10 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::post('/store',[ActionController::class,"store"])->name("action.store");
         Route::post('/update',[ActionController::class,"update"])->name("action.update");
         Route::post('/delete', [ActionController::class,"delete"])->name("action.delete");
+        Route::get("/popup_docs", [ActionController::class,"popupDocs"])->name("action.popup.docs");
+        Route::post('/delete', [ActionController::class,"delete"])->name("action.delete");
+        Route::post('/add_documents', [ActionController::class,"addDocuments"])->name("action.docs.store");
+        Route::post('/delete_documents', [ActionController::class,"deleteDocuments"])->name("action.docs.delete");
     });
 
     Route::group(["prefix"=>"specific_obj"], function(){

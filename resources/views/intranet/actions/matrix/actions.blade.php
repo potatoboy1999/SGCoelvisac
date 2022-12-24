@@ -51,7 +51,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($obj->actions->where('estado','>=',1) as $action)
+                        @foreach ($obj->actions as $action)
                             <tr class="action-{{$action->id}}">
                                 <td class="align-middle" align="center">
                                     {{$action->hito}}
@@ -68,7 +68,7 @@
                                     @php
                                         $docs = $action->documents;
                                     @endphp
-                                    <a href="javascript:;" class="btn {{sizeof($docs)>0?'btn-success':'btn-secondary'}} btn-sm text-white btn-show-doc" data-route="" data-id="{{$action->id}}">
+                                    <a href="javascript:;" class="btn {{sizeof($docs)>0?'btn-success':'btn-secondary'}} btn-sm text-white btn-show-doc" data-id="{{$action->id}}" data-coreui-toggle="modal" data-coreui-target="#docsModal">
                                         <svg class="icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#{{sizeof($docs)>0?'cil-file':'cil-arrow-thick-from-bottom'}}"></use>
                                         </svg>

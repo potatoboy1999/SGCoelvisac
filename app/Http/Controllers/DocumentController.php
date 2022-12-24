@@ -90,7 +90,8 @@ class DocumentController extends Controller
             $document->save();
             return [
                 "status"=> "ok",
-                "msg" => "El documento ha sido eliminado"
+                "msg" => "El documento ha sido eliminado",
+                "doc" => $document->id
             ];
         }else{
             return [

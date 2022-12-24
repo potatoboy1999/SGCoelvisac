@@ -88,6 +88,28 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="docsModal" tabindex="-1" aria-labelledby="docsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actionModalLabel">Documentos<span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section" id="form-docs-action">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                <div class="modal-section" id="form-docs-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="body flex-grow-1 px-3">
     <div class="container">
         <h4>OBJETIVO ESPECÍFICO</h4>
@@ -178,6 +200,7 @@
     let matrixUrl = "{{route('actions.matrix')}}";
     let newFormUrl = "{{route('action.create')}}";
     let editFormUrl = "{{route('action.edit')}}";
+    let docsFormUrl = "{{route('action.popup.docs')}}";
 </script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>

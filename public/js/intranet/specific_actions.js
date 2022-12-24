@@ -105,6 +105,40 @@ function loadEditAction(obj){
     });
 }
 
+function loadFormDocs(action_id) {
+    $.ajax({
+        url: docsFormUrl,
+        method: 'GET',
+        data:{
+            id: action_id,
+        },
+        beforeSend: function(){
+            // show loading
+            addSpinner("#form-docs-action");
+        },
+        success:function(res){
+            $("#form-docs-action").html(res);
+
+            // change table btn if no docs remaining
+            var btn = $("a.btn-show-doc[data-id="+action_id+"]");
+            var icon = btn.find("use");
+            var qnty = $(".doc-item").length;
+            if(qnty == 0){
+                if(btn.hasClass("btn-success")){
+                    btn.removeClass("btn-success");
+                    btn.addClass("btn-secondary");
+                }
+                var href = icon.attr("xlink:href");
+                href = href.replace("cil-file","cil-arrow-thick-from-bottom");
+                icon.attr("xlink:href", href); 
+            }
+        },
+        error: function(err){
+            console.error("error loading docs");
+        }
+    });
+}
+
 function addSpinner(target){
     $(target).html(
         '<div class="spinner-border" role="status"><span class="sr-only"></span></div>'
@@ -139,6 +173,15 @@ $(document).on('click','.edit-action',function(ev){
     $("#form-edit-action").show();
     loadEditAction(action);
 });
+
+$(document).on('click', '.btn-show-doc', function(ev){
+    ev.preventDefault();
+    var action_id = $(this).data('id');
+    $(".modal-section").hide();
+    $("#form-docs-action").show();
+    loadFormDocs(action_id);
+});
+
 
 $(document).on('submit',"#form-newAction", function(ev){
     ev.preventDefault();
@@ -235,6 +278,93 @@ $(document).on('submit','#f-form-delete', function(ev){
         },
         error: function(err){
             console.error('error deleting action');
+        }
+    });
+});
+
+$(document).on("change","[name='a_file']",function(ev){
+    $("[name='a_edit']").val("true");
+});
+
+$(document).on("submit", "#docs-form", function(ev){
+    ev.preventDefault();
+    var form = $("#docs-form");
+    var data = new FormData(form[0]);
+    $.ajax({
+        url: form.attr("action"),
+        method: "POST",
+        data: data,
+        contentType: false,
+        processData: false,
+        beforeSend: function(){
+            $(".modal-section").hide();
+            $("#form-docs-loading").show();
+        },
+        success: function(res){
+            if(res.status == "ok"){
+                var action_id = $("#docs-form [name='action_id']").val();
+                $(".modal-section").hide();
+                $("#form-docs-action").show();
+                loadFormDocs(action_id);
+                
+                // change table btn
+                var btn = $("a.btn-show-doc[data-id="+action_id+"]");
+                var icon = btn.find("use");
+                if(btn.hasClass("btn-secondary")){
+                    btn.removeClass("btn-secondary");
+                    btn.addClass("btn-success");
+                }
+                var href = icon.attr("xlink:href");
+                href = href.replace("cil-arrow-thick-from-bottom","cil-file");
+                icon.attr("xlink:href", href); 
+
+            }else{
+                $("#a_error").html(res.msg);
+                console.error("error uploading document: "+res.msg);
+            }
+        },
+        error: function(err){
+            console.error("error uploading document");
+        }
+    });
+});
+
+$(document).on("click",".btn-file-download",function(ev){
+    ev.preventDefault();
+    var route = $(this).attr("href");
+    var id = $(this).attr("file-id");
+    route = route+"?id="+id;
+    window.location.href = route;
+});
+
+$(document).on("click",".btn-file-delete",function(ev){
+    ev.preventDefault();
+    var route = $(this).attr("href");
+    var id = $(this).attr("file-id");
+    $.ajax({
+        url: route,
+        data: {
+            id: id,
+            _token: $("[name=_token]").val(),
+        },
+        method: "POST",
+        beforeSend: function(){
+            $(".modal-section").hide();
+            $("#form-docs-loading").show();
+        },
+        success: function(res){
+            if(res.status == "ok"){
+                var action_id = $("#docs-form [name='action_id']").val();
+                $(".modal-section").hide();
+                $("#form-docs-action").show();
+                loadFormDocs(action_id);
+            }else{
+                // $("#a_error").html(res.msg);
+                console.error("error deleting document: "+res.msg);
+            }
+        },
+        error: function(err){
+            console.error("error deleting document");
         }
     });
 });
