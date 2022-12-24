@@ -51,16 +51,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($strat->actions->where('estado','>=',1) as $action)
-                            <tr>
+                        @foreach ($obj->actions->where('estado','>=',1) as $action)
+                            <tr class="action-{{$action->id}}">
                                 <td class="align-middle" align="center">
                                     {{$action->hito}}
                                 </td>
-                                <td class="align-middle">
+                                <td class="align-middle action-name">
                                     {{$action->nombre}}
                                 </td>
                                 <td class="align-middle">
-                                    {{$strat->area->nombre}}
+                                    {{$obj->area->nombre}}
                                 </td>
                                 <td class="align-middle" align="center">{{date("d-m-Y",strtotime($action->inicio))}}</td>                            
                                 <td class="align-middle" align="center">{{date("d-m-Y",strtotime($action->fin))}}</td>
@@ -100,12 +100,12 @@
                                         </span>
                                         <ul class="dropdown-menu p-0" ddTrack="{{'act-'.$action->id}}">
                                             <li>
-                                                <a class="dropdown-item" href="">
-                                                    Editar
+                                                <a class="dropdown-item edit-action" action="{{$action->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#actionEditModal">
+                                                    Editar Acción
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item bg-danger text-white" href="">
+                                                <a class="dropdown-item bg-danger text-white dlt-action" action="{{$action->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#deleteActionModal">
                                                     <svg class="icon">
                                                         <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                     </svg> Eliminar

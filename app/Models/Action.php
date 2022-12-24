@@ -14,6 +14,7 @@ class Action extends Model
 
     protected $fillable = [
         'objetivo_id',
+        'area_id',
         'hito',
         'nombre',
         'inicio',
@@ -22,9 +23,23 @@ class Action extends Model
         'estado',
     ];
 
+    /* estado
+    ==============
+        0 = Deleted
+        1 = Not started
+        2 = Working on it
+        3 = Finished
+        4 = Not Finished
+    */
+
     public function objective()
     {
-        return $this->belongsTo(StratObjective::class,"objective_id","id");
+        return $this->belongsTo(StratObjective::class,"objetivo_id","id");
+    }
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class,"area_id","id");
     }
 
     public function documents()

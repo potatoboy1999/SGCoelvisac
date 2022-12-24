@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActionController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AreaRoleController;
 use App\Http\Controllers\AreaController;
@@ -56,8 +57,16 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::post('obj_especificos/store', [ObjectiveController::class,"storeSpecific"])->name("specifics.matrix.store");
         Route::post('obj_especificos/update', [ObjectiveController::class,"updateSpecific"])->name("specifics.matrix.update");
 
-        Route::get('obj_especificos/acciones', [ObjectiveController::class,"actionsIndex"])->name("actions");
-        Route::get('obj_especificos/acciones/getMatrix', [ObjectiveController::class,"actionsMatrix"])->name("actions.matrix");
+        Route::get('obj_especificos/acciones', [ActionController::class,"index"])->name("actions");
+        Route::get('obj_especificos/acciones/getMatrix', [ActionController::class,"getMatrix"])->name("actions.matrix");
+    });
+
+    Route::group(["prefix"=>"action"], function(){
+        Route::get('/createForm',[ActionController::class,"create"])->name("action.create");
+        Route::get('/edit',[ActionController::class,"edit"])->name("action.edit");
+        Route::post('/store',[ActionController::class,"store"])->name("action.store");
+        Route::post('/update',[ActionController::class,"update"])->name("action.update");
+        Route::post('/delete', [ActionController::class,"delete"])->name("action.delete");
     });
 
     Route::group(["prefix"=>"specific_obj"], function(){

@@ -158,39 +158,6 @@ class ObjectiveController extends Controller
 
     }
 
-    public function actionsIndex(Request $request)
-    {
-        $page = "objectives";
-        $bcrums = ["Agenda Estrategica","Objetivos"];
-
-        $data = [
-            "page"=>$page,
-            "bcrums" => $bcrums
-        ];
-        $objSpec = StratObjective::where('id', $request->specific)->where('estado',1)->first();
-        if($objSpec){
-            $data['status'] = "ok";
-            $data['strat'] = $objSpec;
-        }else{
-            $data['status'] = "error";
-            $data['msg'] = "Objectivo no encontrado";
-        }
-        return view("intranet.objectives.indexActions", $data);
-    }
-
-    public function actionsMatrix(Request $request)
-    {
-        $data = [];
-        $strat = StratObjective::where('id', $request->strat_id)->where('estado', 1)->first();
-        if($strat){
-            $data = ["status"=>"ok","strat" => $strat];
-        }else{
-            $data = ["status"=>"error","msg"=>"strat not found"];
-        }
-
-        return view("intranet.objectives.matrix.actions", $data);
-    }
-
     public function specificMatrixIndex(Request $request)
     {
         $page = "objectives";
@@ -828,7 +795,8 @@ class ObjectiveController extends Controller
         return $pdf->stream();
     }
 
-    public function storeItem(Request $request){
+    public function storeItem(Request $request)
+    {
 
         $alerts = [];
         
@@ -959,7 +927,8 @@ class ObjectiveController extends Controller
         ]);
     }
 
-    public function allItems(Request $request){
+    public function allItems(Request $request)
+    {
         $roles = [];
         if(isset($request->area)){
             $area = Area::where('id', $request->area)

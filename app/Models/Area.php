@@ -34,4 +34,9 @@ class Area extends Model
     {
         return $this->hasMany(AreaRoles::class,'area_id','id');
     }
+
+    public function actions()
+    {
+        return $this->hasMany(Area::class,'area_id','id');
+    }
 }
