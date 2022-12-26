@@ -24,8 +24,8 @@
                         <th class="text-center align-middle t-head-objective" width="180">Objetivo Específico</th>
                         <th class="text-center align-middle t-head-sponsor" width="50">Responsable</th>
                         <th class="text-center align-middle t-head-kpi" width="50">KPI</th>
-                        <th class="text-center align-middle t-head-curryear" width="50">2022</th>
-                        <th class="text-center align-middle t-head-nextyear" width="50">2023</th>
+                        <th class="text-center align-middle t-head-curryear" width="50">{{date('Y')}}</th>
+                        <th class="text-center align-middle t-head-nextyear" width="50">{{date('Y', strtotime('+1 year'))}}</th>
                         <th class="text-center align-middle t-head-resmes" width="50">Res. Mes</th>
                         <th class="text-center align-middle t-head-resacum" width="50">Res. Acum.</th>
                         <th class="text-center align-middle t-head-actions" width="20"></th>
