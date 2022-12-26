@@ -74,20 +74,20 @@
                             </tr>
                         @endif
                         @foreach ($kpis as $kpi)
-                            <tr>
-                                <td class="align-middle" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
+                            <tr class="obj-{{$spec->id}} kpi-{{$kpi->id}}" strat="{{$spec->id}}" kpi="{{$kpi->id}}">
+                                <td class="align-middle rowspan-bound td-stratname" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
                                     {{$spec->stratObjective->nombre}}
                                 </td>
-                                <td class="align-middle" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
+                                <td class="align-middle rowspan-bound td-speccode" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
                                     <a href="{{route('actions')}}?specific={{$spec->id}}"><span class="badge bg-primary obj-code">{{$spec->codigo}}</span></a>
                                 </td>
-                                <td class="align-middle" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                <td class="align-middle rowspan-bound td-spec" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                     <a href="{{route('actions')}}?specific={{$spec->id}}">{{$spec->nombre}}</a>
                                 </td>
-                                <td class="align-middle" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                <td class="align-middle rowspan-bound td-area" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                     {{$spec->area->nombre}}
                                 </td>
-                                <td class="align-middle">{{$kpi->nombre}}</td>                            
+                                <td class="align-middle kpi-name">{{$kpi->nombre}}</td>                            
                                 <td class="align-middle" align="center">0</td>
                                 <td class="align-middle" align="center">100</td>
                                 @php
@@ -173,7 +173,7 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item bg-danger text-white" href="">
+                                                <a class="dropdown-item bg-danger text-white dlt-kpi" kpi="{{$kpi->id}}" href="#" data-coreui-toggle="modal" data-coreui-target="#deleteKpiModal">
                                                     <svg class="icon">
                                                         <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                     </svg> Eliminar

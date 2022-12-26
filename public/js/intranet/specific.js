@@ -60,3 +60,49 @@ $(document).on('hidden.coreui.dropdown', '.dropdown',function () {
         position:false, left:false, top:false, display: "none"
     }).detach());
 });
+
+$(document).on('click','.dlt-kpi',function(ev){
+    var kpi = $(this).attr('kpi');
+    var kpi_name = $(".kpi-"+kpi+" .kpi-name").html();
+    $("#f-form-delete input[name='kpi_id']").val(kpi);
+    $("#kpi_dlt_name").html(kpi_name);
+
+    $(".modal-section").hide();
+    $("#form-delete").show();
+});
+
+$(document).on('submit','#f-form-delete', function(ev){
+    ev.preventDefault();
+    var url = $(this).attr("action");
+    $.ajax({
+        url: url,
+        data: $(this).serialize(),
+        method: 'POST',
+        beforeSend: function(){
+            // show loading
+            $(".modal-section").hide();
+            $("#form-delete-loading").show();
+        },
+        success: function(res){
+            if(res.status == "ok"){
+                $("#deleteKpiModal").modal("hide");
+                var row = $("tr.kpi-"+res.kpi);
+                var view = $(".switch-view").attr('view');
+                loadSpecificMatrix(view,true);
+                // TO DO [LATER VERSION]
+                /*
+                    // find row & remove
+                    row.remove();
+                    // update rowspans
+                    var d = $("tr.kpi-"+k).attr('dim');
+                    var o = $("tr.kpi-"+k).attr('strat');
+                */
+            }else{
+                console.error('error deleting kpi: '+res.msg);
+            }
+        },
+        error: function(err){
+            console.error('error deleting kpi');
+        }
+    });
+});

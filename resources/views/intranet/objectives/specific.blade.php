@@ -9,6 +9,41 @@
 @endsection
 
 @section('content')
+<div class="modal fade" id="deleteKpiModal" tabindex="-1" aria-labelledby="deleteKpiModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteKpiModalLabel">Eliminar KPI<span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section" id="form-delete">
+                    <form id="f-form-delete" action="{{route('kpi.delete')}}" method="post">
+                        @csrf
+                        <input type="hidden" name="kpi_id" value="">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>
+                                    <strong class="text-danger">¡Estas por eliminar un KPI!</strong><br>
+                                    Estas por eliminar el KPI: <br>
+                                    <strong><span id="kpi_dlt_name"></span></strong>
+                                </p>
+                            </div>
+                            <div class="col-md-12">
+                                <button class="btn btn-danger text-white float-end mx-1">Eliminar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-section" id="form-delete-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="body flex-grow-1 px-3">
     <div class="container">
         <h4>OBJETIVOS ESPECÍFICOS</h4>

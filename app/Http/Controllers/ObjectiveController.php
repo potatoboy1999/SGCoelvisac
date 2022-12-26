@@ -175,6 +175,14 @@ class ObjectiveController extends Controller
                     ->where('estado', 1);
 
         $specObjec->with(['stratObjective']);
+        $specObjec->with(['kpis' => function($qKpi){
+            $qKpi->where('estado',1);
+            $qKpi->with(['kpiDates'=>function($qDates){
+                $qDates->where('estado', 1);
+                $qDates->where('anio', date('Y'));
+                $qDates->orderBy('ciclo', 'asc');
+            }]);
+        }]);
         
         $specObjec = $specObjec->get();
 

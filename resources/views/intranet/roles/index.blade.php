@@ -9,6 +9,109 @@
 @endsection
 
 @section('content')
+<div class="modal fade" id="roleModal" tabindex="-1" aria-labelledby="roleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="roleModalLabel">Nuevo Rol<span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section" id="form-role">
+                    <form id="form-newRole" action="{{route('areaRoles.store')}}" autocomplete="off">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="">Area</label>
+                                    <select name="area_id" id="area_select" class="form-select">
+                                        @foreach ($areas as $area)
+                                        <option value="{{$area->id}}">{{$area->nombre}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="">Nombre</label>
+                                    <input type="text" name="name" class="form-control" placeholder="Nombre del Rol" required>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mt-2">
+                                    <button type="submit" class="btn btn-success text-white float-end mx-1">Crear</button>
+                                    <a class="btn btn-secondary text-white float-end" data-coreui-dismiss="modal">Cerrar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-section" id="form-new-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="roleEditModal" tabindex="-1" aria-labelledby="roleEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="roleEditModalLabel">Editar Objetivo<span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section" id="form-edit-role">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                <div class="modal-section" id="form-edit-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteRoleModalLabel">Eliminar Rol<span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section" id="form-delete">
+                    <form id="f-form-delete" action="{{route('areaRoles.delete')}}" method="post">
+                        @csrf
+                        <input type="hidden" name="id" value="">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>
+                                    <strong class="text-danger">¡Estas por eliminar un Rol!</strong><br>
+                                    Estas por eliminar el Rol: <br>
+                                    <strong><span id="role_dlt_name"></span></strong>
+                                </p>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-danger text-white float-end mx-1">Eliminar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-section" id="form-delete-loading" style="display: none">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="body flex-grow-1 px-3">
     <div class="container">
         <h4>Roles</h4>
@@ -16,7 +119,7 @@
             <div class="card-body">
                 <div class="d-flex flex-row flex-wrap">
                     <div class="p-1">
-                        <a href="#" class="btn btn-success text-white">
+                        <a href="#" class="btn btn-success text-white new-role" data-coreui-toggle="modal" data-coreui-target="#roleModal">
                             <svg class="icon">
                                 <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-plus"></use>
                             </svg> Nuevo Item
@@ -50,24 +153,24 @@
                         </thead>
                         <tbody>
                             @foreach ($area->roles as $rol)
-                                <tr>
-                                    <td>{{$rol->nombres}}</td>
+                                <tr class="role-{{$rol->id}}">
+                                    <td class="role-name">{{$rol->nombres}}</td>
                                     <td width="100">{{sizeOf($rol->stratObjectives)}}</td>
                                     <td width="150">{{date('d-m-Y',strtotime($rol->created_at));}}</td>
                                     <td width="50" class="align-middle" align="center">
-                                        <div class="dropdown">
+                                        <div class="dropdown" ddTrack="{{'ddrole'.$rol->id}}">
                                             <span class="badge bg-secondary btn-more text-black" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa-solid fa-ellipsis"></i>
                                             </span>
-                                            <ul class="dropdown-menu p-0">
+                                            <ul class="dropdown-menu p-0" ddTrack="{{'ddrole'.$rol->id}}">
                                                 <li>
-                                                    <a class="dropdown-item" href="">
+                                                    <a class="dropdown-item edit-role" href="#" role="{{$rol->id}}" data-coreui-toggle="modal" data-coreui-target="#roleEditModal">
                                                         Editar
                                                     </a>
                                                 </li>
                                                 @if (sizeOf($rol->stratObjectives) == 0)
                                                 <li>
-                                                    <a class="dropdown-item bg-danger text-white" href="">
+                                                    <a class="dropdown-item bg-danger text-white dlt-role" href="#" role="{{$rol->id}}" data-coreui-toggle="modal" data-coreui-target="#deleteRoleModal">
                                                         <svg class="icon">
                                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-trash"></use>
                                                         </svg> Eliminar
@@ -92,7 +195,7 @@
 
 @section('script')
 <script>
-    
+    const editFormUrl = "{{route('areaRoles.popup.edit')}}"
 </script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>
