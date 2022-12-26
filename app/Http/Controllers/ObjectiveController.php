@@ -1096,4 +1096,41 @@ class ObjectiveController extends Controller
         }
 
     }
+
+    // all
+
+    public function reportStratPdf(Request $request)
+    {
+        $data = [];
+        $pilars = Pilars::where('estado',1);
+        $pilars->with(['dimensions' => function($qDim){
+            $qDim->where('estado', 1);
+            $qDim->with(['stratObjectives' => function($qStrObj){
+                $qStrObj->where('estado', 1);
+                $qStrObj->whereNull('obj_estrategico_id');
+                $qStrObj->with(['kpis' => function($qKpi){
+                    $qKpi->where('estado',1);
+                    $qKpi->with(['kpiDates'=>function($qDates){
+                        $qDates->where('estado', 1);
+                        $qDates->where('anio', date('Y'));
+                        $qDates->orderBy('ciclo', 'asc');
+                    }]);
+                }]);
+            }]);
+        }]);
+        $pilars = $pilars->get();
+        $data = [
+            "pilars" => $pilars,
+            "cicles" => Kpis::getCicleDef(),
+            "types" => Kpis::getTypeDef()
+        ];
+
+        if($request->view == "web"){
+            return view('pdf.strat_obj_report', $data);
+        }
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('pdf.strat_obj_report', $data);
+        return $pdf->stream();
+    }
 }

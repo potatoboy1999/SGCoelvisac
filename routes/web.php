@@ -42,7 +42,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
         Route::get('/getMatrix', [ObjectiveController::class,"getPilarMatrix"])->name("objectives.matrix");
         Route::get('/pdf', [ObjectiveController::class,"viewPDF"])->name("objectives.pdf");
         Route::post('new_item', [ObjectiveController::class,"storeItem"])->name("new_item");
-        Route::get("all_items", [ObjectiveController::class,"allItems"])->name("api_all_activities");
+        Route::get("all_items", [ObjectiveController::class,"allItems"])->name("api_all_activities");        
 
         Route::get('obj_estrategico/newForm', [ObjectiveController::class,"getNewForm"])->name("obj_strat.matrix.create");
         Route::get('obj_estrategico/editForm', [ObjectiveController::class,"getEditForm"])->name("obj_strat.matrix.edit");
@@ -261,6 +261,7 @@ Route::get("/reunions/calendar", [ReunionController::class,'viewFrontCalendar'])
 Route::get("/reunions/document", [ReunionController::class,'viewDocument'])->name('front.reunion.document');
 
 // EXTRAS
+Route::get("/strat_pdf", [ObjectiveController::class,"reportStratPdf"])->name("strat.pdf");
 Route::get("/document/download", [DocumentController::class,"download"])->name('doc.download');
 Route::get("/test_mail", [DashboardController::class,"testMail"])->name('test.mail');
 Route::get("/test_pdf", [DashboardController::class,"testPdf"])->name('test.pdf');

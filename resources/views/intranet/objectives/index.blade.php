@@ -150,7 +150,7 @@
                         </button>
                     </div> --}}
                     <div class="p-1">
-                        <a href="#" class="btn btn-danger text-white">
+                        <a href="{{route('strat.pdf')}}" target="_blank" class="btn btn-danger text-white">
                             <i class="fa-regular fa-file-pdf"></i> Exportar a PDF
                         </a>
                     </div>
