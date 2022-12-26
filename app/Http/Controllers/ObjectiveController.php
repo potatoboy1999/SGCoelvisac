@@ -969,4 +969,131 @@ class ObjectiveController extends Controller
         }
         return $roles;
     }
+
+
+    // front
+    public function frontIndex(Request $request)
+    {
+        $page = 'matrix';
+
+        $all_areas = Area::where("estado", 1)->where("vis_matriz",1)->get();
+        $pilars = Pilars::where('estado',1)->get();
+
+        // return $roles->toArray();
+        
+        return view('front.objectives.index',[
+            "page" => $page,
+            "all_areas" => $all_areas,
+            "pilars" => $pilars
+        ]);
+    }
+
+    public function frontStratMatrix(Request $request)
+    {
+        $data = [];
+        $pilar = Pilars::where('id',$request->pilar_id);
+        $pilar->with(['dimensions' => function($qDim){
+            $qDim->where('estado', 1);
+            $qDim->with(['stratObjectives' => function($qStrObj){
+                $qStrObj->where('estado', 1);
+                $qStrObj->whereNull('obj_estrategico_id');
+                $qStrObj->with(['kpis' => function($qKpi){
+                    $qKpi->where('estado',1);
+                    $qKpi->with(['kpiDates'=>function($qDates){
+                        $qDates->where('estado', 1);
+                        $qDates->where('anio', date('Y'));
+                        $qDates->orderBy('ciclo', 'asc');
+                    }]);
+                }]);
+            }]);
+        }]);
+        $pilar = $pilar->first();
+        if($pilar){
+            $data = ["status"=>"ok","pilar" => $pilar];
+        }else{
+            $data = ["status"=>"error","msg"=>"pilar not found"];
+        }
+        $data["cicles"] = Kpis::getCicleDef();
+        $data["types"] = Kpis::getTypeDef();
+        $view = isset($request->view)?$request->view:'general';
+        if($view == "general"){
+            return view("front.objectives.matrix.strategics", $data);
+        }else{
+            return view("front.objectives.matrix.strategicsCicle", $data);
+        }
+    }
+
+    public function frontSpecificsIndex(Request $request)
+    {
+        $page = "matrix";
+
+        $data = [
+            "page"=>$page,
+        ];
+        $objStrat = StratObjective::where('id',$request->strat)->where('estado', 1)->first();
+        if($objStrat){
+            $data['status'] = "ok";
+            $data['strat'] = $objStrat;
+        }else{
+            $data['status'] = "error";
+            $data['msg'] = "Objectivo no encontrado";
+        }
+        return view("front.specifics.index", $data);
+    }
+
+    public function frontStratSummMatrix(Request $request)
+    {
+        $data = [];
+        $strat = StratObjective::where('id', $request->strat_id)->where('estado', 1);
+        $strat->with(['kpis'=>function($qKpis){
+            $qKpis->where('estado', 1);
+            $qKpis->with(['kpiDates'=>function($qDates){
+                $qDates->where('estado', 1);
+                $qDates->where('anio', date('Y'));
+                $qDates->orderBy('ciclo', 'asc');
+            }]);
+        }]);
+        $strat = $strat->first();
+        if($strat){
+            $data = ["status"=>"ok","strat" => $strat];
+        }else{
+            $data = ["status"=>"error","msg"=>"strat not found"];
+        }
+        $data["cicles"] = Kpis::getCicleDef();
+        $data["types"] = Kpis::getTypeDef();
+
+        return view("front.specifics.matrix.strategicSummary", $data);
+    }
+
+    public function frontSpecificsMatrix(Request $request)
+    {
+        $data = [];
+        $strat = StratObjective::where('id',$request->strat_id)->where('estado', 1)->first();
+        if($strat){
+            $specifics = StratObjective::where('obj_estrategico_id', $request->strat_id)
+                ->where('estado', 1);
+            $specifics->with(['kpis' => function($qKpi){
+                $qKpi->where('estado',1);
+                $qKpi->with(['kpiDates'=>function($qDates){
+                    $qDates->where('estado', 1);
+                    $qDates->where('anio', date('Y'));
+                    $qDates->orderBy('ciclo', 'asc');
+                }]);
+            }]);    
+            $specifics = $specifics->get();
+            $data = ["status"=>"ok","strat" => $strat,"specifics"=>$specifics];
+        }else{
+            $data = ["status"=>"error","msg"=>"strat not found"];
+        }
+        $data["cicles"] = Kpis::getCicleDef();
+        $data["types"] = Kpis::getTypeDef();
+
+        $view = isset($request->view)?$request->view:'general';
+        if($view == "general"){
+            return view("front.specifics.matrix.general", $data);
+        }else{
+            return view("front.specifics.matrix.complete", $data);
+        }
+
+    }
 }

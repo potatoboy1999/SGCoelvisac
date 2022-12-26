@@ -1,0 +1,32 @@
+.pilar-header {
+    margin-bottom: 10px;
+}
+
+thead tr th, td.side-title{
+    background-color: #51607c!important;
+    color: white!important;
+}
+.t_gray {
+    background-color: #adadad!important;
+}
+.t_red {
+    background-color: #ec1d1d!important;
+}
+.t_green {
+    background-color: #12c212!important;
+}
+.t_blue {
+    background-color: #5759d5!important;
+}
+.t_yellow {
+    background-color: #f9e715!important;
+}
+.file-downloadable {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    border-color: #2eb85c;
+}
+.file-downloadable p{
+    margin: 0;
+}

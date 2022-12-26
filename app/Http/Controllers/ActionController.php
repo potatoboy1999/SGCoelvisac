@@ -231,4 +231,63 @@ class ActionController extends Controller
     {
         # code...
     }
+
+    // front
+
+    public function frontIndex(Request $request)
+    {
+        $page = "objectives";
+
+        $data = [
+            "page"=>$page,
+        ];
+        $objSpec = StratObjective::where('id', $request->specific)->where('estado', 1);
+        $objSpec->with(['stratObjective' => function($qStratObj){
+            $qStratObj->with(['dimension' => function($qDimension){
+                $qDimension->with(['pilar' => function($qPilar){}]);
+            }]);
+        }]);
+        $objSpec = $objSpec->first();
+        if($objSpec){
+            return view("front.actions.index", [
+                "page" => $page,
+                "obj" => $objSpec
+            ]);
+        }
+        return back();
+    }
+
+    public function frontMatrix(Request $request)
+    {
+        $data = [];
+        $obj = StratObjective::where('id', $request->strat_id)->where('estado', 1);
+        $obj->with(['area' => function($qArea){}]);
+        $obj->with(['actions'=> function($qAction){
+            $qAction->where('estado','>=',1);
+            $qAction->with(['documents'=>function($qDocs){
+                $qDocs->where('t_sgcv_documentos.estado', 1);
+            }]);
+        }]);
+        $obj = $obj->first();
+
+        if($obj){
+            $data = ["status"=>"ok","obj" => $obj];
+        }else{
+            $data = ["status"=>"error","msg"=>"strat not found"];
+        }
+
+        return view("front.actions.matrix.actions", $data);
+    }
+
+    public function frontPopupDocs(Request $request)
+    {
+        $action = Action::where('id',$request->id)->where('estado',1);
+        $action->with(['documents' => function($qDoc){
+            $qDoc->where('t_sgcv_documentos.estado', 1);
+        }]);
+        $action = $action->first();
+        return view('front.actions.forms.docs',[
+            "action" => $action,
+        ]);
+    }
 }

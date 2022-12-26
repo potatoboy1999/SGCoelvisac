@@ -25,7 +25,7 @@
         <!--<img src="{{asset('img/grap1.png')}}" alt="">-->
         <div class="d-flex flex-row flex-wrap">
           @foreach ($m_areas as $area)
-            <a href="{{route('front.activity.matrix.show').'?area='.$area->id}}" class="btn btn-secondary p-4 matriz-option">{{$area->nombre}}</a>
+            <a href="{{route('front.objectives').'?area='.$area->id}}" class="btn btn-secondary p-4 matriz-option">{{$area->nombre}}</a>
           @endforeach
         </div>
       </div>

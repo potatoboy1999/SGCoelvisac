@@ -1,0 +1,70 @@
+thead tr th{
+    background-color: #51607c!important;
+    color: white!important;
+}
+tr.border-w-0{
+    border-width: 0;
+}
+tr.border-w-0 td{
+    border-width: 0;
+}
+.t_red {
+    background-color: #ec1d1d!important;
+}
+.t_green {
+    background-color: #12c212!important;
+}
+.t_yellow {
+    background-color: #f9e715!important;
+}
+.t_blue {
+    background-color: #5759d5!important;
+}
+.file-downloadable {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    border-color: #2eb85c;
+}
+.file-downloadable p{
+    margin: 0;
+}
+#ui-datepicker-div{
+    z-index: 10000!important;
+}
+
+.pilar-header {
+    margin-bottom: 10px;
+}
+
+thead tr th{
+    background-color: #51607c!important;
+    color: white!important;
+}
+
+.t-head-cicle {
+    min-width: 75px!important;
+}
+
+.t-head-kpi {
+    min-width: 150px;
+}
+
+.t-head-sponsor {
+    min-width: 150px;
+}
+
+.t-head-dimension {
+    min-width: 130px!important;
+}
+
+.t-head-objective {
+    min-width: 200px;
+}
+
+.t-head-resmes{
+    min-width: 82px;
+}
+.t-head-resacum{
+    min-width: 96px;
+}

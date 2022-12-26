@@ -235,8 +235,19 @@ Route::get("/", function(){return view("front.index"); });
 Route::get("/menu", [ActivityController::class,'showMenu'])->name('front.menu');
 
 // MATRIZ
-Route::get("/matriz", [ActivityController::class,'showMatrix'])->name('front.activity.matrix.show');
-Route::get("/activity/popup_adjacent_docs", [ActivityController::class,"popupFrontAdjacentDocs"])->name("front.activity.popup.adjacents");
+// Route::get("/matriz", [ActivityController::class,'showMatrix'])->name('front.activity.matrix.show');
+Route::get("/matriz", [ObjectiveController::class,'frontIndex'])->name('front.objectives');
+Route::get("/getMatriz", [ObjectiveController::class,'frontStratMatrix'])->name('front.objectives.matrix');
+
+Route::get('/matriz/especificos/', [ObjectiveController::class,"frontSpecificsIndex"])->name("front.specifics");
+Route::get('/matriz/especificos/getSummMatrix', [ObjectiveController::class,"frontStratSummMatrix"])->name("front.specifics.summarymatrix");
+Route::get('/matriz/especificos/getMatrix', [ObjectiveController::class,"frontSpecificsMatrix"])->name("front.specifics.matrix");
+
+Route::get('/matriz/acciones', [ActionController::class,"frontIndex"])->name("front.actions");
+Route::get('/matriz/acciones/getMatrix', [ActionController::class,"frontMatrix"])->name("front.actions.matrix");
+Route::get("/matriz/acciones/popup_docs", [ActionController::class,"frontPopupDocs"])->name("front.actions.popup.docs");
+
+// Route::get("/activity/popup_adjacent_docs", [ActivityController::class,"popupFrontAdjacentDocs"])->name("front.activity.popup.adjacents");
 
 // TRAVEL SCHEDULES
 Route::get("/schedules", [TravelScheduleController::class,'frontIndex'])->name('front.schedules');

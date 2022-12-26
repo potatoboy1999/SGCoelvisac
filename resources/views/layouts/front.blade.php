@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="{{asset('css/front/fontawesome/all.css')}}">
     <link rel="stylesheet" href="{{asset("css/front/estilos.css")}}">
+    <link rel="stylesheet" href="{{asset("css/front_global.css")}}">
     <style>
       .icon {
         width: 1rem;
@@ -47,9 +48,7 @@
               </div>
               <div id="menu1Body" class="accordion-collapse collapse {{$page == 'matrix'? 'show':''}}" aria-labelledby="menu1Head" data-bs-parent="#menuInterna">
                 <div class="accordion-body">
-                  @foreach ($m_areas as $area)
-                      <a href="{{route('front.activity.matrix.show').'?area='.$area->id}}">{{$area->nombre}}</a>
-                  @endforeach
+                  <a href="{{route('front.objectives')}}">Objetivos Estratégicos</a>
                 </div>
               </div>
             </div>
@@ -130,7 +129,7 @@
           openNav("menu", "contenido");
         }
       });
-      $('#datepicker').datepicker('show');
+      // $('#datepicker').datepicker('show');
     </script>
     {{-- <script>
         $(document).ready(function() {

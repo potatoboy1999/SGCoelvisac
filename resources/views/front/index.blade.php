@@ -37,7 +37,7 @@
                 <div class="row">
                     <div class="col-3">
                         <div class="box">
-                            <a href="{{route('front.menu')}}">
+                            <a href="{{route('front.objectives')}}">
                                 <i class="fas fa-cog"></i>
                                 Matriz de Agenda de Gestión Estratégica
                             </a>
