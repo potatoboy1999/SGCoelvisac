@@ -20,6 +20,7 @@ use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class ObjectiveController extends Controller
 {
@@ -56,6 +57,9 @@ class ObjectiveController extends Controller
             $qDim->with(['stratObjectives' => function($qStrObj){
                 $qStrObj->where('estado', 1);
                 $qStrObj->whereNull('obj_estrategico_id');
+                $qStrObj->with(['users' => function($qUser){
+                    $qUser->where('t_sgcv_usuarios.estado',1);
+                }]);
                 $qStrObj->with(['kpis' => function($qKpi){
                     $qKpi->where('estado',1);
                     $qKpi->with(['kpiDates'=>function($qDates){
