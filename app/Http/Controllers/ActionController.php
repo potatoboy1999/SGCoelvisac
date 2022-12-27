@@ -111,6 +111,7 @@ class ActionController extends Controller
             $action->nombre = $request->name;
             $action->inicio = date_format(date_create_from_format('d/m/Y',$request->start_date),'Y-m-d');
             $action->fin = date_format(date_create_from_format('d/m/Y',$request->end_date),'Y-m-d');
+            $action->estado = $request->status;
             $action->save();
             return ["status"=>"ok","action"=>$action->id];
         }
