@@ -51,19 +51,19 @@
                 <div class="col-md-4">
                     <div class="form-group mb-3">
                         <label for="kpi_name">KPI</label>
-                        <input class="form-control" type="text" name="kpi" id="kpi_name" value="{{$kpi?$kpi->nombre:''}}" placeholder="Nombre del Indicador" required>
+                        <input class="form-control" type="text" name="kpi" maxlength="500" id="kpi_name" value="{{$kpi?$kpi->nombre:''}}" placeholder="Nombre del Indicador" required>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group mb-3">
                         <label for="kpi_description">Descripción del indicador</label>
-                        <input class="form-control" type="text" name="description" id="kpi_description" value="{{$kpi?$kpi->descripcion:''}}" placeholder="¿Para qué se usa?" required>
+                        <input class="form-control" type="text" name="description" maxlength="2500" id="kpi_description" value="{{$kpi?$kpi->descripcion:''}}" placeholder="¿Para qué se usa?" required>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group mb-3">
                         <label for="kpi_formula">Fórmula</label>
-                        <input class="form-control" type="text" name="formula" id="kpi_formula" value="{{$kpi?$kpi->formula:''}}" placeholder="¿Cómo se calcula?" required>
+                        <input class="form-control" type="text" name="formula" maxlength="1000" id="kpi_formula" value="{{$kpi?$kpi->formula:''}}" placeholder="¿Cómo se calcula?" required>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                 <div class="col-md-4">
                     <div class="form-group mb-3">
                         <label for="kpi_meta">Resultado Clave Anual</label>
-                        <input class="form-control" type="text" name="meta" id="kpi_meta" value="{{$kpi?$kpi->meta:''}}" placeholder="¿Cuál es la meta esperada?" required>
+                        <input class="form-control" type="text" name="meta" maxlength="2500" id="kpi_meta" value="{{$kpi?$kpi->meta:''}}" placeholder="¿Cuál es la meta esperada?" required>
                     </div>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                                         <td class="text-center align-middle">Real</td>
                                         @for ($i = 1; $i <= 12; $i++)
                                             <td class="text-center align-middle p-0">
-                                                <input class="form-control input-number border-0 text-center" type="number" name="real_cicle[]" value="0">
+                                                <input class="form-control input-number border-0 text-center" type="number" step="0.0001" min="0" max="9999999999" name="real_cicle[]" value="0">
                                             </td>
                                         @endfor
                                     </tr>
@@ -136,7 +136,7 @@
                                         <td class="text-center align-middle">Planificado</td>
                                         @for ($i = 1; $i <= 12; $i++)
                                             <td class="text-center align-middle p-0">
-                                                <input class="form-control input-number border-0 text-center" type="number" name="plan_cicle[]" value="0">
+                                                <input class="form-control input-number border-0 text-center" type="number" step="0.0001" min="0" max="9999999999" name="plan_cicle[]" value="0">
                                             </td>
                                         @endfor
                                     </tr>
@@ -173,7 +173,7 @@
                                         <td class="text-center align-middle">Planificado</td>
                                         @for ($i = 1; $i <= 12; $i++)
                                             <td class="text-center align-middle p-0">
-                                                <input class="form-control input-number border-0 text-center" type="number" name="plan_futurecicle[]" value="0">
+                                                <input class="form-control input-number border-0 text-center" type="number" step="0.0001" min="0" max="9999999999" name="plan_futurecicle[]" value="0">
                                             </td>
                                         @endfor
                                     </tr>

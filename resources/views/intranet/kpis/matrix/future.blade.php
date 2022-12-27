@@ -64,7 +64,7 @@
                     <td class="text-center align-middle">Planificado</td>
                     @for ($i = 1; $i <= $cicles[$frequency]["count"]; $i++)
                     <td class="text-center align-middle p-0">
-                        <input class="form-control input-number border-0 text-center" type="number" name="plan_futurecicle[]" value="{{$cicles_data[$i-1]["plan"]}}">
+                        <input class="form-control input-number border-0 text-center" type="number" step="0.0001" min="0" max="9999999999" name="plan_futurecicle[]" value="{{$cicles_data[$i-1]["plan"]}}">
                     </td>
                     @endfor
                 </tr>
