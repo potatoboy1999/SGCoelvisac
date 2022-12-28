@@ -125,12 +125,12 @@ function createTable(type, freq) {
         table +="<tbody>"+
                     "<tr><td class='text-center align-middle'>Real</td>";
         for (let i = 1; i <= cicles[freq].count; i++) {
-            table += "<td class='text-center align-middle p-0'><input class='form-control input-number border-0 text-center' type='number' name='real_cicle[]' value='0'></td>";
+            table += "<td class='text-center align-middle p-0'><input class='form-control input-number border-0 text-center' type='number' step='0.0001' min='0' max='9999999999' name='real_cicle[]' value='0'></td>";
         }
         table += "</tr>"+
                     "<tr><td class='text-center align-middle'>Planificado</td>";
         for (let i = 1; i <= cicles[freq].count; i++) {
-            table += "<td class='text-center align-middle p-0'><input class='form-control input-number border-0 text-center' type='number' name='plan_cicle[]' value='0'></td>";
+            table += "<td class='text-center align-middle p-0'><input class='form-control input-number border-0 text-center' type='number' step='0.0001' min='0' max='9999999999' name='plan_cicle[]' value='0'></td>";
         }
         table +="</tbody>";
     }else{
@@ -140,7 +140,7 @@ function createTable(type, freq) {
         for (let i = 1; i <= cicles[freq].count; i++) {
             table += "<td class='text-center align-middle p-0'>"+
             "<input type='hidden' name='plan_pastcicle[]' value='0'>"+
-            "<input class='form-control input-number border-0 text-center' type='number' name='real_pastcicle[]' value='0'>"+
+            "<input class='form-control input-number border-0 text-center' type='number' step='0.0001' min='0' max='9999999999' name='real_pastcicle[]' value='0'>"+
             "</td>";
         }
         table += 
