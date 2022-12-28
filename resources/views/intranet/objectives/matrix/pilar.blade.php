@@ -8,7 +8,7 @@
                 $isValidObj = userIsAllowed(Auth::user(), $stratObj);
                 if($isValidObj){
                     $kpis = $stratObj->kpis;
-                    $rowCount += sizeof($kpis);
+                    $rowCount += sizeof($kpis) == 0? 1: sizeof($kpis);
                 }
             }
         }
