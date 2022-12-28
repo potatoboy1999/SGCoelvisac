@@ -351,7 +351,7 @@ class ObjectiveController extends Controller
         $dimension = Dimensions::where('id', $request->dimension_id)->first();
         $area = Area::where('id',$request->area_id)->where('estado', 1)->first();
         $rol = AreaRoles::where('area_id', $request->area_id)->where('id', $request->rol_id)->where('estado', 1)->first();
-        if($dimension && $area && $rol){
+        if($dimension && $area){
             // crear codigo
             $code = "";
             $pilar = $dimension->pilar;
@@ -369,7 +369,7 @@ class ObjectiveController extends Controller
             $obj = new StratObjective();
             $obj->codigo = "";
             $obj->dimension_id = $dimension->id;
-            $obj->rol_id = $rol->id;
+            $obj->rol_id = $rol?$rol->id:null;
             $obj->area_id = $area->id;
             $obj->nombre = $request->nombre;
             $obj->estado = 1;

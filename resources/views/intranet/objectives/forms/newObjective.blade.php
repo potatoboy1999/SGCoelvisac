@@ -41,6 +41,7 @@
             <div class="form-group mb-2">
                 <label class="form-label" for="">Rol</label>
                 <select name="rol_id" id="rol_select" class="form-select">
+                    <option value="">-- No aplica --</option>
                     @foreach ($areas[0]["roles"] as $role)
                     <option value="{{$role->id}}">{{$role->nombres}}</option>
                     @endforeach
