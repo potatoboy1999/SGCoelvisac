@@ -25,6 +25,7 @@
     $cicles_data = [];
     for ($i=0; $i < 12; $i++) { 
         $cicles_data[] = [
+            "id" => null,
             "real" => 0,
             "plan" => 0
         ];
@@ -32,6 +33,7 @@
     if($kpi){
         $kpiDates = $kpi->kpiDates;
         foreach ($kpiDates as $k => $kpiDate) {
+            $cicles_data[$k]["id"] = ($kpiDate->id?:null);
             $cicles_data[$k]["real"] = ($kpiDate->real_cantidad?:0)+0; // add +0 to remove excess of ceros
             $cicles_data[$k]["plan"] = ($kpiDate->meta_cantidad?:0)+0; // add +0 to remove excess of ceros
         }
@@ -64,6 +66,7 @@
                     <td class="text-center align-middle">Real</td>
                     @for ($i = 1; $i <= $cicles[$frequency]["count"]; $i++)
                     <td class="text-center align-middle p-0">
+                        <input type="hidden" name="past_id[]" value="{{$cicles_data[$i-1]["id"]}}">
                         <input type="hidden" step="0.0001" min="0" max="9999999999" name="plan_pastcicle[]" value="{{$cicles_data[$i-1]["plan"]}}">
                         <input class="form-control input-number border-0 text-center" type="number" step="0.0001" min="0" max="9999999999" name="real_pastcicle[]" value="{{$cicles_data[$i-1]["real"]}}">
                     </td>

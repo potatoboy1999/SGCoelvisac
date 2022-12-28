@@ -66,6 +66,7 @@
                     <td class="text-center align-middle">Real</td>
                     @for ($i = 1; $i <= $cicles[$frequency]["count"]; $i++)
                         <td class="text-center align-middle p-0">
+                            <input type="hidden" name="now_id[]" value="{{$cicles_data[$i-1]["id"]}}">
                             <input class="form-control input-number border-0 text-center" type="number" step="0.0001" min="0" max="9999999999" name="real_cicle[]" value="{{$cicles_data[$i-1]["real"]}}">
                         </td>
                     @endfor

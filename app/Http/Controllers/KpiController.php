@@ -199,9 +199,6 @@ class KpiController extends Controller
         $kpi->estado = 1;
         $kpi->save();
 
-        KpiDates::where('kpi_id', $kpi->id)->where('anio', date('Y'))->delete();
-        KpiDates::where('kpi_id', $kpi->id)->where('anio', date('Y',strtotime('-1 year')))->delete();
-
         for ($i=0; $i < sizeOf($request->real_cicle); $i++) { 
             $real = floatval($request->real_cicle[$i]);
             $plan = floatval($request->plan_cicle[$i]);
@@ -258,6 +255,8 @@ class KpiController extends Controller
         // return $request->all();
         $kpi = Kpis::find($request->id);
         if($kpi){
+            $freq_changed = ($kpi->frecuencia != $request->frequency);
+
             $kpi->nombre = $request->kpi;
             $kpi->descripcion = $request->description;
             $kpi->formula = $request->formula;
@@ -266,33 +265,67 @@ class KpiController extends Controller
             $kpi->meta = $request->meta;
             $kpi->save();
 
-            KpiDates::where('kpi_id', $kpi->id)->where('anio', date('Y'))->delete();
-            KpiDates::where('kpi_id', $kpi->id)->where('anio', date('Y',strtotime('-1 year')))->delete();
+            // if frequency changed, create new KpiDates
+            if($freq_changed){
+                KpiDates::where('kpi_id', $kpi->id)
+                        ->where(function($qAnio){
+                            $qAnio->where('anio', date('Y'))
+                                ->orWhere('anio', date('Y', strtotime('-1 year')));
+                        })
+                        ->where('estado', 1)
+                        ->update(["estado" => 0]);
+    
+                for ($i=0; $i < sizeOf($request->real_cicle); $i++) { 
+                    $real = floatval($request->real_cicle[$i]);
+                    $plan = floatval($request->plan_cicle[$i]);
+                    $kpiDate = new KpiDates();
+                    $kpiDate->kpi_id = $kpi->id;
+                    $kpiDate->anio = intval(date('Y'));
+                    $kpiDate->ciclo = ($i+1);
+                    $kpiDate->real_cantidad = $real;
+                    $kpiDate->meta_cantidad = $plan;
+                    $kpiDate->estado = 1;
+                    $kpiDate->save();
+                }
+    
+                for ($i=0; $i < sizeOf($request->real_pastcicle); $i++) {
+                    $real = floatval($request->real_pastcicle[$i]);
+                    $plan = floatval($request->plan_pastcicle[$i]);
+                    $kpiDate = new KpiDates();
+                    $kpiDate->kpi_id = $kpi->id;
+                    $kpiDate->anio = intval(date('Y',strtotime('-1 year')));
+                    $kpiDate->ciclo = ($i+1);
+                    $kpiDate->real_cantidad = $real;
+                    $kpiDate->meta_cantidad = $plan;
+                    $kpiDate->estado = 1;
+                    $kpiDate->save();
+                }
+            }else{
+                if(isset($request->now_id)){
+                    for ($i=0; $i < sizeOf($request->now_id); $i++) {
+                        $id = $request->now_id[$i];
+                        $real = floatval($request->real_cicle[$i]);
+                        $plan = floatval($request->plan_cicle[$i]);
 
-            for ($i=0; $i < sizeOf($request->real_cicle); $i++) { 
-                $real = floatval($request->real_cicle[$i]);
-                $plan = floatval($request->plan_cicle[$i]);
-                $kpiDate = new KpiDates();
-                $kpiDate->kpi_id = $kpi->id;
-                $kpiDate->anio = intval(date('Y'));
-                $kpiDate->ciclo = ($i+1);
-                $kpiDate->real_cantidad = $real;
-                $kpiDate->meta_cantidad = $plan;
-                $kpiDate->estado = 1;
-                $kpiDate->save();
-            }
+                        $kpiDate = KpiDates::find($id);
+                        $kpiDate->real_cantidad = $real;
+                        $kpiDate->meta_cantidad = $plan;
+                        $kpiDate->save();
+                    }
+                }
 
-            for ($i=0; $i < sizeOf($request->real_pastcicle); $i++) {
-                $plan = floatval($request->plan_pastcicle[$i]);
-                $real = floatval($request->real_pastcicle[$i]);
-                $kpiDate = new KpiDates();
-                $kpiDate->kpi_id = $kpi->id;
-                $kpiDate->anio = intval(date('Y',strtotime('-1 year')));
-                $kpiDate->ciclo = ($i+1);
-                $kpiDate->real_cantidad = $real;
-                $kpiDate->meta_cantidad = $plan;
-                $kpiDate->estado = 1;
-                $kpiDate->save();
+                if(isset($request->past_id)){
+                    for ($i=0; $i < sizeOf($request->past_id); $i++) {
+                        $id = $request->past_id[$i];
+                        $real = floatval($request->real_pastcicle[$i]);
+                        $plan = floatval($request->plan_pastcicle[$i]);
+
+                        $kpiDate = KpiDates::find($id);
+                        $kpiDate->real_cantidad = $real;
+                        $kpiDate->meta_cantidad = $plan;
+                        $kpiDate->save();
+                    }
+                }
             }
         }
         return back();
