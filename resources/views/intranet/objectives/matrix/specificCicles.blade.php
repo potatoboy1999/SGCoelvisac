@@ -92,7 +92,11 @@
                                             <td class="align-middle rowspan-bound td-area" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                                 {{$spec->area->nombre}}
                                             </td>
-                                            <td class="align-middle kpi-name">{{$kpi->nombre}}</td>
+                                            <td class="align-middle kpi-name">
+                                                <a href="{{route('kpi')}}?id={{$kpi->id}}">
+                                                    {{$kpi->nombre}}
+                                                </a>
+                                            </td>
                                             @for ($cicle_i = 0; $cicle_i < 12; $cicle_i++)
                                                 @php
                                                     $cicles_groups = $cicles[$kpi->frecuencia]["cicles"];
@@ -101,9 +105,15 @@
                                                     $plan = 0;
                                                     $perc = 0;
                                                     $na = false;
+                                                    $kpiDates = [];
                                                     if($kpi->kpiDates && sizeOf($kpi->kpiDates) > 0){
-                                                        if(sizeOf($kpi->kpiDates) > $cicle_i){
-                                                            $date = $kpi->kpiDates[$cicle_i];
+                                                        foreach($kpi->kpiDates as $date){
+                                                            if($date->anio == date('Y')){
+                                                                $kpiDates[] = $date;
+                                                            }
+                                                        }
+                                                        if(sizeOf($kpiDates) > $cicle_i){
+                                                            $date = $kpiDates[$cicle_i];
                                                             if($date->ciclo == ($cicle_i+1)){
                                                                 $tracker = $date->id;
                                                                 $real = $date->real_cantidad + 0;

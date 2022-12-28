@@ -170,6 +170,7 @@
                                             <th class="text-center align-middle t-head-formula" >Fórmula</th>
                                             <th class="text-center align-middle t-head-frequency" >Frecuencia</th>
                                             <th class="text-center align-middle t-head-type" >Tipo</th>
+                                            <th class="text-center align-middle t-head-nextyear">{{date('Y', strtotime('-1 year'))}}</th>
                                             <th class="text-center align-middle t-head-goal" >Meta</th>
                                             <th class="text-center align-middle t-head-resmes" >Res. Mes</th>
                                             <th class="text-center align-middle t-head-resacum" >Res. Acum.</th>
@@ -204,11 +205,24 @@
                                                             <td class="align-middle"></td>
                                                             <td class="align-middle"></td>
                                                             <td class="align-middle"></td>
+                                                            <td class="align-middle"></td>
                                                             <td class="align-middle text-center" align="center"></td>
                                                             <td class="align-middle text-center" align="center"></td>
                                                         </tr>
                                                     @endif
                                                     @foreach ($kpis as $kpi)
+                                                        @php
+                                                            $month = intval(date('m'));
+                                                            $cicles_groups = $cicles[$kpi->frecuencia]["cicles"];
+                                                            $cicle_i = 0;
+                                                            for($i = 0; $i < sizeOf($cicles_groups); $i++){
+                                                                $group = $cicles_groups[$i];
+                                                                if(array_search($month, $group) !== false){
+                                                                    $cicle_i = $i;
+                                                                    break;
+                                                                };
+                                                            }
+                                                        @endphp
                                                         <tr class="dim-{{$dimension->id}} obj-{{$stratObj->id}} kpi-{{$kpi->id}}" dim="{{$dimension->id}}" strat="{{$stratObj->id}}" kpi="{{$kpi->id}}">
                                                             <td class="align-middle rowspan-bound td-dimension" rowspan="{{$rowSpan}}" style="{{($x == 0 && $k == 0)?'':'display: none;'}}">{{$dimension->nombre}}</td>
                                                             <td class="align-middle rowspan-bound td-stratcode text-center" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
@@ -224,18 +238,23 @@
                                                             <td class="align-middle">{{$kpi->formula}}</td>
                                                             <td class="align-middle">{{$cicles[$kpi->frecuencia]["name"]}}</td>
                                                             <td class="align-middle">{{$types[$kpi->tipo]["name"]}}</td>
+                                                            @php
+                                                                $p_real_acumm = 0;
+                                                                if($kpi->kpiDates){
+                                                                    foreach ($kpi->kpiDates as $kd => $date) {
+                                                                        if($date->anio == date('Y', strtotime('-1 years'))){
+                                                                            // get acummulated
+                                                                            $t_real = $date->real_cantidad + 0;
+                                                                            if($date->ciclo <= ($cicle_i+1)){
+                                                                                $p_real_acumm += $t_real;
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            <td class="align-middle">{{$p_real_acumm}}</td>
                                                             <td class="align-middle">{{$kpi->meta}}</td>
                                                             @php
-                                                                $month = intval(date('m'));
-                                                                $cicles_groups = $cicles[$kpi->frecuencia]["cicles"];
-                                                                $cicle_i = 0;
-                                                                for($i = 0; $i < sizeOf($cicles_groups); $i++){
-                                                                    $group = $cicles_groups[$i];
-                                                                    if(array_search($month, $group) !== false){
-                                                                        $cicle_i = $i;
-                                                                        break;
-                                                                    };
-                                                                }
                                                                 $tracker = 'temp'.$stratObj->id.$k.$cicle_i;
                                                                 $real = 0;
                                                                 $real_acumm = 0;
@@ -245,17 +264,19 @@
                                                                 $perc_acumm = 0;
                                                                 if($kpi->kpiDates){
                                                                     foreach ($kpi->kpiDates as $kd => $date) {
-                                                                        // get acummulated
-                                                                        $t_real = $date->real_cantidad + 0;
-                                                                        $t_plan = $date->meta_cantidad + 0;
-                                                                        if($date->ciclo <= ($cicle_i+1)){
-                                                                            $real_acumm += $t_real;
-                                                                            $plan_acumm += $t_plan;
-                                                                        }
-                                                                        // get current
-                                                                        if($kd == $cicle_i && $date->ciclo == ($cicle_i+1)){
-                                                                            $real = $t_real;
-                                                                            $plan = $t_plan;
+                                                                        if($date->anio == date('Y')){
+                                                                            // get acummulated
+                                                                            $t_real = $date->real_cantidad + 0;
+                                                                            $t_plan = $date->meta_cantidad + 0;
+                                                                            if($date->ciclo <= ($cicle_i+1)){
+                                                                                $real_acumm += $t_real;
+                                                                                $plan_acumm += $t_plan;
+                                                                            }
+                                                                            // get current
+                                                                            if($kd == $cicle_i && $date->ciclo == ($cicle_i+1)){
+                                                                                $real = $t_real;
+                                                                                $plan = $t_plan;
+                                                                            }
                                                                         }
                                                                     }
                                                                 }

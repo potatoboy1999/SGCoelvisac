@@ -46,16 +46,16 @@ class KpiController extends Controller
         ]);
     }
 
-    public function getMatrixFuture(Request $request)
+    public function getMatrixPast(Request $request)
     {
         $kpi = Kpis::where('id',$request->id);
         $kpi->with(['kpiDates' => function($qDates){
             $qDates->where('estado', 1);
-            $qDates->where('anio', intval(date('Y',strtotime('+1 year'))));
+            $qDates->where('anio', intval(date('Y',strtotime('-1 year'))));
             $qDates->orderBy('ciclo', 'asc');
         }]);
         $kpi = $kpi->first();
-        return view('intranet.kpis.matrix.future',[
+        return view('intranet.kpis.matrix.past',[
             "kpi" => $kpi,
             "frequency" => $request->frequency,
             "type" => $request->type
@@ -200,7 +200,7 @@ class KpiController extends Controller
         $kpi->save();
 
         KpiDates::where('kpi_id', $kpi->id)->where('anio', date('Y'))->delete();
-        KpiDates::where('kpi_id', $kpi->id)->where('anio', date('Y',strtotime('+1 year')))->delete();
+        KpiDates::where('kpi_id', $kpi->id)->where('anio', date('Y',strtotime('-1 year')))->delete();
 
         for ($i=0; $i < sizeOf($request->real_cicle); $i++) { 
             $real = floatval($request->real_cicle[$i]);
@@ -215,13 +215,14 @@ class KpiController extends Controller
             $kpiDate->save();
         }
 
-        for ($i=0; $i < sizeOf($request->plan_futurecicle); $i++) {
-            $plan = floatval($request->plan_futurecicle[$i]);
+        for ($i=0; $i < sizeOf($request->real_pastcicle); $i++) {
+            $plan = floatval($request->plan_pastcicle[$i]);
+            $real = floatval($request->real_pastcicle[$i]);
             $kpiDate = new KpiDates();
             $kpiDate->kpi_id = $kpi->id;
-            $kpiDate->anio = intval(date('Y',strtotime('+1 year')));
+            $kpiDate->anio = intval(date('Y',strtotime('-1 year')));
             $kpiDate->ciclo = ($i+1);
-            $kpiDate->real_cantidad = 0;
+            $kpiDate->real_cantidad = $real;
             $kpiDate->meta_cantidad = $plan;
             $kpiDate->estado = 1;
             $kpiDate->save();
@@ -266,7 +267,7 @@ class KpiController extends Controller
             $kpi->save();
 
             KpiDates::where('kpi_id', $kpi->id)->where('anio', date('Y'))->delete();
-            KpiDates::where('kpi_id', $kpi->id)->where('anio', date('Y',strtotime('+1 year')))->delete();
+            KpiDates::where('kpi_id', $kpi->id)->where('anio', date('Y',strtotime('-1 year')))->delete();
 
             for ($i=0; $i < sizeOf($request->real_cicle); $i++) { 
                 $real = floatval($request->real_cicle[$i]);
@@ -281,13 +282,14 @@ class KpiController extends Controller
                 $kpiDate->save();
             }
 
-            for ($i=0; $i < sizeOf($request->plan_futurecicle); $i++) {
-                $plan = floatval($request->plan_futurecicle[$i]);
+            for ($i=0; $i < sizeOf($request->real_pastcicle); $i++) {
+                $plan = floatval($request->plan_pastcicle[$i]);
+                $real = floatval($request->real_pastcicle[$i]);
                 $kpiDate = new KpiDates();
                 $kpiDate->kpi_id = $kpi->id;
-                $kpiDate->anio = intval(date('Y',strtotime('+1 year')));
+                $kpiDate->anio = intval(date('Y',strtotime('-1 year')));
                 $kpiDate->ciclo = ($i+1);
-                $kpiDate->real_cantidad = 0;
+                $kpiDate->real_cantidad = $real;
                 $kpiDate->meta_cantidad = $plan;
                 $kpiDate->estado = 1;
                 $kpiDate->save();

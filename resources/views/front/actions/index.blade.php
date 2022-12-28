@@ -87,6 +87,7 @@
         <div class="box">
             <h3 class="titulo">Leyenda</h3>
             <div class="cuerpo text-start">
+                <p><span class="d-inline-block text-block t_gray" style="width: 20px;">&nbsp;</span> <strong>Gris:</strong> La actividad aun no ha comenzado.</p>
                 <p><span class="d-inline-block text-block t_green" style="width: 20px;">&nbsp;</span> <strong>Verde:</strong> Desde la fecha de inicio hasta faltando 25% de los días para la fecha de término.</p>
                 <p><span class="d-inline-block text-block t_yellow" style="width: 20px;">&nbsp;</span> <strong>Amarillo:</strong> Entre el 25% de los días previo a la fecha de vencimiento hasta la fecha de vencimiento.</p>
                 <p><span class="d-inline-block text-block t_blue" style="width: 20px;">&nbsp;</span> <strong>Azul:</strong> La actividad ha sido cumplida.</p>

@@ -113,6 +113,14 @@ class ActionController extends Controller
             $action->fin = date_format(date_create_from_format('d/m/Y',$request->end_date),'Y-m-d');
             $action->estado = $request->status;
             $action->save();
+
+            if($action->estado == 3){ // if is finished
+                $action->fecha_final = date('Y-m-d');
+                $action->save();
+            }else{
+                $action->fecha_final = null;
+                $action->save();
+            }
             return ["status"=>"ok","action"=>$action->id];
         }
         return ["status"=>"error","msg"=>"Acción no encontrada"];
@@ -142,7 +150,7 @@ class ActionController extends Controller
     }
 
     public function popupDocs(Request $request){
-        $action = Action::where('id',$request->id)->where('estado',1);
+        $action = Action::where('id',$request->id)->where('estado','>=', 1);
         $action->with(['documents' => function($qDoc){
             $qDoc->where('t_sgcv_documentos.estado', 1);
         }]);

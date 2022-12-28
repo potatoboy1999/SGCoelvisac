@@ -54,9 +54,15 @@
                                     $plan = 0;
                                     $perc = 0;
                                     $na = false;
+                                    $kpiDates = [];
                                     if($kpi->kpiDates && sizeOf($kpi->kpiDates) > 0){
-                                        if(sizeOf($kpi->kpiDates) > $cicle_i){
-                                            $date = $kpi->kpiDates[$cicle_i];
+                                        foreach($kpi->kpiDates as $date){
+                                            if($date->anio == date('Y')){
+                                                $kpiDates[] = $date;
+                                            }
+                                        }
+                                        if(sizeOf($kpiDates) > $cicle_i){
+                                            $date = $kpiDates[$cicle_i];
                                             if($date->ciclo == ($cicle_i+1)){
                                                 $tracker = $date->id;
                                                 $real = $date->real_cantidad + 0;

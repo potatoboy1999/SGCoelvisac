@@ -148,7 +148,7 @@
                 </div>
             </div>
             <div class="kpi_dates">
-                <h3 id="year_future">{{date('Y',strtotime('+1 year'))}}</h3>
+                <h3 id="year_future">{{date('Y',strtotime('-1 year'))}}</h3>
                 <div id="matrix_future">
                     @if ($kpi)
                     <div class="spinner-border" role="status">
@@ -173,7 +173,8 @@
                                         <td class="text-center align-middle">Planificado</td>
                                         @for ($i = 1; $i <= 12; $i++)
                                             <td class="text-center align-middle p-0">
-                                                <input class="form-control input-number border-0 text-center" type="number" step="0.0001" min="0" max="9999999999" name="plan_futurecicle[]" value="0">
+                                                <input type="hidden" step="0.0001" min="0" max="9999999999" name="plan_pastcicle[]" value="0">
+                                                <input class="form-control input-number border-0 text-center" type="number" step="0.0001" min="0" max="9999999999" name="real_pastcicle[]" value="0">
                                             </td>
                                         @endfor
                                     </tr>
@@ -190,7 +191,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body text-center p-1">
-                        MENSUAL
+                        POR CICLOS
                     </div>
                 </div>
                 <div class="my-2">
@@ -203,7 +204,7 @@
                 <div class="my-2">
                     <div class="card">
                         <div class="card-body">
-                            <canvas id="graph-bar-acum"></canvas>
+                            <canvas id="graph-line"></canvas>
                         </div>
                     </div>
                 </div>
@@ -217,7 +218,7 @@
                 <div class="my-2">
                     <div class="card">
                         <div class="card-body">
-                            <canvas id="graph-line"></canvas>
+                            <canvas id="graph-bar-acum"></canvas>
                         </div>
                     </div>
                 </div>

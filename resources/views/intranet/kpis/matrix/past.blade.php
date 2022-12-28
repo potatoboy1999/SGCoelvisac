@@ -19,7 +19,7 @@
         ],
         "anu" => [
             "count" => 1,
-            "label" => date('Y',strtotime('+1 year'))
+            "label" => date('Y',strtotime('-1 year'))
         ],
     ];
     $cicles_data = [];
@@ -61,10 +61,11 @@
             </thead>
             <tbody>
                 <tr>
-                    <td class="text-center align-middle">Planificado</td>
+                    <td class="text-center align-middle">Real</td>
                     @for ($i = 1; $i <= $cicles[$frequency]["count"]; $i++)
                     <td class="text-center align-middle p-0">
-                        <input class="form-control input-number border-0 text-center" type="number" step="0.0001" min="0" max="9999999999" name="plan_futurecicle[]" value="{{$cicles_data[$i-1]["plan"]}}">
+                        <input type="hidden" step="0.0001" min="0" max="9999999999" name="plan_pastcicle[]" value="{{$cicles_data[$i-1]["plan"]}}">
+                        <input class="form-control input-number border-0 text-center" type="number" step="0.0001" min="0" max="9999999999" name="real_pastcicle[]" value="{{$cicles_data[$i-1]["real"]}}">
                     </td>
                     @endfor
                 </tr>

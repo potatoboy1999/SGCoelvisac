@@ -19,9 +19,9 @@
         $isValid = false;
         $is_admin = $usr->is_admin;
         $area_id = $usr->position->area_id; // 11 = area gestion
-        // if($is_admin){
-        //     return true;
-        // }
+        if($is_admin){
+            return true;
+        }
         if($area_id != 11){
             foreach ($obj->users as $k => $user) {
                 if($user->id == $usr->id){
@@ -103,6 +103,18 @@
                                     ?>
                                     @if ($isValidObj)
                                         @foreach ($kpis as $kpi)
+                                            @php
+                                                $month = intval(date('m'));
+                                                $cicles_groups = $cicles[$kpi->frecuencia]["cicles"];
+                                                $cicle_i = 0;
+                                                for($i = 0; $i < sizeOf($cicles_groups); $i++){
+                                                    $group = $cicles_groups[$i];
+                                                    if(array_search($month, $group) !== false){
+                                                        $cicle_i = $i;
+                                                        break;
+                                                    };
+                                                }
+                                            @endphp
                                             <tr class="dim-{{$dimension->id}} obj-{{$stratObj->id}} kpi-{{$kpi->id}}" dim="{{$dimension->id}}" strat="{{$stratObj->id}}" kpi="{{$kpi->id}}">
                                                 <td class="align-middle rowspan-bound td-dimension" rowspan="{{$rowSpan}}" style="{{($x == 0 && $k == 0)?'':'display: none;'}}">{{$dimension->nombre}}</td>
                                                 <td class="align-middle rowspan-bound td-stratcode" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
@@ -114,7 +126,11 @@
                                                 <td class="align-middle rowspan-bound td-area" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                                     {{$stratObj->area->nombre}}
                                                 </td>
-                                                <td class="align-middle kpi-name">{{$kpi->nombre}}</td>
+                                                <td class="align-middle kpi-name">
+                                                    <a href="{{route('kpi')}}?id={{$kpi->id}}">
+                                                        {{$kpi->nombre}}
+                                                    </a>
+                                                </td>
                                                 @for ($cicle_i = 0; $cicle_i < 12; $cicle_i++)
                                                     @php
                                                         $cicles_groups = $cicles[$kpi->frecuencia]["cicles"];
@@ -123,9 +139,15 @@
                                                         $plan = 0;
                                                         $perc = 0;
                                                         $na = false;
+                                                        $kpiDates = [];
                                                         if($kpi->kpiDates && sizeOf($kpi->kpiDates) > 0){
-                                                            if(sizeOf($kpi->kpiDates) > $cicle_i){
-                                                                $date = $kpi->kpiDates[$cicle_i];
+                                                            foreach($kpi->kpiDates as $date){
+                                                                if($date->anio == date('Y')){
+                                                                    $kpiDates[] = $date;
+                                                                }
+                                                            }
+                                                            if(sizeOf($kpiDates) > $cicle_i){
+                                                                $date = $kpiDates[$cicle_i];
                                                                 if($date->ciclo == ($cicle_i+1)){
                                                                     $tracker = $date->id;
                                                                     $real = $date->real_cantidad + 0;

@@ -64,8 +64,7 @@
                             <th class="text-center align-middle t-head-objective" width="180">Objetivo Específico</th>
                             <th class="text-center align-middle t-head-sponsor" width="50">Responsable</th>
                             <th class="text-center align-middle t-head-kpi" width="50">KPI</th>
-                            <th class="text-center align-middle t-head-curryear" width="50">{{date('Y')}}</th>
-                            <th class="text-center align-middle t-head-nextyear" width="50">{{date('Y', strtotime('+1 year'))}}</th>
+                            <th class="text-center align-middle t-head-nextyear" width="50">{{date('Y', strtotime('-1 year'))}}</th>
                             <th class="text-center align-middle t-head-resmes" width="50">Res. Mes</th>
                             <th class="text-center align-middle t-head-resacum" width="50">Res. Acum.</th>
                             <th class="text-center align-middle t-head-actions" width="20"></th>
@@ -98,7 +97,6 @@
                                         <td class="align-middle" align="center"></td>
                                         <td class="align-middle" align="center"></td>
                                         <td class="align-middle" align="center"></td>
-                                        <td class="align-middle" align="center"></td>
                                         <td class="align-middle" align="center">
                                             <div class="dropdown" ddTrack="{{'act'.$spec->id.$k}}">
                                                 <span class="badge bg-secondary btn-more text-black" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false">
@@ -116,6 +114,18 @@
                                     </tr>
                                 @endif
                                 @foreach ($kpis as $kpi)
+                                    @php
+                                        $month = intval(date('m'));
+                                        $cicles_groups = $cicles[$kpi->frecuencia]["cicles"];
+                                        $cicle_i = 0;
+                                        for($i = 0; $i < sizeOf($cicles_groups); $i++){
+                                            $group = $cicles_groups[$i];
+                                            if(array_search($month, $group) !== false){
+                                                $cicle_i = $i;
+                                                break;
+                                            };
+                                        }
+                                    @endphp
                                     <tr class="obj-{{$spec->id}} kpi-{{$kpi->id}}" strat="{{$spec->id}}" kpi="{{$kpi->id}}">
                                         <td class="align-middle rowspan-bound td-stratname" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
                                             {{$spec->stratObjective->nombre}}
@@ -129,20 +139,27 @@
                                         <td class="align-middle rowspan-bound td-area" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                             {{$spec->area->nombre}}
                                         </td>
-                                        <td class="align-middle kpi-name">{{$kpi->nombre}}</td>                            
-                                        <td class="align-middle" align="center">0</td>
-                                        <td class="align-middle" align="center">100</td>
+                                        <td class="align-middle kpi-name">
+                                            <a href="{{route('kpi')}}?id={{$kpi->id}}">
+                                                {{$kpi->nombre}}
+                                            </a>
+                                        </td>
                                         @php
-                                            $month = intval(date('m'));
-                                            $cicles_groups = $cicles[$kpi->frecuencia]["cicles"];
-                                            $cicle_i = 0;
-                                            for($i = 0; $i < sizeOf($cicles_groups); $i++){
-                                                $group = $cicles_groups[$i];
-                                                if(array_search($month, $group) !== false){
-                                                    $cicle_i = $i;
-                                                    break;
-                                                };
+                                            $p_real_acumm = 0;
+                                            if($kpi->kpiDates){
+                                                foreach ($kpi->kpiDates as $kd => $date) {
+                                                    if($date->anio == date('Y', strtotime('-1 years'))){
+                                                        // get acummulated
+                                                        $t_real = $date->real_cantidad + 0;
+                                                        if($date->ciclo <= ($cicle_i+1)){
+                                                            $p_real_acumm += $t_real;
+                                                        }
+                                                    }
+                                                }
                                             }
+                                        @endphp
+                                        <td class="align-middle" align="center">{{$p_real_acumm}}</td>
+                                        @php
                                             $tracker = 'temp'.$spec->id.$k.$cicle_i;
                                             $real = 0;
                                             $real_acumm = 0;
@@ -152,17 +169,19 @@
                                             $perc_acumm = 0;
                                             if($kpi->kpiDates){
                                                 foreach ($kpi->kpiDates as $kd => $date) {
-                                                    // get acummulated
-                                                    $t_real = $date->real_cantidad + 0;
-                                                    $t_plan = $date->meta_cantidad + 0;
-                                                    if($date->ciclo <= ($cicle_i+1)){
-                                                        $real_acumm += $t_real;
-                                                        $plan_acumm += $t_plan;
-                                                    }
-                                                    // get current
-                                                    if($kd == $cicle_i && $date->ciclo == ($cicle_i+1)){
-                                                        $real = $t_real;
-                                                        $plan = $t_plan;
+                                                    if($date->anio == date('Y')){
+                                                        // get acummulated
+                                                        $t_real = $date->real_cantidad + 0;
+                                                        $t_plan = $date->meta_cantidad + 0;
+                                                        if($date->ciclo <= ($cicle_i+1)){
+                                                            $real_acumm += $t_real;
+                                                            $plan_acumm += $t_plan;
+                                                        }
+                                                        // get current
+                                                        if($date->ciclo == ($cicle_i+1)){
+                                                            $real = $t_real;
+                                                            $plan = $t_plan;
+                                                        }
                                                     }
                                                 }
                                             }
@@ -173,7 +192,7 @@
                                                 $perc_acumm = round(($real_acumm/$plan_acumm),2)*100;
                                             }
                                         @endphp
-                                        <td class="align-middle" align="center">
+                                        <td class="align-middle" align="center" cicle="{{$cicle_i}}">
                                             <div class="dropdown" ddTrack="{{$tracker}}">
                                                 <div class="circle c-{{progressColor($perc)}}" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
                                                 <ul class="dropdown-menu p-2" ddTrack="{{$tracker}}">
@@ -188,7 +207,7 @@
                                                 </ul>
                                             </div>
                                         </td>
-                                        <td class="align-middle" align="center">
+                                        <td class="align-middle" align="center" cicle="{{$cicle_i}}">
                                             <div class="dropdown" ddTrack="accum-{{$tracker}}">
                                                 <div class="circle c-{{progressColor($perc_acumm)}}" href="#" role="button" data-coreui-toggle="dropdown" aria-expanded="false"></div>
                                                 <ul class="dropdown-menu p-2" ddTrack="accum-{{$tracker}}">

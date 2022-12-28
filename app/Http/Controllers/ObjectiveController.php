@@ -64,7 +64,10 @@ class ObjectiveController extends Controller
                     $qKpi->where('estado',1);
                     $qKpi->with(['kpiDates'=>function($qDates){
                         $qDates->where('estado', 1);
-                        $qDates->where('anio', date('Y'));
+                        $qDates->where(function($qAnio){
+                            $qAnio->where('anio', date('Y'))
+                                ->orWhere('anio', date('Y', strtotime('-1 year')));
+                        });
                         $qDates->orderBy('ciclo', 'asc');
                     }]);
                 }]);
@@ -79,6 +82,7 @@ class ObjectiveController extends Controller
         $data["cicles"] = Kpis::getCicleDef();
         $data["types"] = Kpis::getTypeDef();
         $view = isset($request->view)?$request->view:'general';
+        // return $data;
         if($view == "general"){
             return view("intranet.objectives.matrix.pilar", $data);
         }else{
@@ -114,7 +118,10 @@ class ObjectiveController extends Controller
             $qKpis->where('estado', 1);
             $qKpis->with(['kpiDates'=>function($qDates){
                 $qDates->where('estado', 1);
-                $qDates->where('anio', date('Y'));
+                $qDates->where(function($qAnio){
+                    $qAnio->where('anio', date('Y'))
+                        ->orWhere('anio', date('Y', strtotime('-1 year')));
+                });
                 $qDates->orderBy('ciclo', 'asc');
             }]);
         }]);
@@ -141,7 +148,10 @@ class ObjectiveController extends Controller
                 $qKpi->where('estado',1);
                 $qKpi->with(['kpiDates'=>function($qDates){
                     $qDates->where('estado', 1);
-                    $qDates->where('anio', date('Y'));
+                    $qDates->where(function($qAnio){
+                        $qAnio->where('anio', date('Y'))
+                            ->orWhere('anio', date('Y', strtotime('-1 year')));
+                    });
                     $qDates->orderBy('ciclo', 'asc');
                 }]);
             }]);    
@@ -183,7 +193,10 @@ class ObjectiveController extends Controller
             $qKpi->where('estado',1);
             $qKpi->with(['kpiDates'=>function($qDates){
                 $qDates->where('estado', 1);
-                $qDates->where('anio', date('Y'));
+                $qDates->where(function($qAnio){
+                    $qAnio->where('anio', date('Y'))
+                        ->orWhere('anio', date('Y', strtotime('-1 year')));
+                });
                 $qDates->orderBy('ciclo', 'asc');
             }]);
         }]);
@@ -1005,7 +1018,10 @@ class ObjectiveController extends Controller
                     $qKpi->where('estado',1);
                     $qKpi->with(['kpiDates'=>function($qDates){
                         $qDates->where('estado', 1);
-                        $qDates->where('anio', date('Y'));
+                        $qDates->where(function($qAnio){
+                            $qAnio->where('anio', date('Y'))
+                                ->orWhere('anio', date('Y', strtotime('-1 year')));
+                        });
                         $qDates->orderBy('ciclo', 'asc');
                     }]);
                 }]);
@@ -1053,7 +1069,10 @@ class ObjectiveController extends Controller
             $qKpis->where('estado', 1);
             $qKpis->with(['kpiDates'=>function($qDates){
                 $qDates->where('estado', 1);
-                $qDates->where('anio', date('Y'));
+                $qDates->where(function($qAnio){
+                    $qAnio->where('anio', date('Y'))
+                        ->orWhere('anio', date('Y', strtotime('-1 year')));
+                });
                 $qDates->orderBy('ciclo', 'asc');
             }]);
         }]);
@@ -1080,7 +1099,10 @@ class ObjectiveController extends Controller
                 $qKpi->where('estado',1);
                 $qKpi->with(['kpiDates'=>function($qDates){
                     $qDates->where('estado', 1);
-                    $qDates->where('anio', date('Y'));
+                    $qDates->where(function($qAnio){
+                        $qAnio->where('anio', date('Y'))
+                            ->orWhere('anio', date('Y', strtotime('-1 year')));
+                    });
                     $qDates->orderBy('ciclo', 'asc');
                 }]);
             }]);    
@@ -1116,7 +1138,10 @@ class ObjectiveController extends Controller
                     $qKpi->where('estado',1);
                     $qKpi->with(['kpiDates'=>function($qDates){
                         $qDates->where('estado', 1);
-                        $qDates->where('anio', date('Y'));
+                        $qDates->where(function($qAnio){
+                            $qAnio->where('anio', date('Y'))
+                                ->orWhere('anio', date('Y', strtotime('-1 year')));
+                        });
                         $qDates->orderBy('ciclo', 'asc');
                     }]);
                 }]);
