@@ -148,7 +148,7 @@
         {{-- <img class="logo" src="img/logo.png" height="50" alt=""> --}}
         <h3 style="font-family: sans-serif; color:#008cff">CVC ENERGIA</h3>
         <h2 style="text-align: center;">Objetivos Estratégicos</h2>
-
+        <P style="font-size: 10px; margin: 0;">Fecha: {{date('d/m/Y')}}</P>
         <div id="matrix_content">
             @foreach ($pilars as $pilar)
             <div class="pilar" pilar="{{$pilar->id}}">
@@ -164,6 +164,7 @@
                                         <tr>
                                             <th class="text-center align-middle t-head-dimension" >Dimensión</th>
                                             <th class="text-center align-middle t-head-code" >Código</th>
+                                            <th class="text-center align-middle t-head-rol" >Rol</th>
                                             <th class="text-center align-middle t-head-objective" >Objetivo Estratégico</th>
                                             <th class="text-center align-middle t-head-sponsor" >Sponsor</th>
                                             <th class="text-center align-middle t-head-kpi" >KPI</th>
@@ -193,6 +194,9 @@
                                                             <td class="align-middle">{{$dimension->nombre}}</td>
                                                             <td class="align-middle text-center" align="center" style="">
                                                                 <span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span>
+                                                            </td>
+                                                            <td class="align-middle" style="">
+                                                                {{$stratObj->rol->nombres}}
                                                             </td>
                                                             <td class="align-middle" style="">
                                                                 {{$stratObj->nombre}}
@@ -228,6 +232,9 @@
                                                             <td class="align-middle rowspan-bound td-stratcode text-center" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
                                                                 <span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span>
                                                             </td>
+                                                            <td class="align-middle rowspan-bound td-rol" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                                                {{$stratObj->rol->nombres}}
+                                                            </td>
                                                             <td class="align-middle rowspan-bound td-strat" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                                                 {{$stratObj->nombre}}
                                                             </td>
@@ -240,6 +247,7 @@
                                                             <td class="align-middle">{{$types[$kpi->tipo]["name"]}}</td>
                                                             @php
                                                                 $p_real_acumm = 0;
+                                                                $p_real_count = 0;
                                                                 if($kpi->kpiDates){
                                                                     foreach ($kpi->kpiDates as $kd => $date) {
                                                                         if($date->anio == date('Y', strtotime('-1 years'))){
@@ -247,9 +255,14 @@
                                                                             $t_real = $date->real_cantidad + 0;
                                                                             if($date->ciclo <= ($cicle_i+1)){
                                                                                 $p_real_acumm += $t_real;
+                                                                                $p_real_count++;
                                                                             }
                                                                         }
                                                                     }
+                                                                }
+                                                                // if kpi type "percentage" or "ratio" get average
+                                                                if($kpi->tipo == "per" || $kpi->tipo == "rat"){
+                                                                    $p_real_acumm = ($p_real_acumm/$p_real_count)+0;
                                                                 }
                                                             @endphp
                                                             <td class="align-middle">{{$p_real_acumm}}</td>

@@ -78,6 +78,7 @@
                             <tr>
                                 <th class="text-center align-middle t-head-dimension" width="50">Dimensión</th>
                                 <th class="text-center align-middle t-head-code" width="50">Código</th>
+                                <th class="text-center align-middle t-head-rol" width="120">Rol</th>
                                 <th class="text-center align-middle t-head-objective" width="180">Objetivo Estratégico</th>
                                 <th class="text-center align-middle t-head-sponsor" width="50">Sponsor</th>
                                 <th class="text-center align-middle t-head-kpi" width="50">KPI</th>
@@ -119,6 +120,9 @@
                                                 <td class="align-middle rowspan-bound td-dimension" rowspan="{{$rowSpan}}" style="{{($x == 0 && $k == 0)?'':'display: none;'}}">{{$dimension->nombre}}</td>
                                                 <td class="align-middle rowspan-bound td-stratcode" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
                                                     <a href="{{route('specifics')}}?strat={{$stratObj->id}}"><span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span></a>
+                                                </td>
+                                                <td class="align-middle rowspan-bound td-rolname" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                                    {{$stratObj->rol->nombres}}
                                                 </td>
                                                 <td class="align-middle rowspan-bound td-strat" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                                     <a href="{{route('specifics')}}?strat={{$stratObj->id}}">{{$stratObj->nombre}}</a>

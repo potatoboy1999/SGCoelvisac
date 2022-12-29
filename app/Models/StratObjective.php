@@ -35,7 +35,7 @@ class StratObjective extends Model
 
     public function rol()
     {
-        return $this->belongsTo(Rol::class,"rol_id","id");
+        return $this->belongsTo(AreaRoles::class,"rol_id","id");
     }
 
     public function dimension()

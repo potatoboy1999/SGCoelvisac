@@ -77,6 +77,7 @@
                             <td class="align-middle kpi-name">{{$kpi->nombre}}</td>
                             @php
                                 $p_real_acumm = 0;
+                                $p_real_count = 0;
                                 if($kpi->kpiDates){
                                     foreach ($kpi->kpiDates as $kd => $date) {
                                         if($date->anio == date('Y', strtotime('-1 years'))){
@@ -84,9 +85,14 @@
                                             $t_real = $date->real_cantidad + 0;
                                             if($date->ciclo <= ($cicle_i+1)){
                                                 $p_real_acumm += $t_real;
+                                                $p_real_count++;
                                             }
                                         }
                                     }
+                                }
+                                // if kpi type "percentage" or "ratio" get average
+                                if($kpi->tipo == "per" || $kpi->tipo == "rat"){
+                                    $p_real_acumm = ($p_real_acumm/$p_real_count)+0;
                                 }
                             @endphp
                             <td class="align-middle" align="center">{{$p_real_acumm}}</td>

@@ -57,6 +57,9 @@ class ObjectiveController extends Controller
             $qDim->with(['stratObjectives' => function($qStrObj){
                 $qStrObj->where('estado', 1);
                 $qStrObj->whereNull('obj_estrategico_id');
+                $qStrObj->with(['rol' => function($qRol){
+                    $qRol->where('t_sgcv_area_roles.estado',1);
+                }]);
                 $qStrObj->with(['users' => function($qUser){
                     $qUser->where('t_sgcv_usuarios.estado',1);
                 }]);
@@ -1014,6 +1017,9 @@ class ObjectiveController extends Controller
             $qDim->with(['stratObjectives' => function($qStrObj){
                 $qStrObj->where('estado', 1);
                 $qStrObj->whereNull('obj_estrategico_id');
+                $qStrObj->with(['rol' => function($qRol){
+                    $qRol->where('t_sgcv_area_roles.estado',1);
+                }]);
                 $qStrObj->with(['kpis' => function($qKpi){
                     $qKpi->where('estado',1);
                     $qKpi->with(['kpiDates'=>function($qDates){
@@ -1134,6 +1140,9 @@ class ObjectiveController extends Controller
             $qDim->with(['stratObjectives' => function($qStrObj){
                 $qStrObj->where('estado', 1);
                 $qStrObj->whereNull('obj_estrategico_id');
+                $qStrObj->with(['rol' => function($qRol){
+                    $qRol->where('t_sgcv_area_roles.estado',1);
+                }]);
                 $qStrObj->with(['kpis' => function($qKpi){
                     $qKpi->where('estado',1);
                     $qKpi->with(['kpiDates'=>function($qDates){

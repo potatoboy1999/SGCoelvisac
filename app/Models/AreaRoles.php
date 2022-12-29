@@ -14,7 +14,7 @@ class AreaRoles extends Model
 
     protected $fillable = [
         'area_id',
-        'nombre',
+        'nombres',
         'estado',
     ];
 

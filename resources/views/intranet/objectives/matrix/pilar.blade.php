@@ -78,6 +78,7 @@
                             <tr>
                                 <th class="text-center align-middle t-head-dimension" width="50">Dimensión</th>
                                 <th class="text-center align-middle t-head-code" width="50">Código</th>
+                                <th class="text-center align-middle t-head-rol" width="150">Rol</th>
                                 <th class="text-center align-middle t-head-objective" width="180">Objetivo Estratégico</th>
                                 <th class="text-center align-middle t-head-sponsor" width="50">Sponsor</th>
                                 <th class="text-center align-middle t-head-kpi" width="50">KPI</th>
@@ -112,6 +113,7 @@
                                                 <td class="align-middle" align="center" style="">
                                                     <a href="{{route('specifics')}}?strat={{$stratObj->id}}"><span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span></a>
                                                 </td>
+                                                <td class="align-middle">{{$stratObj->rol->nombres}}</td>
                                                 <td class="align-middle" style="">
                                                     <a href="{{route('specifics')}}?strat={{$stratObj->id}}">{{$stratObj->nombre}}</a>
                                                 </td>
@@ -165,6 +167,9 @@
                                                 <td class="align-middle rowspan-bound td-stratcode" rowspan="{{sizeOf($kpis)}}" align="center" style="{{($k == 0)?'':'display: none;'}}">
                                                     <a href="{{route('specifics')}}?strat={{$stratObj->id}}"><span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span></a>
                                                 </td>
+                                                <td class="align-middle rowspan-bound td-rolename" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
+                                                    {{$stratObj->rol->nombres}}
+                                                </td>
                                                 <td class="align-middle rowspan-bound td-strat" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                                     <a href="{{route('specifics')}}?strat={{$stratObj->id}}">{{$stratObj->nombre}}</a>
                                                 </td>
@@ -181,6 +186,7 @@
                                                 <td class="align-middle">{{$types[$kpi->tipo]["name"]}}</td>
                                                 @php
                                                     $p_real_acumm = 0;
+                                                    $p_real_count = 0;
                                                     if($kpi->kpiDates){
                                                         foreach ($kpi->kpiDates as $kd => $date) {
                                                             if($date->anio == date('Y', strtotime('-1 years'))){
@@ -188,9 +194,14 @@
                                                                 $t_real = $date->real_cantidad + 0;
                                                                 if($date->ciclo <= ($cicle_i+1)){
                                                                     $p_real_acumm += $t_real;
+                                                                    $p_real_count++;
                                                                 }
                                                             }
                                                         }
+                                                    }
+                                                    // if kpi type "percentage" or "ratio" get average
+                                                    if($kpi->tipo == "per" || $kpi->tipo == "rat"){
+                                                        $p_real_acumm = ($p_real_acumm/$p_real_count)+0;
                                                     }
                                                 @endphp
                                                 <td class="align-middle" align="center">{{$p_real_acumm}}</td>
