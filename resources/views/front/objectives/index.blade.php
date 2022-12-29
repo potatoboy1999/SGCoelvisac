@@ -66,6 +66,12 @@
         <div class="box">
             <h3 class="titulo">Pilares</h3>
             <div class="cuerpo">
+                @php
+                    $months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+                @endphp
+                <div class="date">
+                    <h6>{{$months[intval(date('m')) - 1]}} {{date('Y')}}</h6>
+                </div>
                 <div id="matrix_content">
                     @foreach ($pilars as $pilar)
                     <div class="pilar mb-3" pilar="{{$pilar->id}}">
