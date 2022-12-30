@@ -69,7 +69,7 @@ class Kpis extends Model
                 "count" => 1,
                 "label" => date('Y'),
                 "label_now" => date('Y'),
-                "label_future" => date('Y',strtotime('+1 year')),
+                "label_future" => date('Y',strtotime('-1 year')),
                 "cicles" => [[1,2,3,4,5,6,7,8,9,10,11,12]]
             ],
         ];

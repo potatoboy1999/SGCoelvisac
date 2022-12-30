@@ -423,7 +423,7 @@ class ObjectiveController extends Controller
                 $plan = 0;
                 $kpiDate = new KpiDates();
                 $kpiDate->kpi_id = $kpi->id;
-                $kpiDate->anio = intval(date('Y',strtotime('+1 year')));
+                $kpiDate->anio = intval(date('Y',strtotime('-1 year')));
                 $kpiDate->ciclo = ($i+1);
                 $kpiDate->real_cantidad = 0;
                 $kpiDate->meta_cantidad = $plan;
