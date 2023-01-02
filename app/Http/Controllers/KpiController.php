@@ -67,7 +67,10 @@ class KpiController extends Controller
         $kpi = Kpis::where('id', $request->id);
         $kpi->with(['kpiDates' => function($qDates){
             $qDates->where('estado', 1);
-            $qDates->where('anio', date('Y'));
+            $qDates->where(function($qAnio){
+                $qAnio->where('anio', date('Y'))
+                    ->orWhere('anio', date('Y', strtotime('-1 year')));
+            });
             $qDates->orderBy('ciclo', 'asc');
         }]);
         $kpi = $kpi->first();
@@ -97,7 +100,9 @@ class KpiController extends Controller
                 "real" => 0,
                 "plan" => 0,
                 "real_accum" => 0,
-                "plan_accum" => 0
+                "plan_accum" => 0,
+                "real_past" => 0,
+                "plan_past" => 0,
             ];
         }
 
@@ -105,16 +110,53 @@ class KpiController extends Controller
             $realAccum = 0;
             $planAccum = 0;
             $kpiDates = $kpi->kpiDates;
+            $x = -1;
+            $lastCicle = 0;
+            // check if all planned amount are the same
+            $allEqualCheck = true;
+            $planCheck = 0;
+            $idx = 0;
+            foreach ($kpiDates as $kpiDate) {
+                if($kpiDate->anio == date('Y')){
+                    if($idx == 0){
+                        $planCheck = $kpiDate->meta_cantidad;
+                    }
+                    if($planCheck != $kpiDate->meta_cantidad){
+                        $allEqualCheck = false;
+                    }
+                    $idx++;
+                }
+            }
+
+            $accumAsAvg = ($kpi->tipo == "per" || $kpi->tipo == "rat") && $allEqualCheck;
             foreach ($kpiDates as $k => $kpiDate) {
-                $realAccum += ($kpiDate->real_cantidad?:0)+0;
-                $planAccum += ($kpiDate->meta_cantidad?:0)+0;
-                $cicles_data[$k]["real"] = ($kpiDate->real_cantidad?:0)+0; // add +0 to remove excess of ceros
-                $cicles_data[$k]["plan"] = ($kpiDate->meta_cantidad?:0)+0; // add +0 to remove excess of ceros
-                $cicles_data[$k]["real_accum"] = $realAccum; // add +0 to remove excess of ceros
-                $cicles_data[$k]["plan_accum"] = $planAccum; // add +0 to remove excess of ceros
+                if($lastCicle != $kpiDate->ciclo){
+                    $lastCicle = $kpiDate->ciclo;
+                    $x++;
+                }
+                if($kpiDate->anio == date('Y')){
+                    $realAccum += ($kpiDate->real_cantidad?:0)+0;
+                    $planAccum += ($kpiDate->meta_cantidad?:0)+0;
+                    $cicles_data[$x]["real"] = ($kpiDate->real_cantidad?:0)+0; // add +0 to remove excess of ceros
+                    $cicles_data[$x]["plan"] = ($kpiDate->meta_cantidad?:0)+0; // add +0 to remove excess of ceros
+
+                    // if all plan amount are the same and tipe "Per" or "Rat"
+                    if($accumAsAvg){
+                        $cicles_data[$x]["real_accum"] = ($realAccum/($x+1))+0; // add +0 to remove excess of ceros
+                        $cicles_data[$x]["plan_accum"] = ($planAccum/($x+1))+0; // add +0 to remove excess of ceros
+                    }else{
+                        $cicles_data[$x]["real_accum"] = $realAccum; // add +0 to remove excess of ceros
+                        $cicles_data[$x]["plan_accum"] = $planAccum; // add +0 to remove excess of ceros
+                    }
+                }
+                if($kpiDate->anio == date('Y',strtotime('-1 year'))){
+                    $cicles_data[$x]["real_past"] = ($kpiDate->real_cantidad?:0)+0; // add +0 to remove excess of ceros
+                    $cicles_data[$x]["plan_past"] = ($kpiDate->meta_cantidad?:0)+0; // add +0 to remove excess of ceros
+                }
             }
         }
 
+        // DATASETS: Current Data
         // Monto Real
         $data = [];
         for ($i = 0; $i < $cicles[$freq]["count"]; $i++){
@@ -134,8 +176,15 @@ class KpiController extends Controller
             }
         }
 
+        $lbl = "";
+        if(isset($request->type)){
+            $lbl = (($accumAsAvg && $request->type == 'accumulated')?'Promedio':'Monto').' Real '.($request->type == 'simple'?'':'Acumulado');
+        }else{
+            $lbl = 'Monto Real';
+        }
+
         $datasets[] = [
-            "label" => 'Monto Real'.(isset($request->type)?($request->type == 'simple'?'':' Acumulado'):''),
+            "label" => $lbl,
             "data" => $data,
             "borderWidth" => 1
         ];
@@ -158,15 +207,44 @@ class KpiController extends Controller
                 $data[] = 0;
             }
         }
+        $lbl = "";
+        if(isset($request->type)){
+            $lbl = (($accumAsAvg && $request->type == 'accumulated')?'Promedio':'Monto').' Planificado '.($request->type == 'simple'?'':'Acumulado');
+        }else{
+            $lbl = 'Monto Planificado';
+        }
         $datasets[] = [
-            "label" => 'Monto Planificado'.(isset($request->type)?($request->type == 'simple'?'':' Acumulado'):''),
+            "label" => $lbl,
             "data" => $data,
             "borderWidth" => 1
         ];
 
-        return [
+        $v1 = [
             "labels" => $labels,
             "datasets" => $datasets
+        ];
+
+        // DATASET: Past Data
+
+        $data = [];
+        for ($i = 0; $i < $cicles[$freq]["count"]; $i++){
+            $data[] = $cicles_data[$i]["real_past"];
+        }
+
+        $datasets[] = [
+            "label" => 'Monto Real Pasado',
+            "data" => $data,
+            "borderWidth" => 1
+        ];
+
+        $v2 = [
+            "labels" => $labels,
+            "datasets" => $datasets
+        ];
+
+        return [
+            "v1" => $v1,
+            "v2" => $v2,
         ];
     }
 

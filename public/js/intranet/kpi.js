@@ -235,7 +235,7 @@ function loadGraphDataNow(graph, type) {
                 if(graph=="bar"){
                     ch_gb1 = new Chart(gb1, {
                         type: 'bar',
-                        data: res,
+                        data: res.v1,
                         options: {
                             scales: {
                                 y: {
@@ -247,7 +247,7 @@ function loadGraphDataNow(graph, type) {
                 }else if(graph=="line"){
                     ch_gl1 = new Chart(gl1, {
                         type: 'line',
-                        data: res,
+                        data: res.v2,
                         options: {
                             scales: {
                                 y: {
@@ -261,7 +261,7 @@ function loadGraphDataNow(graph, type) {
                 if(graph=="bar"){
                     ch_gb2 = new Chart(gb2, {
                         type: 'bar',
-                        data: res,
+                        data: res.v1,
                         options: {
                             scales: {
                                 y: {
@@ -273,7 +273,7 @@ function loadGraphDataNow(graph, type) {
                 }else if(graph=="line"){
                     ch_gl2 = new Chart(gl2, {
                         type: 'line',
-                        data: res,
+                        data: res.v1,
                         options: {
                             scales: {
                                 y: {
