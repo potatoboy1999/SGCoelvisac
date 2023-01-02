@@ -66,7 +66,7 @@
                                     <td class="align-middle" align="center" style="">
                                         <a href="{{route('front.specifics')}}?strat={{$stratObj->id}}"><span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span></a>
                                     </td>
-                                    <td class="align-middle">{{$stratObj->rol->nombres}}</td>
+                                    <td class="align-middle">{{$stratObj->rol?$stratObj->rol->nombres:'No Aplica'}}</td>
                                     <td class="align-middle" style="">
                                         <a href="{{route('front.specifics')}}?strat={{$stratObj->id}}">{{$stratObj->nombre}}</a>
                                     </td>
@@ -102,7 +102,7 @@
                                         <a href="{{route('front.specifics')}}?strat={{$stratObj->id}}"><span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span></a>
                                     </td>
                                     <td class="align-middle rowspan-bound td-rol" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
-                                        {{$stratObj->rol->nombres}}
+                                        {{$stratObj->rol?$stratObj->rol->nombres:'No Aplica'}}
                                     </td>
                                     <td class="align-middle rowspan-bound td-strat" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                         <a href="{{route('front.specifics')}}?strat={{$stratObj->id}}">{{$stratObj->nombre}}</a>
