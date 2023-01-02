@@ -448,6 +448,7 @@ class ObjectiveController extends Controller
         }
 
         if($area && $rol){
+            $obj->rol_id = $rol->id;
             $obj->area_id = $area->id;
             $obj->nombre = $request->nombre;
             $obj->save();
