@@ -31,6 +31,7 @@
             <div class="form-group mb-2">
                 <label class="form-label" for="">Rol</label>
                 <select name="rol_id" id="rol_edit_select" class="form-select">
+                    <option value="">-- No aplica --</option>
                     @foreach ($areas[$i]["roles"] as $role)
                     <option value="{{$role->id}}" {{$obj->rol_id == $role->id?'selected':''}}>{{$role->nombres}}</option>
                     @endforeach
