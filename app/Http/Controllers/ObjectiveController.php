@@ -447,8 +447,8 @@ class ObjectiveController extends Controller
             return ["status"=>"error","msg"=>"Objetivo no encontrado"];
         }
 
-        if($area && $rol){
-            $obj->rol_id = $rol->id;
+        if($area){
+            $obj->rol_id = $rol?$rol->id:null;
             $obj->area_id = $area->id;
             $obj->nombre = $request->nombre;
             $obj->save();
