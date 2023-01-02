@@ -142,6 +142,7 @@ $(document).on('change','#sponsor_select', function(ev){
     var roles = area.roles;
     var users = area.users;
     var roleHtml = "";
+    roleHtml += '<option value="">-- No aplica --</option>';
     for (let i = 0; i < roles.length; i++) {
         const role = roles[i];
         roleHtml += '<option value="'+role.id+'">'+role.nombres+'</option>';
