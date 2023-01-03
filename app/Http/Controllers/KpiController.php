@@ -248,22 +248,6 @@ class KpiController extends Controller
         ];
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $kpi = new Kpis();
@@ -306,31 +290,9 @@ class KpiController extends Controller
         return redirect()->route('kpi', ['id'=>$kpi->id]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
     public function update(Request $request)
     {
-        // return $request->all();
+        //return $request->all();
         $kpi = Kpis::find($request->id);
         if($kpi){
             $freq_changed = ($kpi->frecuencia != $request->frequency);
@@ -386,9 +348,20 @@ class KpiController extends Controller
                         $plan = floatval($request->plan_cicle[$i]);
 
                         $kpiDate = KpiDates::find($id);
-                        $kpiDate->real_cantidad = $real;
-                        $kpiDate->meta_cantidad = $plan;
-                        $kpiDate->save();
+                        if($kpiDate){
+                            $kpiDate->real_cantidad = $real;
+                            $kpiDate->meta_cantidad = $plan;
+                            $kpiDate->save();
+                        }else{
+                            $kpiDate = new KpiDates();
+                            $kpiDate->kpi_id = $kpi->id;
+                            $kpiDate->anio = intval(date('Y'));
+                            $kpiDate->ciclo = ($i+1);
+                            $kpiDate->real_cantidad = $real;
+                            $kpiDate->meta_cantidad = $plan;
+                            $kpiDate->estado = 1;
+                            $kpiDate->save();
+                        }
                     }
                 }
 
@@ -399,25 +372,25 @@ class KpiController extends Controller
                         $plan = floatval($request->plan_pastcicle[$i]);
 
                         $kpiDate = KpiDates::find($id);
-                        $kpiDate->real_cantidad = $real;
-                        $kpiDate->meta_cantidad = $plan;
-                        $kpiDate->save();
+                        if($kpiDate){
+                            $kpiDate->real_cantidad = $real;
+                            $kpiDate->meta_cantidad = $plan;
+                            $kpiDate->save();
+                        }else{
+                            $kpiDate = new KpiDates();
+                            $kpiDate->kpi_id = $kpi->id;
+                            $kpiDate->anio = intval(date('Y',strtotime('-1 year')));
+                            $kpiDate->ciclo = ($i+1);
+                            $kpiDate->real_cantidad = $real;
+                            $kpiDate->meta_cantidad = $plan;
+                            $kpiDate->estado = 1;
+                            $kpiDate->save();
+                        }
                     }
                 }
             }
         }
         return back();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     public function getAddKpiForm(Request $request)
