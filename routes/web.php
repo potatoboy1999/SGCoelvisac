@@ -89,7 +89,7 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
     Route::group(["prefix"=>"kpi"], function(){
         Route::get('/',[KpiController::class,"index"])->name("kpi");
         Route::get('/getNowMatrix',[KpiController::class,"getMatrixNow"])->name("kpi.matrix_now");
-        Route::get('/getFutureMatrix',[KpiController::class,"getMatrixPast"])->name("kpi.matrix_future");
+        Route::get('/getPastMatrix',[KpiController::class,"getMatrixPast"])->name("kpi.matrix_past");
         Route::get('/getNowBar',[KpiController::class,"getGraphDataNow"])->name("kpi.bar_now");
         Route::post('/store',[KpiController::class,"store"])->name("kpi.store");
         Route::post('/update',[KpiController::class,"update"])->name("kpi.update");
@@ -246,6 +246,12 @@ Route::get('/matriz/especificos/getMatrix', [ObjectiveController::class,"frontSp
 Route::get('/matriz/acciones', [ActionController::class,"frontIndex"])->name("front.actions");
 Route::get('/matriz/acciones/getMatrix', [ActionController::class,"frontMatrix"])->name("front.actions.matrix");
 Route::get("/matriz/acciones/popup_docs", [ActionController::class,"frontPopupDocs"])->name("front.actions.popup.docs");
+
+Route::get('/kpi', [KpiController::class,"frontIndex"])->name("front.kpi");
+Route::get('/kpi/nowMatrix',[KpiController::class,"frontGetMatrixNow"])->name("front.kpi.matrix_now");
+Route::get('/kpi/pastMatrix',[KpiController::class,"frontGetMatrixPast"])->name("front.kpi.matrix_past");
+Route::get('/kpi/getNowBar',[KpiController::class,"getGraphDataNow"])->name("front.kpi.bar_now");
+Route::get('/kpi/highlights',[HighlightController::class,"frontMatrix"])->name('front.kpi.highlights');
 
 // Route::get("/activity/popup_adjacent_docs", [ActivityController::class,"popupFrontAdjacentDocs"])->name("front.activity.popup.adjacents");
 

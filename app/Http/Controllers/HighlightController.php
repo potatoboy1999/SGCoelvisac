@@ -40,4 +40,17 @@ class HighlightController extends Controller
         }
         return ["status"=>"ok"];
     }
+
+    public function frontMatrix(Request $request)
+    {
+        $kpi_date = KpiDates::where('id',$request->kpi_date);
+        $kpi_date->with(['highlights' => function($qHigh){
+            $qHigh->where('status', 1);
+        }]);
+        $kpi_date = $kpi_date->first();
+
+        return view('front.highlights.matrix.highlights',[
+            "kpi_date" => $kpi_date
+        ]);
+    }
 }

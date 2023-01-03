@@ -241,7 +241,7 @@
     var ogType = "{{$kpi?$kpi->tipo:'per'}}";
     var ogFrequency = "{{$kpi?$kpi->frecuencia:'men'}}";
     var nowMatrixUrl = "{{route('kpi.matrix_now')}}";
-    var futureMatrixUrl = "{{route('kpi.matrix_future')}}";
+    var futureMatrixUrl = "{{route('kpi.matrix_past')}}";
     var highlightsUrl = "{{route('kpi.highlights')}}";
     var addHighUrl = "{{route('kpi.highlights.store')}}";
     var rmvHighUrl = "{{route('kpi.highlights.delete')}}";

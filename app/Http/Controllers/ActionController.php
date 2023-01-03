@@ -246,10 +246,6 @@ class ActionController extends Controller
     public function frontIndex(Request $request)
     {
         $page = "objectives";
-
-        $data = [
-            "page"=>$page,
-        ];
         $objSpec = StratObjective::where('id', $request->specific)->where('estado', 1);
         $objSpec->with(['stratObjective' => function($qStratObj){
             $qStratObj->with(['dimension' => function($qDimension){

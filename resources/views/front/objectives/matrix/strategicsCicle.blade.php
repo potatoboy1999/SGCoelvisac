@@ -69,7 +69,11 @@
                                 <td class="align-middle rowspan-bound td-area" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                     {{$stratObj->area->nombre}}
                                 </td>
-                                <td class="align-middle kpi-name">{{$kpi->nombre}}</td>
+                                <td class="align-middle kpi-name">
+                                    <a href="{{route('front.kpi')}}?id={{$kpi->id}}">
+                                        {{$kpi->nombre}}
+                                    </a>
+                                </td>
                                 @php
                                     $kpiDates = [];
                                     if($kpi->kpiDates && sizeOf($kpi->kpiDates) > 0){

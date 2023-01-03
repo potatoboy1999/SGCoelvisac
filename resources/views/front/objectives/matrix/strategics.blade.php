@@ -110,7 +110,11 @@
                                     <td class="align-middle rowspan-bound td-area" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                         {{$stratObj->area->nombre}}
                                     </td>
-                                    <td class="align-middle kpi-name">{{$kpi->nombre}}</td>
+                                    <td class="align-middle kpi-name">
+                                        <a href="{{route('front.kpi')}}?id={{$kpi->id}}">
+                                            {{$kpi->nombre}}
+                                        </a>
+                                    </td>
                                     <td class="align-middle">{{$kpi->formula}}</td>
                                     <td class="align-middle">{{$cicles[$kpi->frecuencia]["name"]}}</td>
                                     <td class="align-middle">{{$types[$kpi->tipo]["name"]}}</td>

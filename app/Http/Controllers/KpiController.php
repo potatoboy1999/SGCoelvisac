@@ -416,4 +416,49 @@ class KpiController extends Controller
         }
         return ['status'=>'error', 'msg'=>'Kpi no encontrado'];
     }
+
+    // FRONT
+    public function frontIndex(Request $request)
+    {
+        $page = "objectives";        
+        $kpi = Kpis::where('id',$request->id)->where('estado',1)->first();
+        return view('front.kpis.index',[
+            'page' => $page,
+            'kpi' => $kpi,
+            'cicles' => Kpis::getCicleDef(),
+            'types' => Kpis::getTypeDef(),
+        ]);
+    }
+
+    public function frontGetMatrixNow(Request $request)
+    {
+        $kpi = Kpis::where('id', $request->id);
+        $kpi->with(['kpiDates' => function($qDates){
+            $qDates->where('estado', 1);
+            $qDates->where('anio', date('Y'));
+            $qDates->orderBy('ciclo', 'asc');
+        }]);
+        $kpi = $kpi->first();
+        return view('front.kpis.matrix.now',[
+            "kpi" => $kpi,
+            "frequency" => $request->frequency,
+            "type" => $request->type
+        ]);
+    }
+
+    public function frontGetMatrixPast(Request $request)
+    {
+        $kpi = Kpis::where('id',$request->id);
+        $kpi->with(['kpiDates' => function($qDates){
+            $qDates->where('estado', 1);
+            $qDates->where('anio', intval(date('Y',strtotime('-1 year'))));
+            $qDates->orderBy('ciclo', 'asc');
+        }]);
+        $kpi = $kpi->first();
+        return view('front.kpis.matrix.past',[
+            "kpi" => $kpi,
+            "frequency" => $request->frequency,
+            "type" => $request->type
+        ]);
+    }
 }
