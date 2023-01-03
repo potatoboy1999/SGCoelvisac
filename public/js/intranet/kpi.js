@@ -136,7 +136,7 @@ function createTable(type, freq) {
     }else{
         table += 
         "<tbody>"+
-            "<tr><td class='text-center align-middle'>Planificado</td>";
+            "<tr><td class='text-center align-middle'>Real</td>";
         for (let i = 1; i <= cicles[freq].count; i++) {
             table += "<td class='text-center align-middle p-0'>"+
             "<input type='hidden' name='plan_pastcicle[]' value='0'>"+
