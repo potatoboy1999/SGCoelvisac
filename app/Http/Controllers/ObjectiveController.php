@@ -82,6 +82,7 @@ class ObjectiveController extends Controller
         }else{
             $data = ["status"=>"error","msg"=>"pilar not found"];
         }
+        $data["months"] = Kpis::$months;
         $data["cicles"] = Kpis::getCicleDef();
         $data["types"] = Kpis::getTypeDef();
         $view = isset($request->view)?$request->view:'general';
@@ -163,6 +164,7 @@ class ObjectiveController extends Controller
         }else{
             $data = ["status"=>"error","msg"=>"strat not found"];
         }
+        $data["months"] = Kpis::$months;
         $data["cicles"] = Kpis::getCicleDef();
         $data["types"] = Kpis::getTypeDef();
 
@@ -205,17 +207,18 @@ class ObjectiveController extends Controller
         }]);
         
         $specObjec = $specObjec->get();
-
         $view = isset($request->view)?$request->view:'general';
         if($view == "general"){
             return view("intranet.objectives.matrix.specific2",[
                 "specObjec" => $specObjec,
+                "months" => Kpis::$months,
                 "cicles" => Kpis::getCicleDef(),
                 "types" => Kpis::getTypeDef(),
             ]);
         }else{
             return view("intranet.objectives.matrix.specificCicles2",[
                 "specObjec" => $specObjec,
+                "months" => Kpis::$months,
                 "cicles" => Kpis::getCicleDef(),
                 "types" => Kpis::getTypeDef(),
             ]);
@@ -1040,6 +1043,7 @@ class ObjectiveController extends Controller
         }else{
             $data = ["status"=>"error","msg"=>"pilar not found"];
         }
+        $data["months"] = Kpis::$months;
         $data["cicles"] = Kpis::getCicleDef();
         $data["types"] = Kpis::getTypeDef();
         $view = isset($request->view)?$request->view:'general';
@@ -1118,6 +1122,7 @@ class ObjectiveController extends Controller
         }else{
             $data = ["status"=>"error","msg"=>"strat not found"];
         }
+        $data["months"] = Kpis::$months;
         $data["cicles"] = Kpis::getCicleDef();
         $data["types"] = Kpis::getTypeDef();
 

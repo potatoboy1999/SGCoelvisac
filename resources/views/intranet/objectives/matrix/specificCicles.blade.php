@@ -67,7 +67,7 @@
                                 <th class="text-center align-middle t-head-sponsor" width="50">Responsable</th>
                                 <th class="text-center align-middle t-head-kpi" width="50">KPI</th>
                                 @for ($x = 0; $x < 12; $x++)
-                                <th class="text-center align-middle t-head-cicle" width="50">Ciclo {{$x+1}}</th>
+                                <th class="text-center align-middle t-head-cicle" width="50">{{$months[$x]}}</th>
                                 @endfor
                                 <th class="text-center align-middle t-head-actions" width="20"></th>
                             </tr>
@@ -97,21 +97,39 @@
                                                     {{$kpi->nombre}}
                                                 </a>
                                             </td>
-                                            @for ($cicle_i = 0; $cicle_i < 12; $cicle_i++)
+                                            @php
+                                                $kpiDates = [];
+                                                if($kpi->kpiDates && sizeOf($kpi->kpiDates) > 0){
+                                                    foreach($kpi->kpiDates as $date){
+                                                        if($date->anio == date('Y')){
+                                                            $kpiDates[] = $date;
+                                                        }
+                                                    }
+                                                }
+                                            @endphp
+                                            @for ($mon_i = 0; $mon_i < 12; $mon_i++)
                                                 @php
                                                     $cicles_groups = $cicles[$kpi->frecuencia]["cicles"];
-                                                    $tracker = 'temp'.$spec->id.$k.$cicle_i;
+                                                    $cicle_i = 0;
+                                                    $curr_group = [];
+                                                    for($i = 0; $i < sizeOf($cicles_groups); $i++){
+                                                        $group = $cicles_groups[$i];
+                                                        if(array_search(($mon_i+1), $group) !== false){
+                                                            $cicle_i = $i;
+                                                            $curr_group = $group;
+                                                            break;
+                                                        };
+                                                    }
+
+                                                    $tracker = 'temp'.$spec->id.$k.$mon_i;
                                                     $real = 0;
                                                     $plan = 0;
                                                     $perc = 0;
                                                     $na = false;
-                                                    $kpiDates = [];
-                                                    if($kpi->kpiDates && sizeOf($kpi->kpiDates) > 0){
-                                                        foreach($kpi->kpiDates as $date){
-                                                            if($date->anio == date('Y')){
-                                                                $kpiDates[] = $date;
-                                                            }
-                                                        }
+
+                                                    // check if this month is last on group
+                                                    $lastIdx = sizeOf($curr_group)-1;
+                                                    if($curr_group[$lastIdx] == ($mon_i+1)){
                                                         if(sizeOf($kpiDates) > $cicle_i){
                                                             $date = $kpiDates[$cicle_i];
                                                             if($date->ciclo == ($cicle_i+1)){
@@ -122,9 +140,11 @@
                                                         }else{
                                                             $na = true;
                                                         }
-                                                    }
-                                                    if($plan != 0){
-                                                        $perc = round(($real/$plan),2)*100;
+                                                        if($plan != 0){
+                                                            $perc = round(($real/$plan),2)*100;
+                                                        }
+                                                    }else{
+                                                        $na = true;
                                                     }
                                                 @endphp
                                                 <td class="align-middle" align="center" style="{{$na?'background-color:#ccc':''}}">
