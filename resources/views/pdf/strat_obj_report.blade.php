@@ -275,20 +275,28 @@
                                                                 $plan_acumm = 0;
                                                                 $perc = 0;
                                                                 $perc_acumm = 0;
-                                                                if($kpi->kpiDates){
-                                                                    foreach ($kpi->kpiDates as $kd => $date) {
-                                                                        if($date->anio == date('Y')){
-                                                                            // get acummulated
-                                                                            $t_real = $date->real_cantidad + 0;
-                                                                            $t_plan = $date->meta_cantidad + 0;
-                                                                            if($date->ciclo <= ($cicle_i+1)){
-                                                                                $real_acumm += $t_real;
-                                                                                $plan_acumm += $t_plan;
-                                                                            }
-                                                                            // get current
-                                                                            if($kd == $cicle_i && $date->ciclo == ($cicle_i+1)){
-                                                                                $real = $t_real;
-                                                                                $plan = $t_plan;
+                                                                $na = false;
+                                                                // if this is the first cicle and is not anually -> DONT SHOW BUTTON INFO
+                                                                if($cicle_i == 0 && $kpi->frecuencia != "anu"){
+                                                                    $na = true;
+                                                                }else{
+                                                                    // else show button info from previous cicle
+                                                                    $cicle_i -= 1;
+                                                                    if($kpi->kpiDates){
+                                                                        foreach ($kpi->kpiDates as $kd => $date) {
+                                                                            if($date->anio == date('Y')){
+                                                                                // get acummulated
+                                                                                $t_real = $date->real_cantidad + 0;
+                                                                                $t_plan = $date->meta_cantidad + 0;
+                                                                                if($date->ciclo <= ($cicle_i+1)){
+                                                                                    $real_acumm += $t_real;
+                                                                                    $plan_acumm += $t_plan;
+                                                                                }
+                                                                                // get current
+                                                                                if($kd == $cicle_i && $date->ciclo == ($cicle_i+1)){
+                                                                                    $real = $t_real;
+                                                                                    $plan = $t_plan;
+                                                                                }
                                                                             }
                                                                         }
                                                                     }
@@ -300,11 +308,15 @@
                                                                     $perc_acumm = round(($real_acumm/$plan_acumm),2)*100;
                                                                 }
                                                             @endphp
-                                                            <td class="align-middle text-center" align="center">
+                                                            <td class="align-middle text-center" align="center" style="{{$na?'background-color:#ccc':''}}">
+                                                                @if (!$na)
                                                                 <div class="circle c-{{progressColor($perc)}}" href="#" role="button" style="margin: auto"></div>
+                                                                @endif
                                                             </td>
-                                                            <td class="align-middle text-center" align="center">
+                                                            <td class="align-middle text-center" align="center" style="{{$na?'background-color:#ccc':''}}">
+                                                                @if (!$na)
                                                                 <div class="circle c-{{progressColor($perc_acumm)}}" href="#" role="button" style="margin: auto"></div>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                         <?php $k++; ?>
