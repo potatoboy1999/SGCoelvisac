@@ -180,7 +180,9 @@
                                                     $na = true;
                                                 }else{
                                                     // else show button info from previous cicle
-                                                    $cicle_i -= 1;
+                                                    if($kpi->frecuencia != "anu"){
+                                                        $cicle_i -= 1;
+                                                    }
                                                     if($kpi->kpiDates){
                                                         foreach ($kpi->kpiDates as $kd => $date) {
                                                             if($date->anio == date('Y')){
