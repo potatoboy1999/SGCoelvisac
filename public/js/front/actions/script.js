@@ -47,9 +47,6 @@ function loadFormDocs(action_id) {
                     btn.removeClass("btn-success");
                     btn.addClass("btn-secondary");
                 }
-                var href = icon.attr("xlink:href");
-                href = href.replace("cil-file","cil-arrow-thick-from-bottom");
-                icon.attr("xlink:href", href); 
             }
         },
         error: function(err){
@@ -86,4 +83,12 @@ $(document).on('click', '.btn-show-doc', function(ev){
     $(".modal-section").hide();
     $("#form-docs-action").show();
     loadFormDocs(action_id);
+});
+
+$(document).on("click",".btn-file-download",function(ev){
+    ev.preventDefault();
+    var route = $(this).attr("href");
+    var id = $(this).attr("file-id");
+    route = route+"?id="+id;
+    window.location.href = route;
 });

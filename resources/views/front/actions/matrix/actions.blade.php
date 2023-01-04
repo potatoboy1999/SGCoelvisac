@@ -67,7 +67,7 @@
                                     @php
                                         $docs = $action->documents;
                                     @endphp
-                                    <a href="javascript:;" class="btn {{sizeof($docs)>0?'btn-success':'btn-outline-secondary'}} btn-sm btn-show-doc" data-id="{{$action->id}}" {{sizeof($docs)>0?'data-bs-toggle="modal" data-bs-target="#docsModal"':''}}>
+                                    <a href="javascript:;" class="btn {{sizeof($docs)>0?'btn-success':'btn-outline-secondary'}} btn-sm btn-show-doc" data-id="{{$action->id}}" data-bs-toggle="{{sizeof($docs)>0?'modal':''}}" data-bs-target="{{sizeof($docs)>0?'#docsModal':''}}">
                                         <svg class="icon">
                                             <use xlink:href="{{asset("icons/sprites/free.svg")}}#cil-file"></use>
                                         </svg>
