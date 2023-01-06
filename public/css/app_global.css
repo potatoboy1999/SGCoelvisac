@@ -47,3 +47,6 @@
 .comm-border{
     border-color: #b1b7c1!important;
 }
+a{
+    text-decoration: none;
+}
