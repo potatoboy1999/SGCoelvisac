@@ -15,11 +15,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('task:sendAlerts')
-                //->hourly();
-                ->monthlyOn(2,'08:00')
-                ->monthlyOn(6,'08:00');
-                //->everyMinute();
+        // $schedule->command('task:sendAlerts')
+        //        //->hourly();
+        //        ->monthlyOn(2,'08:00')
+        //        ->monthlyOn(6,'08:00');
+        //        //->everyMinute();
     }
 
     /**
