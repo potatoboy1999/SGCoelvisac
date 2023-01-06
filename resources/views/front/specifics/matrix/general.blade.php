@@ -117,21 +117,26 @@
                                     if($kpi->frecuencia != "anu"){
                                         $cicle_i -= 1;
                                     }
-                                    if($kpi->kpiDates){
-                                        foreach ($kpi->kpiDates as $kd => $date) {
-                                            if($date->anio == date('Y')){
-                                                // get acummulated
-                                                $t_real = $date->real_cantidad + 0;
-                                                $t_plan = $date->meta_cantidad + 0;
-                                                if($date->ciclo <= ($cicle_i+1)){
-                                                    $real_acumm += $t_real;
-                                                    $plan_acumm += $t_plan;
-                                                }
-                                                // get current
-                                                if($date->ciclo == ($cicle_i+1)){
-                                                    $tracker = $date->id;
-                                                    $real = $t_real;
-                                                    $plan = $t_plan;
+                                    // if frequency anual, only show on december
+                                    if($kpi->frecuencia == "anu" && $month != 12){
+                                        $na = true;
+                                    }else{
+                                        if($kpi->kpiDates){
+                                            foreach ($kpi->kpiDates as $kd => $date) {
+                                                if($date->anio == date('Y')){
+                                                    // get acummulated
+                                                    $t_real = $date->real_cantidad + 0;
+                                                    $t_plan = $date->meta_cantidad + 0;
+                                                    if($date->ciclo <= ($cicle_i+1)){
+                                                        $real_acumm += $t_real;
+                                                        $plan_acumm += $t_plan;
+                                                    }
+                                                    // get current
+                                                    if($date->ciclo == ($cicle_i+1)){
+                                                        $tracker = $date->id;
+                                                        $real = $t_real;
+                                                        $plan = $t_plan;
+                                                    }
                                                 }
                                             }
                                         }
