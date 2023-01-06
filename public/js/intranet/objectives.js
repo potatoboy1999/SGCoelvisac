@@ -82,6 +82,27 @@ function loadKpiRedirect() {
     });
 }
 
+function loadComments(obj_id, withLoading){
+    $.ajax({
+        url: listComment,
+        data: {
+            obj_id: obj_id
+        },
+        method: "GET",
+        beforeSend: function(){
+            if(withLoading){
+                addSpinner("#comments_list");
+            }
+        },
+        success: function(res){
+            $("#comments_list").html(res);
+        },
+        error: function (err) {
+            
+        }
+    });
+}
+
 function addSpinner(target){
     $(target).html(
         '<div class="spinner-border" role="status"><span class="sr-only"></span></div>'
@@ -320,6 +341,66 @@ $(document).on('submit','#f-form-delete', function(ev){
         },
         error: function(err){
             console.error('error deleting kpi');
+        }
+    });
+});
+
+$(document).on('click','.btn-comments', function(ev){
+    ev.preventDefault();
+    var obj = $(this).data("obj");
+    $("#comments_form [name='objective_id']").val(obj);
+    loadComments(obj, true);
+});
+
+$(document).on('submit','#comments_form', function(ev){
+    ev.preventDefault();
+    console.log("submit new comment");
+    var obj = $("#comments_form [name='objective_id']").val();
+    $.ajax({
+        url: $(this).attr("action"),
+        data: $(this).serialize(),
+        method: "POST",
+        beforeSend: function(){
+            $("#comm_desc").val("");
+            addSpinner("#comments_list");
+        },
+        success: function(res){
+            if(res.status = "ok"){
+                loadComments(obj, true);
+            }else{
+                alert(res.msg);
+            }
+        },
+        error: function(err){
+            loadComments(obj, true);
+        }
+    });
+});
+
+$(document).on("click",".comm-delete", function(ev){
+    ev.preventDefault();
+    var id = $(this).attr("commid");
+    var url = $(this).attr("href");
+    var obj = $("#comments_form [name='objective_id']").val();
+    $.ajax({
+        url: url,
+        data: {
+            _token: $("[name=_token]").val(),
+            id: id
+        },
+        method: "POST",
+        beforeSend: function(){
+            addSpinner("#comments_list");
+        },
+        success: function(res){
+            if(res.status = "ok"){
+                loadComments(obj, true);
+            }else{
+                alert(res.msg);
+            }
+        },
+        error: function(err){
+            loadComments(obj, true);
         }
     });
 });

@@ -9,6 +9,36 @@
 @endsection
 
 @section('content')
+<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newKpiModalLabel">Comentarios<span id="hl-label"></span></h5>
+                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="comments_list">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                <form id="comments_form" action="{{route('obj_comments.store')}}" method="POST" autocomplete="off">
+                    @csrf
+                    <input type="hidden" name="objective_id" value="">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group py-1 comm-group" commid="new">
+                                <label class="form-label">Nuevo comentario:</label>
+                                <textarea id="comm_desc" name="description" class="form-control" rows="2" maxlength="1500" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="comm_update" class="btn btn-info text-white" type="submit" src="">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="deleteKpiModal" tabindex="-1" aria-labelledby="deleteKpiModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -189,6 +219,7 @@
     let newFormUrl = "{{route('obj_strat.matrix.create')}}";
     let editFormUrl = "{{route('obj_strat.matrix.edit')}}";
     let redirectKpiUrl = "{{route('kpi.redirect.form')}}";
+    let listComment = "{{route('obj_comments.list')}}";
 </script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/i18n/jquery-ui-i18n.min.js"></script>

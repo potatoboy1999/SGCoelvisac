@@ -57,4 +57,9 @@ class StratObjective extends Model
     {
         return $this->hasMany(Action::class,"objetivo_id","id");
     }
+
+    public function comments()
+    {
+        return $this->hasMany(ObjectiveComment::class,"objetivo_id","id");
+    }
 }

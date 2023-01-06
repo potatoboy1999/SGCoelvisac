@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\HighlightController;
 use App\Http\Controllers\KpiController;
+use App\Http\Controllers\ObjectiveComments;
 use App\Http\Controllers\ObjectiveController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\ProfileController;
@@ -18,8 +19,6 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\TravelScheduleController;
 use App\Http\Controllers\UserController;
-use App\Models\Highlight;
-use App\Models\TravelSchedule;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -76,6 +75,12 @@ Route::group(["prefix"=>"intranet", "middleware"=>["auth"]], function(){
     Route::group(["prefix"=>"specific_obj"], function(){
         Route::get('/', [ObjectiveController::class,"specificMatrixIndex"])->name("specifics_matrix");
         Route::get('/get_matrix', [ObjectiveController::class,"getSpecificMatrix"])->name("spec_matrix.matrix");
+    });
+
+    Route::group(["prefix"=>"obj_comments"], function(){
+        Route::get("/list", [ObjectiveComments::class, 'list'])->name('obj_comments.list');
+        Route::post("/store", [ObjectiveComments::class, 'store'])->name('obj_comments.store');
+        Route::post("/delete", [ObjectiveComments::class, 'delete'])->name('obj_comments.delete');
     });
 
     Route::group(["prefix"=>"roles"], function(){

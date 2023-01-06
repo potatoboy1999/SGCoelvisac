@@ -89,6 +89,12 @@
                                         </td>
                                         <td class="align-middle" style="">
                                             <a href="{{route('actions')}}?specific={{$spec->id}}">{{$spec->nombre}}</a>
+                                            {{-- If is GESTION or is manager or user IS_ADMIN --}}
+                                            @if (Auth::user()->position->area_id == 11 || Auth::user()->position->es_gerente == 1 || Auth::user()->is_admin == 1)
+                                            <a href="#" class="btn btn-sm btn-success btn-comments" data-obj="{{$spec->id}}" data-coreui-toggle="modal" data-coreui-target="#commentModal">
+                                                <i class="fa-solid fa-comment text-white"></i>
+                                            </a>
+                                            @endif
                                         </td>
                                         <td class="align-middle" style="">
                                             {{$spec->area->nombre}}
@@ -135,6 +141,12 @@
                                         </td>
                                         <td class="align-middle rowspan-bound td-spec" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                             <a href="{{route('actions')}}?specific={{$spec->id}}">{{$spec->nombre}}</a>
+                                            {{-- If is GESTION or is manager or user IS_ADMIN --}}
+                                            @if (Auth::user()->position->area_id == 11 || Auth::user()->position->es_gerente == 1 || Auth::user()->is_admin == 1)
+                                            <a href="#" class="btn btn-sm btn-success btn-comments" data-obj="{{$spec->id}}" data-coreui-toggle="modal" data-coreui-target="#commentModal">
+                                                <i class="fa-solid fa-comment text-white"></i>
+                                            </a>
+                                            @endif
                                         </td>
                                         <td class="align-middle rowspan-bound td-area" rowspan="{{sizeOf($kpis)}}" style="{{($k == 0)?'':'display: none;'}}">
                                             {{$spec->area->nombre}}
