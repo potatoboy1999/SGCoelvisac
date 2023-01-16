@@ -74,6 +74,9 @@ class ObjectiveController extends Controller
                         $qDates->orderBy('ciclo', 'asc');
                     }]);
                 }]);
+                $qStrObj->with(['comments' => function($qComment){
+                    $qComment->where('estado', 1);
+                }]);
             }]);
         }]);
         $pilar = $pilar->first();
@@ -158,7 +161,10 @@ class ObjectiveController extends Controller
                     });
                     $qDates->orderBy('ciclo', 'asc');
                 }]);
-            }]);    
+            }]);   
+            $specifics->with(['comments' => function($qComment){
+                $qComment->where('estado', 1);
+            }]); 
             $specifics = $specifics->get();
             $data = ["status"=>"ok","strat" => $strat,"specifics"=>$specifics];
         }else{
@@ -204,6 +210,9 @@ class ObjectiveController extends Controller
                 });
                 $qDates->orderBy('ciclo', 'asc');
             }]);
+        }]);
+        $specObjec->with(['comments' => function($qComment){
+            $qComment->where('estado', 1);
         }]);
         
         $specObjec = $specObjec->get();

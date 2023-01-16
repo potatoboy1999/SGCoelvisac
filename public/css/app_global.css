@@ -50,3 +50,9 @@
 a{
     text-decoration: none;
 }
+.comm-count{
+    padding: 2px 8px;
+    background-color: white;
+    border-radius: 5px;
+    font-weight: 500;
+}
