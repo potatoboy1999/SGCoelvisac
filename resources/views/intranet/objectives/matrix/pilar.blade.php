@@ -41,7 +41,11 @@
         foreach ($objs as $obj) {
             if(userIsAllowed(Auth::user(), $obj)){
                 $kpis = $obj->kpis->where('estado', 1);
-                $count += sizeOf($kpis);
+                if(sizeOf($kpis) > 0){
+                    $count += sizeOf($kpis);
+                }else{
+                    $count += 1;
+                }
             }
         }
         return $count;
@@ -109,7 +113,7 @@
                                     @if ($isValidObj)
                                         @if (sizeof($kpis) == 0)
                                             <tr class="dim-{{$dimension->id}} obj-{{$stratObj->id}}" dim="{{$dimension->id}}" strat="{{$stratObj->id}}">
-                                                <td class="align-middle">{{$dimension->nombre}}</td>
+                                                <td class="align-middle" style="{{($x == 0 && $k == 0)?'':'display: none;'}}">{{$dimension->nombre}}</td>
                                                 <td class="align-middle" align="center" style="">
                                                     <a href="{{route('specifics')}}?strat={{$stratObj->id}}"><span class="badge bg-primary obj-code">{{$stratObj->codigo}}</span></a>
                                                 </td>
