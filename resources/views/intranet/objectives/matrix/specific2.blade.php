@@ -6,7 +6,7 @@
             $isValidObj = userIsAllowed(Auth::user(), $obj);
             if($isValidObj){
                 $kpis = $obj->kpis;
-                $rowCount += sizeof($kpis);
+                $rowCount += sizeof($kpis) == 0? 1: sizeof($kpis);
             }
         }
         return $rowCount;
