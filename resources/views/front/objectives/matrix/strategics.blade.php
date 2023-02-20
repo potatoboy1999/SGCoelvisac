@@ -142,7 +142,7 @@
                                             $p_real_acumm = ($p_real_acumm/$p_real_count)+0;
                                         }
                                     @endphp
-                                    <td class="align-middle" align="center">{{$p_real_acumm}}</td>
+                                    <td class="align-middle" align="center">{{number_format($p_real_acumm)}}</td>
                                     <td class="align-middle">{{$kpi->meta}}</td>
                                     @php
                                         $tracker = 'temp'.$stratObj->id.$k.$cicle_i;

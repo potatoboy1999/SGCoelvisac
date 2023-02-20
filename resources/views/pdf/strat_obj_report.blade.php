@@ -5,7 +5,7 @@
         $objs = $dimension->stratObjectives->whereNull('obj_estrategico_id');
         foreach ($objs as $obj) {
             $kpis = $obj->kpis->where('estado', 1);
-            $count += sizeOf($kpis);
+            $count += sizeOf($kpis) == 0? 1: sizeOf($kpis);
         }
         return $count;
     }
@@ -265,7 +265,7 @@
                                                                     $p_real_acumm = ($p_real_acumm/$p_real_count)+0;
                                                                 }
                                                             @endphp
-                                                            <td class="align-middle">{{$p_real_acumm}}</td>
+                                                            <td class="align-middle">{{number_format($p_real_acumm)}}</td>
                                                             <td class="align-middle">{{$kpi->meta}}</td>
                                                             @php
                                                                 $tracker = 'temp'.$stratObj->id.$k.$cicle_i;
