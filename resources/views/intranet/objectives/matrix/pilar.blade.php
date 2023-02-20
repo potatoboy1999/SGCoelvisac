@@ -41,7 +41,7 @@
         foreach ($objs as $obj) {
             if(userIsAllowed(Auth::user(), $obj)){
                 $kpis = $obj->kpis->where('estado', 1);
-                $count = sizeof($kpis) == 0? 1: sizeof($kpis);
+                $count += sizeof($kpis) == 0? 1: sizeof($kpis);
             }
         }
         return $count;
